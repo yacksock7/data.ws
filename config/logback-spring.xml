@@ -15,9 +15,9 @@
             <level>trace</level>
         </filter>
 
-        <file>logs/rgate.log</file>
+        <file>logs/base.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/rgate-%d{yyyyMMdd}-%i.log</fileNamePattern>
+            <fileNamePattern>logs/base-%d{yyyyMMdd}-%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>500MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
@@ -34,7 +34,7 @@
     <logger name="org.springframework" level="info" />
 
     <!-- Log for Application -->
-    <logger name="io.aetherit.thunderstream.rgate" level="trace" />
+    <logger name="io.aetherit.project.base" level="trace" />
 
     <!-- Log for ROOT -->
     <root level="error">

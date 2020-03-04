@@ -10,15 +10,15 @@ RUN yum -y install java-1.8.0-openjdk
 
 ## Install application
 ARG JAR_FILE
-RUN mkdir -p /aetherit/thunderstream/rgate
-RUN mkdir -p /aetherit/thunderstream/rgate/config
-RUN mkdir -p /aetherit/thunderstream/rgate/logs
-COPY ./config/logback-spring.xml    /aetherit/thunderstream/rgate/config/logback-spring.xml
-COPY ./target/${JAR_FILE}           /aetherit/thunderstream/rgate/app.jar
+RUN mkdir -p /aetherit/project/base
+RUN mkdir -p /aetherit/project/base/config
+RUN mkdir -p /aetherit/project/base/logs
+COPY ./config/logback-spring.xml    /aetherit/project/base/config/logback-spring.xml
+COPY ./target/${JAR_FILE}           /aetherit/project/base/app.jar
 
 EXPOSE 8000
 EXPOSE 8080
 
-WORKDIR /aetherit/thunderstream/rgate
+WORKDIR /aetherit/project/base
 
-CMD java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000 -Djava.library.path=/usr/lib/x86_64-linux-gnu -jar /aetherit/thunderstream/rgate/app.jar
+CMD java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000 -Djava.library.path=/usr/lib/x86_64-linux-gnu -jar /aetherit/project/base/app.jar

@@ -1,4 +1,4 @@
-USE rgate;
+USE base;
 
 ##
 ## for Spring Session
@@ -33,7 +33,7 @@ CREATE TABLE SPRING_SESSION_ATTRIBUTES (
 ##
 ## for Application
 ##
-CREATE TABLE rgate_users (
+CREATE TABLE base_users (
     id                      NVARCHAR(64)        NOT NULL,
     password                NVARCHAR(128)       NOT NULL,
     name                    NVARCHAR(64)        NOT NULL,

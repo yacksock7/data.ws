@@ -1,6 +1,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="io.aetherit.thunderstream.rgate.repository.mapper.UserMapper">
-    <resultMap id="RGateUserResultMap" type="RGateUser">
+<mapper namespace="io.aetherit.project.base.repository.mapper.UserMapper">
+    <resultMap id="BaseUserResultMap" type="BaseUser">
         <id property="id"                       column="id" />
         <result property="password"             column="password" />
         <result property="name"                 column="name" />
@@ -10,7 +10,7 @@
         <result property="updatedDatetime"      column="updated_datetime" />
     </resultMap>
 
-    <select id="selectUser" parameterType="String" resultMap="RGateUserResultMap">
+    <select id="selectUser" parameterType="String" resultMap="BaseUserResultMap">
         SELECT id,
                password,
                name,
@@ -18,11 +18,11 @@
                is_enabled,
                created_datetime,
                updated_datetime
-        FROM rgate_users
+        FROM base_users
         WHERE id = #{value}
     </select>
 
-    <select id="selectUsersWhereType" parameterType="RGateUserType" resultMap="RGateUserResultMap">
+    <select id="selectUsersWhereType" parameterType="BaseUserType" resultMap="BaseUserResultMap">
         SELECT id,
                password,
                name,
@@ -30,13 +30,13 @@
                is_enabled,
                created_datetime,
                updated_datetime
-        FROM rgate_users
+        FROM base_users
         WHERE type = #{value}
         ORDER BY created_datetime DESC
     </select>
 
     <insert id="insertUser" parameterType="RGateUser">
-        INSERT INTO rgate_users (
+        INSERT INTO base_users (
             id,
             password,
             name,
