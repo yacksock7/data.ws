@@ -23,6 +23,10 @@ AetherIT 기본 프로젝트 템플릿
     1. @ConfigurationProperties prefix 의 'project.base.mybatis'
 * TomcatProperties
     1. @ConfigurationProperties prefix 의 'project.base.tomcat'
+* Application 클래스
+    1. scanPackage 명의 project.base
+* DatabaseConfiguration 클래스
+    1. scanmapper 의 패키지 명
 * Class 이름 변경 (IDE의 refactor 기능 이용)
     1. model/BaseUser
     2. model/BaseUserToken
@@ -44,7 +48,7 @@ Usage:
   -e TZ=Asia/Seoul
   -e DB_URL=jdbc:mariadb://localhost:3306/base
   -e DB_USERNAME=aetherit
-  -e DB_PASSWORD=dnflRlfllogback-spring.xml
+  -e DB_PASSWORD=dnflRlfl
   aetherit/project.base:development`
   
 DB Usage:

@@ -21,7 +21,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableTransactionManagement
-@MapperScan(value = "io.aetherit.thunderstream.rgate.repository.mapper")
+@MapperScan(value = "io.aetherit.project.base.repository.mapper")
 public class DatabaseConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(DatabaseConfiguration.class);
     private static final String DB_URL_ENV_KEY = "DB_URL";

@@ -35,7 +35,7 @@
         ORDER BY created_datetime DESC
     </select>
 
-    <insert id="insertUser" parameterType="RGateUser">
+    <insert id="insertUser" parameterType="BaseUser">
         INSERT INTO base_users (
             id,
             password,
