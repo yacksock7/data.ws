@@ -1,5 +1,9 @@
 # Project Base
 
+주의!!
+첫 컴파일시 web 디렉토리 이동 후 web library 다운로드를 위해, 'yarn' 명령 수행.
+
+
 AetherIT 기본 프로젝트 템플릿
 
 프로젝트 적용시 수정해야 할 내용
@@ -27,6 +31,8 @@ AetherIT 기본 프로젝트 템플릿
     1. scanPackage 명의 project.base
 * DatabaseConfiguration 클래스
     1. scanmapper 의 패키지 명
+* package 이름 변경 (IDE의 refactor 기능 이용)
+    1. 'project.base'
 * Class 이름 변경 (IDE의 refactor 기능 이용)
     1. model/BaseUser
     2. model/BaseUserToken
