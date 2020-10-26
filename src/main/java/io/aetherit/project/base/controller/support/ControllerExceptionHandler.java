@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -23,8 +24,16 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BaseException.class)
     public ResponseEntity<ErrorResponse> handleBaseException(HttpServletRequest httpRequest, BaseException ex) {
-        final HttpStatus status = ex.getStatus();
-        final ErrorResponse response = getErrorResponse(ex, httpRequest, status);
+        final HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        final ErrorResponse response = getErrorResponse(ex, ex.getErrorCode(), httpRequest, status, true);
+
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleAuthenticationException(HttpServletRequest httpRequest, AuthenticationException ex) {
+        final HttpStatus status = HttpStatus.UNAUTHORIZED;
+        final ErrorResponse response = getErrorResponse(ex, ErrorCode.AuthenticationFail, httpRequest, status, false);
 
         return new ResponseEntity<>(response, status);
     }
@@ -35,7 +44,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         if(request instanceof ServletWebRequest) {
             httpServletRequest = ((ServletWebRequest) request).getNativeRequest(HttpServletRequest.class);
         }
-        final ErrorResponse response = getErrorResponse(ex, httpServletRequest, status);
+        final ErrorResponse response = getErrorResponse(ex, ErrorCode.Unknown, httpServletRequest, status, true);
 
         return new ResponseEntity<>(response, status);
     }
@@ -43,17 +52,12 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleUnknownException(HttpServletRequest httpRequest, Exception ex) {
         final HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        final ErrorResponse response = getErrorResponse(ex, httpRequest, status);
+        final ErrorResponse response = getErrorResponse(ex, ErrorCode.Unknown, httpRequest, status, true);
 
         return new ResponseEntity<>(response, status);
     }
 
-    private ErrorResponse getErrorResponse(Exception ex, HttpServletRequest httpServletRequest, HttpStatus status) {
-        ErrorCode errorCode = ErrorCode.Unknown;
-        if(ex instanceof BaseException) {
-            errorCode = ((BaseException) ex).getErrorCode();
-        }
-
+    private ErrorResponse getErrorResponse(Exception ex, ErrorCode errorCode, HttpServletRequest httpServletRequest, HttpStatus status, boolean logException) {
         String requestPath = "";
         if(httpServletRequest != null) {
             requestPath = httpServletRequest.getRequestURI();
@@ -69,13 +73,14 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
         final ErrorResponse response = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
-                .code(errorCode)
-                .status(status.value())
-                .error(status.getReasonPhrase())
+                .errorCode(errorCode)
                 .message(ex.getLocalizedMessage())
                 .path(requestPath)
                 .build();
 
+        if(logException) {
+            logger.warn("Exception", ex);
+        }
         logger.info("HTTP Response [{} {}] to {} : {}", status.value(), status.name(), remoteAddress, response);
 
         return response;

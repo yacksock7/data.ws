@@ -1,6 +1,7 @@
 package io.aetherit.project.base.controller;
 
-import io.aetherit.project.base.exception.CanNotFoundUserException;
+import io.aetherit.project.base.exception.BaseException;
+import io.aetherit.project.base.exception.ErrorCode;
 import io.aetherit.project.base.service.AuthenticationService;
 import io.aetherit.project.base.model.BaseSimpleUser;
 import io.aetherit.project.base.model.BaseUser;
@@ -50,7 +51,7 @@ public class AuthenticationController {
         final BaseSimpleUser user = authenticationService.getUser();
 
         if(user == null) {
-            throw new CanNotFoundUserException();
+            throw new BaseException(ErrorCode.CanNotFoundUser, "Can not found a user");
         }
 
         return new ResponseEntity<>(user, HttpStatus.OK);

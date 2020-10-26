@@ -52,6 +52,7 @@ public class DatabaseConfiguration {
         dataSource.setPassword(dbPass);
         dataSource.setMinimumIdle(databaseProperties.getMinIdle());
         dataSource.setMaximumPoolSize(databaseProperties.getMaxPoolSize());
+        dataSource.setMaxLifetime(databaseProperties.getMaxLifeTime());
 
         return dataSource;
     }

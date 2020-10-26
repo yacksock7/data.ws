@@ -1,6 +1,7 @@
 package io.aetherit.project.base.service;
 
-import io.aetherit.project.base.exception.NotAcceptableIdException;
+import io.aetherit.project.base.exception.BaseException;
+import io.aetherit.project.base.exception.ErrorCode;
 import io.aetherit.project.base.model.support.BaseUserType;
 import io.aetherit.project.base.repository.UserRepository;
 import io.aetherit.project.base.model.BaseUser;
@@ -72,7 +73,7 @@ public class UserService {
 
     public BaseUser createNewUser(BaseUser user) {
         if(isNotAcceptableId(user.getId())) {
-            throw new NotAcceptableIdException(user.getId());
+            throw new BaseException(ErrorCode.NotAcceptableId, "Not acceptable id : " + user.getId());
         }
         final String encodedPassword = passwordEncoder.encode(user.getPassword());
 
