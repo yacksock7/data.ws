@@ -175,8 +175,8 @@
                         </goals>
                         <phase>generate-resources</phase>
                         <configuration>
-                            <nodeVersion>v10.15.0</nodeVersion>
-                            <yarnVersion>v1.13.0</yarnVersion>
+                            <nodeVersion>v12.15.0</nodeVersion>
+                            <yarnVersion>v1.22.0</yarnVersion>
                         </configuration>
                     </execution>
 
