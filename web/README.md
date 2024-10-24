@@ -1,68 +1,71 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Project Base
 
-## Available Scripts
+주의!!
+첫 컴파일시 web 디렉토리 이동 후 web library 다운로드를 위해, 'yarn' 명령 수행.
 
-In the project directory, you can run:
 
-### `yarn start`
+AetherIT 기본 프로젝트 템플릿
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+프로젝트 적용시 수정해야 할 내용
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+* Dockerfile :
+    1. 경로를 나타내는 '/project/base'
+* pom.xml :
+    1. aritifactid 의 'project.base'
+    2. plugin 의 '/project/base' 경로
+* config/logback-spring.xml
+    1. file appender 의 파일 이름 'base'
+    2. logger 이름의 io.aetherit.project.base
+* doc/sql/CreateTables.sql and DropTables.sql
+    1. USE의 데이타베이스 이름
+    2. base_users 테이블 명
+* application.properties
+    1. tomcat, mybatis, application 설정의 'project.base'
+* ApplicationProperties
+    1. @ConfigurationProperties prefix 의 'project.base.application'
+* DatabaseProperties
+    1. @ConfigurationProperties prefix 의 'project.base.mybatis'
+* TomcatProperties
+    1. @ConfigurationProperties prefix 의 'project.base.tomcat'
+* Application 클래스
+    1. scanPackage 명의 project.base
+* DatabaseConfiguration 클래스
+    1. scanmapper 의 패키지 명
+* package 이름 변경 (IDE의 refactor 기능 이용)
+    1. 'project.base'
+* Class 이름 변경 (IDE의 refactor 기능 이용)
+    1. model/BaseUser
+    2. model/BaseUserToken
+    3. model/BaseSimpleUser
+    4. model/support/BaseUserType
+    5. exception/BaseException
+* mybatis-config.xml
+    1. typeAlias 의 BaseUser
+    2. typeAlias 의 BaseUserType
+* UserMapper
+    1. resultmap id 및 type
+    2. sql문의 테이블 명 base_users
+    3. sql문의 resultmap id 및 parameter type
 
-### `yarn test`
+Usage:
+`docker run -d --name project.base
+-p 8000:8000
+-p 8080:8080
+-e TZ=Asia/Seoul
+-e DB_URL=jdbc:mariadb://localhost:3306/base
+-e DB_USERNAME=aetherit
+-e DB_PASSWORD=dnflRlfl
+aetherit/project.base:development`
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+DB Usage:
+`docker run -d --name base.db
+-p 3306:3306
+-e TZ=Asia/Seoul
+-e MYSQL_ROOT_PASSWORD=dnflRlfl1535
+-e MYSQL_DATABASE=base
+-e MYSQL_USER=aetherit
+-e MYSQL_PASSWORD=dnflRlfl
+mariadb:10.4.12
+--character-set-server=utf8mb4
+--collation-server=utf8mb4_unicode_ci`
+ 
