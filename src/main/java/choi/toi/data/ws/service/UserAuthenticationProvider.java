@@ -2,6 +2,7 @@ package choi.toi.data.ws.service;
 
 import choi.toi.data.ws.model.SimpleUser;
 import choi.toi.data.ws.model.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,6 +20,7 @@ import org.springframework.util.Assert;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Component
 public class UserAuthenticationProvider implements AuthenticationProvider {
     private UserService userService;
@@ -32,9 +34,9 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication request) throws AuthenticationException {
+
         Assert.isInstanceOf(UsernamePasswordAuthenticationToken.class, request, "Only UsernamePasswordAuthenticationToken is supported");
 
-        UsernamePasswordAuthenticationToken result = null;
         final String email = (String) request.getPrincipal();
         final String password = (String) request.getCredentials();
 
@@ -43,13 +45,16 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
             throw new UsernameNotFoundException("Username not found : " + email);
         }
 
-
+        UsernamePasswordAuthenticationToken result = null;
         if ((password != null) && (password.length() > 0) && (passwordEncoder.matches(password, user.getPassword()))) {
+
             final List<GrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority(user.getType().name()));
 
+            SimpleUser simpleUser = SimpleUser.convert(user);
             result = new UsernamePasswordAuthenticationToken(email, password, authorities);
-            result.setDetails(getSimpleUser(user));
+            result.setDetails(simpleUser);
+
         } else {
             throw new BadCredentialsException("Bad credentials");
         }
@@ -60,16 +65,5 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
     @Override
     public boolean supports(Class<?> aClass) {
         return UsernamePasswordAuthenticationToken.class.isAssignableFrom(aClass);
-    }
-
-    private SimpleUser getSimpleUser(User user) {
-        return SimpleUser.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .nickname(user.getNickname())
-                .type(user.getType())
-                .createdDatetime(user.getCreatedDatetime())
-                .updatedDatetime(user.getUpdatedDatetime())
-                .build();
     }
 }

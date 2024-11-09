@@ -21,7 +21,7 @@ import java.lang.reflect.Parameter;
 public class ControllerLogger {
     private static final Logger logger = LoggerFactory.getLogger(ControllerLogger.class);
 
-    @Around("execution(* io.aetherit.thunderstream.rgate.controller.*Controller.*(..)) && args(httpRequest, ..)")
+    @Around("execution(* choi.toi.data.ws.controller.*Controller.*(..)) && args(httpRequest, ..)")
     public Object logServiceController(ProceedingJoinPoint joinPoint, HttpServletRequest httpRequest) throws Throwable {
         return logController(joinPoint, httpRequest);
     }

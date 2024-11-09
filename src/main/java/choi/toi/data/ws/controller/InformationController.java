@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/api/v1/informations")
 public class InformationController {
     private static final Logger logger = LoggerFactory.getLogger(InformationController.class);
-    public static final String NAME = "io.aetherit.project.base";
+    public static final String NAME = "choi.toi.data.ws";
     public static final String VERSION = "1.0-SNAPSHOT";
     public static final String BUILD_ID = "20201026_1535";
     public static final String BUILD_NUMBER = "0";

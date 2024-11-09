@@ -1,9 +1,7 @@
 import React from "react";
-import {withSnackbar} from "notistack";
-import {withRouter} from "react-router-dom";
 import {withStyles} from "@material-ui/core/styles";
 
-import {Container, Toolbar, Typography} from "@material-ui/core";
+import {Container, Toolbar, Typography, Box} from "@material-ui/core";
 
 
 const styles = theme => ({
@@ -25,9 +23,6 @@ const styles = theme => ({
 
 class Home extends React.Component {
     componentDidMount() {
-        this.props.enqueueSnackbar("Welcome", {
-            variant: 'info'
-        });
     }
 
     render() {
@@ -38,7 +33,7 @@ class Home extends React.Component {
                 <div className={classes.appBarSpacer} />
                 <div className={classes.mainContent}>
                     <Toolbar className={classes.toolbar}>
-                        <Typography variant="h4" component="h2">
+                        <Typography>
                             Home
                         </Typography>
                     </Toolbar>
@@ -48,4 +43,4 @@ class Home extends React.Component {
     }
 };
 
-export default withSnackbar(withRouter(withStyles(styles) (Home)));
+export default withStyles(styles) (Home);
