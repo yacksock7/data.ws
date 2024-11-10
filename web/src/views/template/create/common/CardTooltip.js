@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import {inject, observer} from "mobx-react";
-import {withStyles} from "@mui/styles";
 import clsx from "clsx";
 
+import {withStyles} from "@mui/styles";
 import {styles} from "../styles/CreateTemplateSideBarStyle";
 
 import {ReactComponent as TooltipArrow} from "../../../../common/images/TooltipArrow.svg";
