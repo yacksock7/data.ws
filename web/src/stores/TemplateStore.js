@@ -134,6 +134,16 @@ export default class TemplateStore {
         makeAutoObservable(this);
     }
 
+    initCreateTemplate = () => {
+        this.newTemplate = Object.assign({}, EmptyTemplate);
+        this.templateSteps = [];
+
+        this.templateStepHistories = [];
+        this.templateStepHistoryIndex = 0;
+
+        this.templateErrorArr = [];
+    }
+
     initTemplate = () =>{
         this.template = Object.assign({}, EmptyTemplate);
     }
@@ -144,7 +154,7 @@ export default class TemplateStore {
 
     changeTemplateSteps = (arr) => {
 
-        this.templateSteps = arr.slice(0);
+        this.templateSteps = arr;
         //this.checkTemplateOrder();
         this.checkTemplateIO();
         this.addTemplateStepHistory();
@@ -592,7 +602,7 @@ export default class TemplateStore {
         }
     }
     initTemplateSteps = () => {
-        this.templateSteps.splice(0, this.templateSteps.length);
+        this.templateSteps = [];
     }
     *getTemplateSteps(templateId) {
         console.log(LogPrefix, `getTemplateSteps Start... templateId=${templateId}`);
@@ -634,6 +644,7 @@ export default class TemplateStore {
             console.log("templateSteps : ", templateSteps);
             console.log("this.templateSteps : ", this.templateSteps);
 
+            yield this.templateRepository.makeNewTemplate(data);
             const response = yield this.templateRepository.makeNewTemplate(data);
             //console.log("response : ", response);
             // this.template = response.template;
@@ -651,7 +662,7 @@ export default class TemplateStore {
         }
     }
 
-    *makeNewPrivateTemplate(userId, callback) {
+    *makeNewPrivateTemplate(userId) {
         console.log(LogPrefix, `makeNewTemplate Start...`);
         this.templateState = State.Pending;
 
@@ -669,6 +680,7 @@ export default class TemplateStore {
             };
 
             const response = yield this.templateRepository.makeNewTemplate(data);
+
             this.template = response.template;
             this.templateSteps = response.templateSteps.map(step => {
                 return {...step, options : JSON.parse(step.options)}
@@ -676,7 +688,6 @@ export default class TemplateStore {
             this.templateState = State.Success;
 
             console.log(LogPrefix, "makeNewTemplate Success!!");
-            callback();
 
         } catch (e) {
             this.templateState = State.Failed;

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {inject, observer} from "mobx-react";
 import {withRouter} from "../../../components/WithRouter";
 
@@ -30,26 +30,9 @@ class TemplateCreatePage extends React.Component {
 
         if(!templateId) {
             this.props.templateStore.initTemplateSteps();
-            let uploadTemplate = {
-                name : TemplateStepTypeLabel[TemplateStepType.Upload],
-                type : TemplateStepType.Upload,
-                options : null,
-                inputType : ResultType.Text,
-                resultType : ResultType.Text
-            };
-
-            let exportTemplate = {
-                name : TemplateStepTypeLabel[TemplateStepType.Export],
-                type : TemplateStepType.Export,
-                options : null,
-                inputType : ResultType.Text,
-                resultType : ResultType.Text
-            };
-
-            let tempArr=[];
-            tempArr.push(uploadTemplate);
-            tempArr.push(exportTemplate);
             this.props.templateStore.initTemplate();
+
+            let tempArr= [DEFAULT_STEP_OBJECT.Upload, DEFAULT_STEP_OBJECT.Export];
             this.props.templateStore.changeTemplateSteps(tempArr);
         } else {
             this.props.templateStore.getTemplate(templateId);
@@ -60,9 +43,7 @@ class TemplateCreatePage extends React.Component {
 
     componentWillUnmount() {
         this.props.navigateStore.changeHidden(false);
-        this.props.templateStore.initTemplateErrorArr();
-        this.props.templateStore.initTemplateSteps();
-        this.props.templateStore.initTemplateStepHistoryIndex();
+        this.props.templateStore.initCreateTemplate();
     }
 
     makeInputResultType = (template) =>{

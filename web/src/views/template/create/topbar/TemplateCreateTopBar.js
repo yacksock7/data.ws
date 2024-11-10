@@ -11,7 +11,7 @@ import {Box, Button, IconButton, Tooltip, MenuList, MenuItem, Popover} from "@mu
 
 import CommonDialog from "../../../dialog/CommonDialog";
 import NewCreateTemplate from "../../../createWork/NewCreateTemplate";
-import {MachineType, TemplateStepType} from "../../../../stores/TemplateStore";
+import {MachineType, State, TemplateStepType} from "../../../../stores/TemplateStore";
 import TemplateHistoryController from "./TemplateHistoryController";
 
 class CreateTemplateTopBar extends Component {
@@ -32,6 +32,9 @@ class CreateTemplateTopBar extends Component {
 
     handleOpenDialog = () => {
         const { dialogOpen } = this.state;
+        if (dialogOpen) {
+            this.props.templateStore.changeNewTemplateName("");
+        }
         this.setState({ dialogOpen: !dialogOpen });
     };
 
@@ -42,10 +45,17 @@ class CreateTemplateTopBar extends Component {
         }
     }
 
-    makeNewTemplate = () => {
+    makeNewTemplate = async () => {
         const { loginUser } = this.props.authStore;
-        this.props.templateStore.makeNewPrivateTemplate(loginUser.id);
+
         this.handleOpenDialog();
+        await this.props.templateStore.makeNewPrivateTemplate(loginUser.id);
+
+        const { templateState } = this.props.templateStore;
+        if (templateState === State.Success) {
+            alert("템플릿 생성 완료!");
+            this.props.navigate("/template");
+        }
     }
 
     handleCheckTemplateSteps = () => {

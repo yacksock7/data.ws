@@ -1,6 +1,14 @@
 import {ResultType, TemplateStepType, TemplateStepTypeLabel} from "../../../stores/TemplateStore";
 
 export const DEFAULT_STEP_OBJECT = {
+    Upload : {
+        type : TemplateStepType.Upload,
+        name : TemplateStepTypeLabel[TemplateStepType.Upload],
+        options : null,
+        inputType : ResultType.Text,
+        resultType : ResultType.Text,
+        rejectPoint : false,
+    },
     Recording : {
         type : TemplateStepType.Recording,
         name : TemplateStepTypeLabel[TemplateStepType.Recording],
@@ -39,6 +47,14 @@ export const DEFAULT_STEP_OBJECT = {
         options : null,
         inputType : ResultType.Audio,
         resultType : ResultType.Audio,
+        rejectPoint : true,
+    },
+    Export: {
+        name : TemplateStepTypeLabel[TemplateStepType.Export],
+        type : TemplateStepType.Export,
+        options : null,
+        inputType : ResultType.Text,
+        resultType : ResultType.Text,
         rejectPoint : true,
     },
 }
