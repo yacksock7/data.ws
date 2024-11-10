@@ -21,7 +21,7 @@ export const TemplateStepType = {
     Recording:'Recording',
     Machine:'Machine',
     Labeling : 'Labeling',
-    Correction : 'Correction',
+    Editing : 'Editing',
     Refine:'Refine',
     Inspection : 'Inspection',
     Export : 'Export'
@@ -32,7 +32,7 @@ export const TemplateStepTypeLabel = {
     Recording:'녹음',
     Machine:'기계',
     Labeling : '라벨링',
-    Correction : '교정',
+    Editing : '교정',
     Refine:'정제',
     Inspection : '검수',
     Export : '추출',
@@ -75,7 +75,7 @@ export const TemplateStepTypeButton = {
     Recording : <SmallRecIcon/>,
     Machine : <SmallMachineIcon/>,
     Labeling : <SmallLabelingIcon/>,
-    Correction : <SmallCorrectionIcon/>,
+    Editing : <SmallCorrectionIcon/>,
     Refine : <SmallSwapIcon/>,
     Inspection : <SmallInspectionIcon/>,
     Export : <SmallDownloadIcon/>,
@@ -84,7 +84,7 @@ export const TemplateStepTypeButton = {
 export const TemplateStepColor = {
     Upload : '#056cf2',
     Machine : '#f2b705',
-    Correction : '#140cf2',
+    Editing : '#140cf2',
     Inspection : '#f25e3d',
     Export : '#5d00c7'
 }
@@ -535,7 +535,7 @@ export default class TemplateStore {
 
         for(let i =0;i< this.templateSteps.length;i++)
         {
-            if(this.templateSteps[i].type === TemplateStepType.Refine || this.templateSteps[i].type === TemplateStepType.Correction
+            if(this.templateSteps[i].type === TemplateStepType.Refine || this.templateSteps[i].type === TemplateStepType.Editing
                 || this.templateSteps[i].type === TemplateStepType.Recording || this.templateSteps[i].type === TemplateStepType.Labeling)
             {
                 this.templateSteps[i].rejectPoint = true;

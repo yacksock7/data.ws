@@ -224,7 +224,7 @@ class TemplateStepButton extends Component {
                     </Box>
                 }
 
-                {(step.type && step.type === TemplateStepType.Correction) &&
+                {(step.type && step.type === TemplateStepType.Editing) &&
                     <Draggable key={dragKey} draggableId={dragKey} index={stepIndex} isDragDisabled={systemFlag}
                                disableInteractiveElementBlocking>
                         {(provided, snapshot) => (

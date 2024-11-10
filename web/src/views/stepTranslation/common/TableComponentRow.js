@@ -218,7 +218,7 @@ class TableComponentRow extends Component {
                 //itemSize = itemSize + preJobResults.length * 48;
                 itemSize = itemSize + (viewingTemplateStepNums.length-1 )* 48;
             }
-            if((selectedWorkTemplateStep.type === TemplateStepType.Correction
+            if((selectedWorkTemplateStep.type === TemplateStepType.Editing
                     || selectedWorkTemplateStep.type === TemplateStepType.Refine)
                 && (jobStepTaskTransfer.status === JobTaskStatus.Assigned
                     || jobStepTaskTransfer.status === JobTaskStatus.Rejected)){

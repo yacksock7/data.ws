@@ -10,7 +10,7 @@ import {withRouter} from "./components/WithRouter";
 import CreateTemplate from "./views/createWork/CreateTemplate";
 import Work from "./views/stepTranslation/Work";
 import Template from "./views/template/Template";
-import TemplateCreatePage from "./views/template/create/TemplateCreatePage";
+import TemplateCreatePage from "./views/template/TemplateCreatePage";
 import Dashboard from "./views/dashboard/Dashboard";
 import LoginHome from "./views/login/LoginHome";
 import SignUp from "./views/signup/SignUp";

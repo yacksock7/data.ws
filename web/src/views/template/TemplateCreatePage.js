@@ -1,17 +1,17 @@
 import React, {Component} from 'react';
 import {inject, observer} from "mobx-react";
-import {withRouter} from "../../../components/WithRouter";
+import {withRouter} from "../../components/WithRouter";
 
 import {withStyles} from "@mui/styles";
-import {styles} from "./styles/CreateTemplateStyle";
+import {styles} from "./create/styles/CreateTemplateStyle";
 
 import {Box} from "@mui/material";
 import { DragDropContext } from 'react-beautiful-dnd';
-import {ResultType, TemplateStepType, TemplateStepTypeLabel} from "../../../stores/TemplateStore";
+import {ResultType, TemplateStepType, TemplateStepTypeLabel} from "../../stores/TemplateStore";
 
-import CreateTemplateSideBar from "./CreateTemplateSideBar";
-import CreateTemplateContents from "./yet/CreateTemplateContents";
-import TemplateCreateTopBar from "./TemplateCreateTopBar";
+import CreateTemplateSideBar from "./create/CreateTemplateSideBar";
+import CreateTemplateContents from "./create/yet/CreateTemplateContents";
+import TemplateCreateTopBar from "./create/TemplateCreateTopBar";
 
 
 class TemplateCreatePage extends React.Component {

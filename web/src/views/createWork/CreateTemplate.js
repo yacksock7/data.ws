@@ -94,7 +94,7 @@ class CreateTemplate extends React.Component {
         {
             return '라벨링';
         }
-        else if(str ===TemplateStepType.Correction)
+        else if(str ===TemplateStepType.Editing)
         {
             return '교정';
         }

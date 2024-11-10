@@ -25,10 +25,11 @@ import CardTooltip from "./common/CardTooltip";
 
 const TEMPLATE_STEP_CARDS = [
     {icon: <UploadIcon/>, text: '업로드', tooltip: '일감을 파일 단위로 업로드 합니다.', tooltip2: '',textId:TemplateStepType.Upload },
+    {icon: <CorrectionIcon/>, text: '교정', tooltip: '텍스트 (원시 데이터)를 작업자가 직접 교정', tooltip2: '',textId:TemplateStepType.Correction},
+
     {icon: <TemplateRecIcon/>, text: '녹음', tooltip: '문장별 텍스트 데이터를 오디오롤 변환 또는 추가하는 작업 (1) 녹음 기능으로 직접 녹음 (2) 오디오 파일을 업로드', tooltip2: '',textId:TemplateStepType.Recording },
     {icon: <MachineTranslationIcon/>, text: '기계', tooltip: '템플릿에서 선택한 기계 작업 옵션이 자동 실행되어 결과물 출력 (1) STT: 음성을 텍스트로 변환 (2) 기계번역: 선택한 번역기로 자동 번역 (3) 문법교정기: 선택한 문법교정기에서 자동 검사 및 교정', tooltip2: '',textId:TemplateStepType.Machine},
     {icon: <TagIcon/>, text: '라벨링', tooltip: '오류 및 데이터를 가장 잘 설명하는 태그 중 하나를 선택하여 붙이는 과정', tooltip2: '',textId:TemplateStepType.Labeling },
-    {icon: <CorrectionIcon/>, text: '교정', tooltip: '텍스트 (원시 데이터)를 작업자가 직접 교정', tooltip2: '',textId:TemplateStepType.Correction},
     {icon: <RefineIcon2/>, text: '정제', tooltip: '텍스트로 변환된 오디오 (원시 데이터)를 작업자가 직접 교정', tooltip2: '',textId:TemplateStepType.Refine },
     {icon: <InspectionIcon/>, text: '검수', tooltip: '이전 단계의 결과 데이터를 작업자가 검수 진행', tooltip2: '반려 가능하며 이전 단계를 지정하여 해당 단계 작업자에게 재작업을 요청',textId:TemplateStepType.Inspection},
     {icon: <ExtractionIcon/>, text: '추출', tooltip: '모든 단계 작업이 완료되어 추출된 결과물 (Json 등)을 다운로드', tooltip2: '',textId:TemplateStepType.Export},

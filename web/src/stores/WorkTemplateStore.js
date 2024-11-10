@@ -14,7 +14,7 @@ export const TemplateStepType = {
     Recording:'Recording',
     Machine:'Machine',
     Labeling : 'Labeling',
-    Correction : 'Correction',
+    Editing : 'Editing',
     Refine:'Refine',
     Inspection : 'Inspection',
     Export : 'Export'

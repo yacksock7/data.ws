@@ -149,7 +149,7 @@ class CreateTemplateTopBar extends Component {
                 return false;
                 }
             }
-                else if(this.props.templateStore.templateSteps[i].type !== TemplateStepType.Correction &&
+                else if(this.props.templateStore.templateSteps[i].type !== TemplateStepType.Editing &&
                 this.props.templateStore.templateSteps[i].type !== TemplateStepType.Refine &&
                 this.props.templateStore.templateSteps[i].type !== TemplateStepType.Export)
             {

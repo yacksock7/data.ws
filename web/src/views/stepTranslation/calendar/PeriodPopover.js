@@ -162,8 +162,8 @@ class PeriodPopover extends Component {
                                             번역
                                         </Button>
                                         <Button
-                                            onClick={e => this.handleChangeStepName('correction')}
-                                            className={deadline.stepName === 'correction'? clsx(classes.typeButton, classes.typeIndigoSelect) : clsx(classes.typeButton, classes.typeIndigo)}
+                                            onClick={e => this.handleChangeStepName('Editing')}
+                                            className={deadline.stepName === 'Editing'? clsx(classes.typeButton, classes.typeIndigoSelect) : clsx(classes.typeButton, classes.typeIndigo)}
                                             disableRipple
                                         >
                                             교정

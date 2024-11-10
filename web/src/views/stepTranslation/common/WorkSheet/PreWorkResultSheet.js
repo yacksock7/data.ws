@@ -107,7 +107,7 @@ class WorkSheet extends Component {
                                                             <Typography>도착어</Typography>
                                                         </Box>
                                                     }
-                                                    {preJobResult.templateStepType === TemplateStepType.Correction &&
+                                                    {preJobResult.templateStepType === TemplateStepType.Editing &&
                                                         <Button className={clsx(classes.contentsButtonCell, classes.contentsButtonCellBlue)} disableRipple>
                                                             {`${preJobResult.templateStepName} 보기`}
                                                         </Button>

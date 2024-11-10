@@ -130,7 +130,7 @@ class TableComponentRow extends Component {
             await this.props.jobStepTaskResultStore.getPreJobResults(jobStepTaskTransfer.jobId, jobStepTaskTransfer.jobStepNum, jobStepTaskTransfer.jobStepTaskNum);
 
             this.props.jobStepTaskResultStore.setNewJobStepTaskText(jobStepTaskTransfer);
-            if (selectedWorkTemplateStep.type === TemplateStepType.Correction || selectedWorkTemplateStep.type === TemplateStepType.Refine) {
+            if (selectedWorkTemplateStep.type === TemplateStepType.Editing || selectedWorkTemplateStep.type === TemplateStepType.Refine) {
                 this.setCorrection();
             }
             this.props.jobStepTaskResultStore.changeSelectedJobStepTaskIndex(this.props.listIndex);

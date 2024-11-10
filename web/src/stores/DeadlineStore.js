@@ -187,7 +187,7 @@ export default class DeadlineStore{
                         //console.log("Cehck deadlineArr");
                         //console.log(this.deadlineArr);
                     }
-                    else if(stepType === TemplateStepType.Correction)
+                    else if(stepType === TemplateStepType.Editing)
                     {
                         this.deadlineArr.push(
                             {
@@ -195,7 +195,7 @@ export default class DeadlineStore{
                                 end: newestDeadline.deadlineDatetime,
                                 colorEvento : eventColor[2],
                                 color: '#fff',
-                                type : 'correction'
+                                type : 'Editing'
                             }
                         );
                         this.deadlineArr = [...this.deadlineArr];

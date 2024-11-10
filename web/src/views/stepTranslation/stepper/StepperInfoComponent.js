@@ -66,7 +66,7 @@ class StepperInfoComponent extends Component {
                                         <li>작업자 배정은 필요 없으며 모든 작업은 자동으로 수행됩니다.</li>
                                     </ul>
                                 }
-                                {selectedWorkTemplateStep.type === TemplateStepType.Correction &&
+                                {selectedWorkTemplateStep.type === TemplateStepType.Editing &&
                                     <ul><li>변역 완료된 아웃풋을 작업자(인간)이 교정합니다.</li></ul>
                                 }
                                 {selectedWorkTemplateStep.type === TemplateStepType.Inspection &&

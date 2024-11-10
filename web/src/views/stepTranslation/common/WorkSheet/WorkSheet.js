@@ -69,7 +69,7 @@ class WorkSheet extends Component {
                                             </Box>
                                         </Box>
                                     ))}
-                                {(selectedWorkTemplateStep.type === TemplateStepType.Correction
+                                {(selectedWorkTemplateStep.type === TemplateStepType.Editing
                                     || selectedWorkTemplateStep.type === TemplateStepType.Refine)
                                     && (jobStepTaskTransfer.status === JobTaskStatus.Assigned
                                         || jobStepTaskTransfer.status === JobTaskStatus.Rejected)

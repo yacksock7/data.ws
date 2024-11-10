@@ -26,8 +26,8 @@ class CreateTemplateTopBar extends Component {
         this.props.templateStore.changeNewTemplateName(e.target.value);
     };
 
-    handleClickHome = () => {
-        this.props.navigate('/');
+    goToBack = () => {
+        this.props.navigate('/template');
     };
 
     handleOpenDialog = () => {
@@ -94,7 +94,7 @@ class CreateTemplateTopBar extends Component {
                     alert('옵션 중 선택 하지 않은 옵션이 있습니다.')
                     return false;
                 }
-            } else if (this.props.templateStore.templateSteps[i].type !== TemplateStepType.Correction &&
+            } else if (this.props.templateStore.templateSteps[i].type !== TemplateStepType.Editing &&
                 this.props.templateStore.templateSteps[i].type !== TemplateStepType.Refine &&
                 this.props.templateStore.templateSteps[i].type !== TemplateStepType.Export) {
                 console.log(this.props.templateStore.templateSteps[i]);
@@ -119,15 +119,15 @@ class CreateTemplateTopBar extends Component {
                 {/* 로고 + 뒤로가기 */}
                 <Box display='flex' alignItems='center'>
                     <Box className={classes.logoBox}
-                         onClick={this.handleClickHome}>
+                         onClick={this.goToBack}>
                         <BasicServiceLogo/>
                     </Box>
 
-                    <Tooltip title="홈으로 나가기"
-                             placement="bottom"
-                             classes={{tooltip: classes.lightTooltip }}>
-                        <IconButton onClick={this.handleClickHome}
-                                    className={classes.iconButton}
+                    <Tooltip classes={{tooltip: classes.lightTooltip}}
+                             title="홈으로 나가기"
+                             placement="bottom">
+                        <IconButton className={classes.iconButton}
+                                    onClick={this.goToBack}
                                     disableRipple>
                             <CreateTemplateTopBackIcon/>
                         </IconButton>
