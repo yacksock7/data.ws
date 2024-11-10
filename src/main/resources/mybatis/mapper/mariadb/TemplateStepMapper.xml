@@ -1,0 +1,101 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="choi.toi.data.ws.repository.mapper.TemplateStepMapper">
+    <resultMap id="TemplateStepResultMap" type="TemplateStep">
+        <id     property="templateId"           column="template_id" />
+        <id     property="templateStepNum"      column="template_step_num" />
+        <result property="type"                 column="type" />
+        <result property="name"                 column="name" />
+        <result property="options"              column="options" />
+        <result property="inputType"            column="input_type" />
+        <result property="resultType"           column="result_type" />
+        <result property="isRejectPoint"        column="is_reject_point"    typeHandler="BooleanYnTypeHandler"/>
+        <result property="createdDatetime"      column="created_datetime" />
+        <result property="updatedDatetime"      column="updated_datetime" />
+    </resultMap>
+
+    <insert id="insertTemplateStep" parameterType="TemplateStep">
+
+        <selectKey keyProperty="templateStepNum" resultType="Integer" order="BEFORE">
+            SELECT
+                (IFNULL(MAX(template_step_num), 0) + 1) AS template_step_num
+            FROM template_steps
+            WHERE template_id = #{templateId}
+        </selectKey>
+
+        INSERT INTO template_steps (
+            template_id,
+            template_step_num,
+            type,
+            name,
+            options,
+            input_type,
+            result_type,
+            is_reject_point
+        ) VALUES (
+            #{templateId},
+            #{templateStepNum},
+            #{type},
+            #{name},
+            #{options},
+            #{inputType},
+            #{resultType},
+            #{isRejectPoint, typeHandler=BooleanYnTypeHandler}
+        )
+    </insert>
+
+    <select id="selectTemplateStep" resultMap="TemplateStepResultMap">
+        SELECT
+            template_id,
+            template_step_num,
+            type,
+            name,
+            options,
+            input_type,
+            result_type,
+            is_reject_point,
+            created_datetime,
+            updated_datetime
+        FROM template_steps
+         WHERE template_id = #{templateId}
+         AND template_step_num = #{templateStepNum}
+    </select>
+
+    <select id="selectTemplateSteps" parameterType="Long" resultMap="TemplateStepResultMap">
+        SELECT
+            template_id,
+            template_step_num,
+            type,
+            name,
+            options,
+            input_type,
+            result_type,
+            is_reject_point,
+            created_datetime,
+            updated_datetime
+        FROM template_steps
+         WHERE template_id = #{templateId}
+    </select>
+
+    <update id="updateTemplateStep" parameterType="TemplateStep">
+        UPDATE template_steps
+        SET type = #{type},
+            name = #{name},
+            options = #{options}
+            updated_datetime = #{updatedDatetime}
+        WHERE template_id = #{templateId}
+        AND template_step_num = #{templateStepNum}
+    </update>
+
+    <delete id="deleteTemplateStep">
+        DELETE FROM template_steps
+        WHERE template_id = #{templateId}
+        AND template_step_num = #{templateStepNum}
+    </delete>
+
+    <delete id="deleteTemplateStepByTemplateId">
+        DELETE FROM template_steps
+        WHERE template_id = #{templateId}
+    </delete>
+</mapper>

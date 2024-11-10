@@ -2,13 +2,13 @@ import React, {Component} from 'react';
 import {inject, observer} from "mobx-react";
 
 import {withStyles} from "@mui/styles";
-import {styles} from "./styles/CreateTemplateTopBarStyle";
+import {styles} from "../styles/CreateTemplateTopBarStyle";
 import clsx from "clsx";
 
-import {ReactComponent as ArrowCounterClockwise} from "../../../common/images/ArrowCounterClockwise.svg";
+import {ReactComponent as ArrowCounterClockwise} from "../../../../common/images/ArrowCounterClockwise.svg";
 
 import {Box, IconButton, Tooltip} from "@mui/material";
-import {HistoryControlType} from "../../../stores/TemplateStore";
+import {HistoryControlType} from "../../../../stores/TemplateStore";
 
 
 class TemplateCreateTopBar extends Component {

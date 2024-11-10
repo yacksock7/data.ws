@@ -10,6 +10,11 @@
     <typeAliases>
         <typeAlias type="choi.toi.data.ws.model.User" alias="User" />
         <typeAlias type="choi.toi.data.ws.model.support.UserType" alias="UserType" />
+
+        <typeAlias type="choi.toi.data.ws.model.Template" alias="Template" />
+        <typeAlias type="choi.toi.data.ws.model.support.TemplateType" alias="TemplateType" />
+        <typeAlias type="choi.toi.data.ws.model.TemplateStep" alias="TemplateStep" />
+
         <typeAlias type="choi.toi.data.ws.repository.typehandler.BooleanYnTypeHandler" alias="BooleanYnTypeHandler" />
     </typeAliases>
 
@@ -19,5 +24,7 @@
 
     <mappers>
         <mapper resource="mybatis/mapper/mariadb/UserMapper.xml" />
+        <mapper resource="mybatis/mapper/mariadb/TemplateMapper.xml" />
+        <mapper resource="mybatis/mapper/mariadb/TemplateStepMapper.xml" />
     </mappers>
 </configuration>

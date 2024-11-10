@@ -1,17 +1,17 @@
 import React, {Component} from 'react';
 import {inject, observer} from "mobx-react";
-import {withRouter} from "../../../components/WithRouter";
+import {withRouter} from "../../../../components/WithRouter";
 import {withStyles} from "@mui/styles";
-import {styles} from "./styles/CreateTemplateTopBarStyle";
+import {styles} from "../styles/CreateTemplateTopBarStyle";
 
-import {ReactComponent as BasicServiceLogo} from "../../../common/images/BasicServiceLogin.svg";
-import {ReactComponent as CreateTemplateTopBackIcon} from "../../../common/images/CreateTemplateTopBackIcon.svg";
+import {ReactComponent as BasicServiceLogo} from "../../../../common/images/BasicServiceLogin.svg";
+import {ReactComponent as CreateTemplateTopBackIcon} from "../../../../common/images/CreateTemplateTopBackIcon.svg";
 
 import {Box, Button, IconButton, Tooltip, MenuList, MenuItem, Popover} from "@mui/material";
 
-import CommonDialog from "../../dialog/CommonDialog";
-import NewCreateTemplate from "../../createWork/NewCreateTemplate";
-import {MachineType, TemplateStepType} from "../../../stores/TemplateStore";
+import CommonDialog from "../../../dialog/CommonDialog";
+import NewCreateTemplate from "../../../createWork/NewCreateTemplate";
+import {MachineType, TemplateStepType} from "../../../../stores/TemplateStore";
 import TemplateHistoryController from "./TemplateHistoryController";
 
 class CreateTemplateTopBar extends Component {
@@ -35,57 +35,39 @@ class CreateTemplateTopBar extends Component {
         this.setState({ dialogOpen: !dialogOpen });
     };
 
-    handleClickDialog = () => {
-        this.setState({
-            dialogOpen: true
-        });
-    };
-
-    handleCloseDialog = () => {
-        this.setState({
-            dialogOpen: false,
-        });
-    };
+    checkTemplateAndOpen = async () => {
+        const checked = await this.handleCheckTemplateSteps();
+        if (checked) {
+            this.handleOpenDialog();
+        }
+    }
 
     makeNewTemplate = () => {
-        const {id} = this.props.authStore.loginUser;
-        const {templateId} = this.props.params;
-        if (templateId === 'new') {
-            this.props.templateStore.makeNewPrivateTemplate(id, this.createWorkTemplateAndWork);
-        } else {
-            this.props.templateStore.makeNewTemplate(id);
-        }
+        const { loginUser } = this.props.authStore;
+        this.props.templateStore.makeNewPrivateTemplate(loginUser.id);
         this.handleOpenDialog();
     }
 
-    createWorkTemplateAndWork = () => {
-        this.props.templateStore.addTemplateRejectOption();
-
-        const {newWork} = this.props.workStore;
-        const {loginUser} = this.props.authStore;
-
-        this.props.templateStore.createWorkTemplateAndWork(loginUser.id, newWork, this.props.navigate);
-    }
-
-    hanleCheckTemplateSteps = () => {
-        if (this.props.templateStore.templateErrorArr.length > 0) {
+    handleCheckTemplateSteps = () => {
+        const { templateErrorArr, templateSteps } = this.props.templateStore;
+        if (templateErrorArr.length > 0) {
             alert("템플릿의 스텝 사이에 호환 오류가 있습니다.");
             return false;
         }
-        for (let i = 0; i < this.props.templateStore.templateSteps.length; i++) {
-            if (this.props.templateStore.templateSteps[i].type === TemplateStepType.Machine) {
-                if (this.props.templateStore.templateSteps[i].options === null) {
+        for (let i = 0; i < templateSteps.length; i++) {
+            if (templateSteps[i].type === TemplateStepType.Machine) {
+                if (!templateSteps[i].options) {
                     alert('옵션 중 선택 하지 않은 옵션이 있습니다.')
                     return false;
-                } else if (this.props.templateStore.templateSteps[i].options.machineType !== null && this.props.templateStore.templateSteps[i].options.machineType !== undefined) {
-                    if (this.props.templateStore.templateSteps[i].options.machineType === MachineType.MachineTranslation) {
-                        if (!this.props.templateStore.templateSteps[i].options.engine || !this.props.templateStore.templateSteps[i].options.sourceLang
-                            || !this.props.templateStore.templateSteps[i].options.targetLang) {
+                } else if (templateSteps[i].options.machineType) {
+                    if (templateSteps[i].options.machineType === MachineType.MachineTranslation) {
+                        if (!templateSteps[i].options.engine || !templateSteps[i].options.sourceLang
+                            || !templateSteps[i].options.targetLang) {
                             alert('옵션 중 선택 하지 않은 옵션이 있습니다.')
                             return false;
                         }
                     } else {
-                        if (!this.props.templateStore.templateSteps[i].options.engine || !this.props.templateStore.templateSteps[i].options.sourceLang) {
+                        if (!templateSteps[i].options.engine || !templateSteps[i].options.sourceLang) {
                             alert('옵션 중 선택 하지 않은 옵션이 있습니다.')
                             return false;
                         }
@@ -94,12 +76,10 @@ class CreateTemplateTopBar extends Component {
                     alert('옵션 중 선택 하지 않은 옵션이 있습니다.')
                     return false;
                 }
-            } else if (this.props.templateStore.templateSteps[i].type !== TemplateStepType.Editing &&
-                this.props.templateStore.templateSteps[i].type !== TemplateStepType.Refine &&
-                this.props.templateStore.templateSteps[i].type !== TemplateStepType.Export) {
-                console.log(this.props.templateStore.templateSteps[i]);
-                if (this.props.templateStore.templateSteps[i].options === null || !this.props.templateStore.templateSteps[i].options) {
-                    console.log(this.props.templateStore.templateSteps[i]);
+            } else if (templateSteps[i].type !== TemplateStepType.Editing &&
+                templateSteps[i].type !== TemplateStepType.Refine &&
+                templateSteps[i].type !== TemplateStepType.Export) {
+                if (!templateSteps[i].options) {
                     alert('옵션 중 선택 하지 않은 옵션이 있습니다.')
                     return false;
                 }
@@ -140,7 +120,7 @@ class CreateTemplateTopBar extends Component {
 
                     <Box className={classes.buttonStyle}>
                         <Button className={classes.buttonBoxIn}
-                                onClick={this.handleOpenDialog}
+                                onClick={this.checkTemplateAndOpen}
                                 disableRipple>템플릿 생성</Button>
                     </Box>
                 </Box>
@@ -150,9 +130,12 @@ class CreateTemplateTopBar extends Component {
                               hoverColor={'#9d4bfb'}
                               title={<span><b>새 템플릿 이름</b>으로 저장</span>}
                               submitText={'저장'}
-                              onClose={this.handleCloseDialog}
+                              onClose={this.handleOpenDialog}
                               onClick={this.makeNewTemplate}
-                              children={<NewCreateTemplate textFieldValue={newTemplate.name} handleChangTextField={this.handleChangeNewTemplateName}/>}/>
+                              children={
+                                <NewCreateTemplate textFieldValue={newTemplate.name}
+                                                   handleChangTextField={this.handleChangeNewTemplateName}/>
+                              }/>
             </Box>
         );
     }

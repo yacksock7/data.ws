@@ -1,17 +1,18 @@
 import React, {Component} from 'react';
 import {inject, observer} from "mobx-react";
-import {withRouter} from "../../components/WithRouter";
+import {withRouter} from "../../../components/WithRouter";
 
 import {withStyles} from "@mui/styles";
-import {styles} from "./create/styles/CreateTemplateStyle";
+import {styles} from "./styles/CreateTemplateStyle";
 
 import {Box} from "@mui/material";
 import { DragDropContext } from 'react-beautiful-dnd';
-import {ResultType, TemplateStepType, TemplateStepTypeLabel} from "../../stores/TemplateStore";
+import {ResultType, TemplateStepType, TemplateStepTypeLabel} from "../../../stores/TemplateStore";
 
-import CreateTemplateSideBar from "./create/CreateTemplateSideBar";
-import CreateTemplateContents from "./create/yet/CreateTemplateContents";
-import TemplateCreateTopBar from "./create/TemplateCreateTopBar";
+import CreateTemplateSideBar from "./sidebar/CreateTemplateSideBar";
+import CreateTemplateContents from "./content/CreateTemplateContents";
+import TemplateCreateTopBar from "./topbar/TemplateCreateTopBar";
+import {DEFAULT_STEP_OBJECT} from "./DefaultObject";
 
 
 class TemplateCreatePage extends React.Component {
@@ -65,19 +66,19 @@ class TemplateCreatePage extends React.Component {
     }
 
     makeInputResultType = (template) =>{
-        if(template.type === TemplateStepType.Recording){
+        if (template.type === TemplateStepType.Recording) {
             template.inputType = ResultType.Text;
             template.resultType = ResultType.Audio;
         }
-        else if(template.type === TemplateStepType.Labeling){
+        else if (template.type === TemplateStepType.Labeling) {
             template.inputType = ResultType.Tag;
             template.resultType = ResultType.Tag;
-        }
-        else{
+        } else {
             template.inputType = ResultType.Text;
             template.resultType = ResultType.Text;
         }
     }
+
 
     handleZoomIn = () =>{
         const { zoomLevel } = this.state;
@@ -100,20 +101,13 @@ class TemplateCreatePage extends React.Component {
     }
 
     handleClickSidebarButton = (templateStepType) => {
-        if(templateStepType === TemplateStepType.Upload || templateStepType === TemplateStepType.Export ) return;
+        if (templateStepType === TemplateStepType.Upload
+            || templateStepType === TemplateStepType.Export ) {
+            return;
+        }
 
-        let temp = [...this.props.templateStore.templateSteps];
-        let templateName = TemplateStepTypeLabel[templateStepType];
-        let tempTemplate = Object.assign({},temp[0]);
-
-        tempTemplate.type = templateStepType;
-        tempTemplate.name = templateName;
-        tempTemplate.options = null;
-
-        this.makeInputResultType(tempTemplate);
-        temp.splice(temp.length-1, 0, tempTemplate);
-
-        this.props.templateStore.changeTemplateSteps(temp);
+        const step = DEFAULT_STEP_OBJECT[templateStepType];
+        this.props.templateStore.addStepByTemplate(step);
     }
 
     onDragEnd = (result) => {

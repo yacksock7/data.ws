@@ -49,14 +49,15 @@ class CreateTemplateContents extends Component {
         this.handleClose();
     }
     render() {
-        const {classes, zoomLevel} = this.props;
+        const {classes, zoomLevel,
+            zoomIn, zoomOut} = this.props;
         const {anchorEl} = this.state;
         const open = Boolean(anchorEl);
         const { templateSteps } = this.props.templateStore;
 
         return (
             <Box className={classes.root} >
-                <Box justifyContent='center'  style={{width: 'calc(100%)'}}>
+                <Box justifyContent='center' style={{width: 'calc(100%)'}}>
                     <Droppable droppableId={"mainContent"}>
                         {(provided) => (
                             <div {...provided.droppableProps} ref={provided.innerRef}>
@@ -97,8 +98,16 @@ class CreateTemplateContents extends Component {
                  </Box>
 
                 <Box className={classes.zoomInZoomOutBox}>
-                    <IconButton className={classes.iconButton} onClick={this.props.zoomIn} disableRipple><ZoomInIcon/></IconButton>
-                    <IconButton className={classes.iconButton} onClick={this.props.zoomOut} disableRipple><ZoomOutIcon/></IconButton>
+                    <IconButton className={classes.iconButton}
+                                onClick={zoomIn}
+                                disableRipple>
+                        <ZoomInIcon/>
+                    </IconButton>
+                    <IconButton className={classes.iconButton}
+                                onClick={zoomOut}
+                                disableRipple>
+                        <ZoomOutIcon/>
+                    </IconButton>
                 </Box>
             </Box>
 

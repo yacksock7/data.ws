@@ -81,6 +81,11 @@ export const styles = (theme) => ({
             minWidth: 200,
         },
     },
+    tooltipTitleBox2:{
+        display:'flex',
+        justifyContent:'space-between',
+        alignItems:'center',
+    },
     tipText:{
         '&.MuiTypography-root': {
             fontSize: '0.75rem',
@@ -126,6 +131,13 @@ export const styles = (theme) => ({
     cardBoxSelect:{
         border: '2px solid #7500fa',
     },
+    cardContent:{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        height: 'calc(100% - 18px)'
+    },
     cardText:{
         '&.MuiTypography-root': {
             fontSize: '1rem',
@@ -135,5 +147,11 @@ export const styles = (theme) => ({
             letterSpacing: '-0.5px',
             marginBottom: 10,
         }
-    }
+    },
+    cardInfoBox: {
+        display : "flex",
+        justifyContent : "flex-end",
+        position: 'relative'
+    },
+
 });

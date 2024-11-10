@@ -59,11 +59,10 @@ export default class UserStore {
     }
 
     *getUserProfile(userId){
-        try{
-            this.userProfile =yield this.userRepository.getUserProfile(userId);
+        try {
+            this.userProfile = yield this.userRepository.getUserProfile(userId);
             console.log(LogPrefix, "userProfile", this.userProfile);
-        }
-        catch (e) {
+        } catch (e) {
             console.log(LogPrefix, "Cannot get User Profile ...", e);
         }
     }

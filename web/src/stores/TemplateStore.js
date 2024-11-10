@@ -134,10 +134,6 @@ export default class TemplateStore {
         makeAutoObservable(this);
     }
 
-    changeTemplateName = (name) => {
-        this.template.name = name;
-    }
-
     initTemplate = () =>{
         this.template = Object.assign({}, EmptyTemplate);
     }
@@ -146,28 +142,35 @@ export default class TemplateStore {
         this.newTemplate.name = name;
     }
 
-    changeTemplateSteps = (arr) =>
-    {
+    changeTemplateSteps = (arr) => {
+
         this.templateSteps = arr.slice(0);
         //this.checkTemplateOrder();
         this.checkTemplateIO();
         this.addTemplateStepHistory();
     }
-    initTemplateErrorArr = () =>
-    {
+
+    addStepByTemplate = (step) => {
+        this.templateSteps.splice(this.templateSteps.length-1, 0, step);
+        this.templateSteps = [...this.templateSteps]; // push로 observer가 작동을 안해...
+
+        this.checkTemplateIO();
+        this.addTemplateStepHistory();
+    }
+
+    initTemplateErrorArr = () => {
         this.templateErrorArr.splice(0,this.templateErrorArr.length);
     }
-    addTemplateErrorArr = (index) =>
-    {
+
+    addTemplateErrorArr = (index) => {
         this.templateErrorArr.push(index);
     }
-    delTemplateErrorArr = (index) =>
-    {
+
+    delTemplateErrorArr = (index) => {
         this.templateErrorArr.splice(index,1);
     }
 
-    checkTemplateIO = () =>
-    {
+    checkTemplateIO = () => {
         this.initTemplateErrorArr();
         const arr = this.templateSteps;
 
@@ -191,7 +194,7 @@ export default class TemplateStore {
         const arr = this.templateSteps;
         //console.log(arr);
         const translateArr = arr.map((_,index) =>index).filter(index=>arr[index].type === TemplateStepType.Machine);
-        const correctionArr = arr.map((_,index) =>index).filter(index=>arr[index].type === TemplateStepType.Correction);
+        const correctionArr = arr.map((_,index) =>index).filter(index=>arr[index].type === TemplateStepType.Editing);
         const inspectionArr = arr.map((_,index) =>index).filter(index=>arr[index].type === TemplateStepType.Inspection);
 
         const correctionTempArr = correctionArr.slice(0);
@@ -497,9 +500,6 @@ export default class TemplateStore {
     }
 
     addTemplateStepHistory = () => {
-        if (this.templateStepHistories.length > 0 && this.templateStepHistoryIndex < this.templateStepHistories.length) {
-            const test = this.templateStepHistories.splice(this.templateStepHistoryIndex);
-        }
         const templateSteps = JSON.parse(JSON.stringify(this.templateSteps));
         this.templateStepHistories.push(templateSteps);
         this.templateStepHistoryIndex += 1;
@@ -531,16 +531,26 @@ export default class TemplateStore {
         return templateType;
     }
 
-    addTemplateRejectOption = () =>{
+    addTemplateRejectOption = () => {
+        this.templateSteps =
+            this.templateSteps.map(step => {
+                switch (step) {
+                    case TemplateStepType.Refine :
+                    case TemplateStepType.Editing :
+                    case TemplateStepType.Recording :
+                    case TemplateStepType.Labeling : step.rejectPoint = true;
+                    default:
+                }
+            });
 
-        for(let i =0;i< this.templateSteps.length;i++)
-        {
-            if(this.templateSteps[i].type === TemplateStepType.Refine || this.templateSteps[i].type === TemplateStepType.Editing
-                || this.templateSteps[i].type === TemplateStepType.Recording || this.templateSteps[i].type === TemplateStepType.Labeling)
-            {
-                this.templateSteps[i].rejectPoint = true;
-            }
-        }
+        // for (let i =0; i< this.templateSteps.length; i++) {
+        //     if (this.templateSteps[i].type === TemplateStepType.Refine
+        //         || this.templateSteps[i].type === TemplateStepType.Editing
+        //         || this.templateSteps[i].type === TemplateStepType.Recording
+        //         || this.templateSteps[i].type === TemplateStepType.Labeling) {
+        //         this.templateSteps[i].rejectPoint = true;
+        //     }
+        // }
     }
 
 
@@ -652,25 +662,22 @@ export default class TemplateStore {
                     const options = step.options ? JSON.stringify(step.options) : null;
                     return {...step, options};
                 });
+
             const data = {
                 template : this.newTemplate,
                 templateSteps : templateSteps
             };
 
-            console.log("templateSteps : ", templateSteps);
-            console.log("this.templateSteps : ", this.templateSteps);
-
             const response = yield this.templateRepository.makeNewTemplate(data);
-            console.log("response : ", response);
             this.template = response.template;
             this.templateSteps = response.templateSteps.map(step => {
                 return {...step, options : JSON.parse(step.options)}
             });
-
             this.templateState = State.Success;
 
             console.log(LogPrefix, "makeNewTemplate Success!!");
             callback();
+
         } catch (e) {
             this.templateState = State.Failed;
             console.log(LogPrefix, "makeNewTemplate ERROR! e=", e.data);

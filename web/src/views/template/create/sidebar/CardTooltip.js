@@ -12,7 +12,7 @@ import {Box, IconButton, Typography} from "@mui/material";
 class CardTooltip extends Component {
 
     render() {
-        const { classes, list, handleOpenTooltip} = this.props;
+        const { classes, cardValue, handleOpenTooltip} = this.props;
 
 
         return (
@@ -22,21 +22,18 @@ class CardTooltip extends Component {
                 </Box>
 
                 <Box className={classes.tooltipBoxIn}>
-                    <Box display='flex'
-                         justifyContent='space-between'
-                         alignItems='center'
-                         className={classes.tooltipTitleBox}>
-                        <Typography>[{list.text}]</Typography>
+                    <Box className={clsx(classes.tooltipTitleBox, classes.tooltipTitleBox2)}>
+                        <Typography>[{cardValue.text}]</Typography>
                         <IconButton className={classes.iconButton}
-                                    onClick={(e) => handleOpenTooltip(e, list.textId)}
+                                    onClick={(e) => handleOpenTooltip(e, cardValue.textId)}
                                     disableRipple>
                             <TooltipCloseIcon/>
                         </IconButton>
                     </Box>
                     <ul>
-                        <li>{list.tooltip}</li>
-                        {list.tooltip2 !== '' &&
-                            <li>{list.tooltip2}</li>
+                        <li>{cardValue.tooltip}</li>
+                        {cardValue.tooltip2 !== '' &&
+                            <li>{cardValue.tooltip2}</li>
                         }
                     </ul>
                 </Box>

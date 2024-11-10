@@ -10,7 +10,7 @@ import {withRouter} from "./components/WithRouter";
 import CreateTemplate from "./views/createWork/CreateTemplate";
 import Work from "./views/stepTranslation/Work";
 import Template from "./views/template/Template";
-import TemplateCreatePage from "./views/template/TemplateCreatePage";
+import TemplateCreatePage from "./views/template/create/TemplateCreatePage";
 import Dashboard from "./views/dashboard/Dashboard";
 import LoginHome from "./views/login/LoginHome";
 import SignUp from "./views/signup/SignUp";
@@ -23,9 +23,6 @@ import Profile from "./views/profile/Profile";
 import ProfileEdit from "./views/profile/ProfileEdit";
 import DashboardMyWorkStatistics from "./views/dashboard/myWorkStatistics/DashboardMyWorkStatistics";
 import Help from "./views/help/Help";
-
-
-
 
 const styles = theme => ({
     root: {
@@ -40,9 +37,6 @@ export const drawerCloseWidth = 60;
 export const drawerSideOpenWidth = 300;
 export const totalDrawerOpenWidth = drawerOpenWidth + drawerSideOpenWidth;
 export const totalDrawerCloseWidth = drawerCloseWidth + drawerSideOpenWidth;
-
-const email = 'user@onthelive.kr';
-const password = '1234';
 
 class App extends React.Component {
     constructor(props) {
@@ -60,9 +54,9 @@ class App extends React.Component {
     }
 
     checkLoginCallback=()=>{
-        if(this.props.authStore.loginState === State.Authenticated) {
-            this.props.userStore.getUserProfile(this.props.authStore.loginUser.id);
-
+        const { loginState, loginUser } = this.props.authStore
+        if(loginState === State.Authenticated) {
+            this.props.userStore.getUserProfile(loginUser.id);
         }else{
             this.props.userStore.initUserProfile();
         }
@@ -82,19 +76,6 @@ class App extends React.Component {
                         <Routes>
                             <Route path="/template" element={<Template/>}/>
                             <Route path="/template/create" element={<TemplateCreatePage/>}/>
-                            {/*<Route path="/template/modify/:templateId" element={<TemplateCreatePage/>}/>*/}
-
-                            {/*<Route path="/create" element={<CreateWork/>}/>*/}
-                            {/*<Route path="/createTemplate/:templateId" element={<CreateTemplate/>}/>*/}
-                            {/*<Route path="/workGroup" element={<Empty />}/>*/}
-                            {/*<Route path="/help" element={<Help/>}/>*/}
-                            {/*<Route path="/work" element={<Work/>}/>*/}
-                            {/*<Route path="/profile" element={<Profile/>}/>*/}
-                            {/*<Route path="/profileEdit" element={<ProfileEdit/>}/>*/}
-                            {/*<Route path="/dashboard" element={<Dashboard/>}/>*/}
-                            {/*<Route path="/dashboard/detail" element={<DashboardDetail/>}/>*/}
-                            {/*/!* 작업자 대시보드*!/*/}
-                            {/*<Route path="/dashboard/statistics" element={<DashboardMyWorkStatistics/>}/>*/}
 
                             <Route path="/" element={<Work/>} />
                             <Route path="*" element={<Work />}/>
