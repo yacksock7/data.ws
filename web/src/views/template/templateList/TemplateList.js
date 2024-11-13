@@ -92,42 +92,41 @@ class TemplateList extends Component {
                     <Table aria-label="simple table">
                         <TableHead className={this.state.detailOpen ? classes.borderStyle : ''}>
                             <TableRow>
-                                <TableCell align='center' width='5%'>
+                                <TableCell align='center' width='8%'>
                                     <Button className={classes.arrowButton} onClick={this.handleClickArrow} disableRipple>
                                         <Typography className={classes.tableCellText}>번호</Typography>
                                         <ArrowUpIcon style={arrow ? {} : {transform: 'rotate( 180deg )'}}/>
                                     </Button>
                                 </TableCell>
 
-                                <TableCell width='26%'>
+                                <TableCell width='17%'>
                                     템플릿 이름
                                 </TableCell>
 
-                                <TableCell align='left' width='18%'>
+                                <TableCell align='left' width='26%'>
                                     포함된 단계
                                 </TableCell>
 
-                                <TableCell align='left' width='12%'>
+                                <TableCell align='left' width='15%'>
                                     <Button className={classes.arrowButton} onClick={this.handleClickArrow} disableRipple>
                                         <Typography className={classes.tableCellText}> 수정일 </Typography>
                                             <ArrowUpIcon style={arrow ? {} : {transform: 'rotate( 180deg )'}}/>
                                     </Button>
                                 </TableCell>
 
-                                <TableCell align='left' width='12%'>
+                                <TableCell align='left' width='15%'>
                                     <Button className={classes.arrowButton} onClick={this.handleClickArrow} disableRipple>
                                         <Typography className={classes.tableCellText}> 등록일 </Typography>
                                             <ArrowUpIcon style={arrow ? {} : {transform: 'rotate( 180deg )'}}/>
                                     </Button>
                                 </TableCell>
 
-                                <TableCell width='15%' colSpan={2}>
+                                <TableCell width='19%' colSpan={2}>
                                     <Button className={classes.arrowButton} onClick={this.handleClickArrow} disableRipple>
                                         <Typography className={classes.tableCellText}>등록자</Typography>
                                             <ArrowUpIcon style={ arrow ? {} : {transform: 'rotate( 180deg )'}}/>
                                     </Button>
                                 </TableCell>
-
                             </TableRow>
                         </TableHead>
                         <TableBody>
