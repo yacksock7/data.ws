@@ -13,7 +13,9 @@
 
         <typeAlias type="choi.toi.data.ws.model.Template" alias="Template" />
         <typeAlias type="choi.toi.data.ws.model.support.TemplateType" alias="TemplateType" />
+        <typeAlias type="choi.toi.data.ws.model.transfer.TemplateTableTransfer" alias="TemplateTableTransfer" />
         <typeAlias type="choi.toi.data.ws.model.TemplateStep" alias="TemplateStep" />
+        <typeAlias type="choi.toi.data.ws.model.support.TemplateStepType" alias="TemplateStepType" />
 
         <typeAlias type="choi.toi.data.ws.repository.typehandler.BooleanYnTypeHandler" alias="BooleanYnTypeHandler" />
     </typeAliases>

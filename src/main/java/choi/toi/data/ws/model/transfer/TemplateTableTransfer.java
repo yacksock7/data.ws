@@ -1,27 +1,27 @@
-package choi.toi.data.ws.model;
+package choi.toi.data.ws.model.transfer;
 
-import choi.toi.data.ws.model.support.JobStepResultType;
 import choi.toi.data.ws.model.support.TemplateStepType;
+import choi.toi.data.ws.model.support.TemplateType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TemplateStep {
-    private Long templateId;
-    private Integer templateStepNum;
-    private TemplateStepType type;
+public class TemplateTableTransfer {
+    private Long id;
+    private Long userId;
+    private String userNickname;
+    private TemplateType type;
     private String name;
-    private String options;
-    private JobStepResultType inputType;
-    private JobStepResultType resultType;
-    private boolean isRejectPoint;
     private LocalDateTime createdDatetime;
     private LocalDateTime updatedDatetime;
+
+    private List<TemplateStepType> templateStepTypes;
 }

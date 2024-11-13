@@ -4,16 +4,23 @@ import {withStyles} from "@mui/styles";
 import {styles} from "./styles/TemplateStyle";
 
 import {drawerCloseWidth, drawerOpenWidth, totalDrawerOpenWidth, totalDrawerCloseWidth} from "../../App";
-
-import StepBox from "./templateList/StepBox";
 import SearchBox from "./templateList/SeachBox";
-import ListTable from "./templateList/ListTable";
+import TemplateList from "./templateList/TemplateList";
+
+import {TemplateType} from "../../stores/TemplateStore";
 
 class Template extends Component {
 
+    componentDidMount() {
+        const { loginUser } = this.props.authStore;
+        this.props.templateStore.getTemplates(loginUser.id, TemplateType.Private);
+
+    }
+
     render() {
         const { classes} = this.props;
-        const { open, menuValue,  sideBar } = this.props.navigateStore;
+        const { open, menuValue, sideBar } = this.props.navigateStore;
+        const { templateTableTransfers } = this.props.templateStore;
 
         return (
             <div className={classes.root}
@@ -26,7 +33,7 @@ class Template extends Component {
                 <SearchBox/>
 
                 {/*TODO Template -> ListTable (데이터 연동)*/}
-                <ListTable/>
+                <TemplateList templates={templateTableTransfers}/>
                 {/*데이터 없을때 테이블*/}
                 {/*<ListTableEmpty/>*/}
 
@@ -36,7 +43,7 @@ class Template extends Component {
 };
 
 export default withStyles(styles) (
-    inject( 'navigateStore') (
+    inject( 'authStore', 'navigateStore', 'templateStore') (
         observer(Template)
     )
 );

@@ -26,7 +26,9 @@ class ChooseTemplate extends Component {
     componentDidMount() {
         const { loginUser } = this.props.authStore;
         const { tabIndex } = this.state;
-        this.props.templateStore.getTemplates(loginUser.id, tabIndex);
+
+        // this.props.templateStore.getTemplatesByTabIndex(loginUser.id, tabIndex);
+        // this.props.templateStore.getTemplates(loginUser.id, tabIndex);
     }
 
     handleChangeTabIndex = (event, tabIndex) => {

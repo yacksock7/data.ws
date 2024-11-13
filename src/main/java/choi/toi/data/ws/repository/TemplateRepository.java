@@ -2,6 +2,7 @@ package choi.toi.data.ws.repository;
 
 import choi.toi.data.ws.model.Template;
 import choi.toi.data.ws.model.support.TemplateType;
+import choi.toi.data.ws.model.transfer.TemplateTableTransfer;
 import choi.toi.data.ws.repository.mapper.TemplateMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -32,6 +33,10 @@ public class TemplateRepository {
 
     public List<Template> selectTemplates(TemplateType type) {
         return templateMapper.selectTemplateByTemplateType(type);
+    }
+
+    public List<TemplateTableTransfer> selectTableTransfers(Long userId) {
+        return templateMapper.selectTableTransfers(userId);
     }
 
     public void updateTemplate(Template template) {

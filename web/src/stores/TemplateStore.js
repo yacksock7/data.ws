@@ -101,7 +101,7 @@ const LogPrefix = '[TemplateStore]';
 
 export const LocalStorageTokenKey = '_DOBEDUB_AUTHENTICATION_TOKEN_';
 
-const TemplateType = {
+export const TemplateType = {
     All : "All",
     System : "System",
     Private : "Private"
@@ -122,6 +122,7 @@ export default class TemplateStore {
         this.templateRepository = props.templateRepository;
 
         this.templates = [];
+        this.templateTableTransfers = [];
         this.template = Object.assign({}, EmptyTemplate);
         this.newTemplate = Object.assign({}, EmptyTemplate);
         this.templateSteps = [];
@@ -564,7 +565,7 @@ export default class TemplateStore {
     }
 
 
-    *getTemplates(userId, tabIndex) {
+    *getTemplatesByTabIndex(userId, tabIndex) {
         console.log(LogPrefix, `getTemplates Start... userId=${userId}, tabIndex=${tabIndex}`);
         this.templateState = State.Pending;
 
@@ -577,6 +578,24 @@ export default class TemplateStore {
             this.templates = templates;
 
             console.log(LogPrefix, "getTemplates Success!! template=", templates);
+
+        } catch (e) {
+            this.templateState = State.Failed;
+            console.log(LogPrefix, "getTemplates ERROR! e=", e.data);
+        }
+    }
+
+    *getTemplates(userId, templateType) {
+        console.log(LogPrefix, `getTemplates Start... userId=${userId}, templateType=${templateType}`);
+        this.templateState = State.Pending;
+
+        try {
+            const params = { templateType : templateType }
+            const templateTableTransfers = yield this.templateRepository.getTemplates(userId, params);
+
+            this.templateTableTransfers = templateTableTransfers;
+            this.templateState = State.Success;
+            console.log(LogPrefix, "getTemplates Success!! templateTableTransfers=", templateTableTransfers);
 
         } catch (e) {
             this.templateState = State.Failed;
@@ -636,6 +655,7 @@ export default class TemplateStore {
                     const options = step.options ? JSON.stringify(step.options) : null;
                     return {...step, options};
                 });
+
             const data = {
                 template : this.newTemplate,
                 templateSteps : templateSteps

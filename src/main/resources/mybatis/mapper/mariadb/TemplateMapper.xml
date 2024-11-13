@@ -11,6 +11,17 @@
         <result property="createdDatetime"      column="created_datetime" />
         <result property="updatedDatetime"      column="updated_datetime" />
     </resultMap>
+    <resultMap id="TemplateTableTransferResultMap" type="TemplateTableTransfer">
+        <id     property="id"                   column="id" />
+        <result property="userId"               column="user_id" />
+        <result property="userNickname"             column="user_nickname" />
+        <result property="type"                 column="type" />
+        <result property="name"                 column="name" />
+        <result property="createdDatetime"      column="created_datetime" />
+        <result property="updatedDatetime"      column="updated_datetime" />
+
+        <collection property="templateStepTypes" column="templateId=id" select="selectStepTypesByTemplateId"/>
+    </resultMap>
 
     <insert id="insertTemplate" parameterType="Template" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO templates (
@@ -57,6 +68,29 @@
             updated_datetime
         FROM templates
         WHERE type = #{type}
+    </select>
+
+    <select id="selectTableTransfers" parameterType="Long" resultMap="TemplateTableTransferResultMap">
+        SELECT
+            t.id,
+            t.user_id,
+            u.nickname AS user_nickname,
+            t.type,
+            t.name,
+            t.created_datetime,
+            t.updated_datetime
+        FROM templates t
+        INNER JOIN users u ON t.user_id = u.id
+        WHERE t.user_id = #{userId}
+        ORDER BY updated_datetime DESC
+    </select>
+
+    <select id="selectStepTypesByTemplateId" parameterType="Map" resultType="TemplateStepType">
+        SELECT
+            type
+        FROM template_steps
+        WHERE template_id=#{templateId}
+        ORDER BY template_step_num ASC
     </select>
 
     <update id="updateTemplate" parameterType="Template">

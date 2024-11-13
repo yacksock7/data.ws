@@ -1,6 +1,6 @@
 package choi.toi.data.ws.model.support;
 
-public enum StepType {
+public enum TemplateStepType {
     Upload,
     Recording,
     Machine,

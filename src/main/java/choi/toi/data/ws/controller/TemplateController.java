@@ -1,6 +1,9 @@
 package choi.toi.data.ws.controller;
 
+import choi.toi.data.ws.model.Template;
+import choi.toi.data.ws.model.support.TemplateType;
 import choi.toi.data.ws.model.transfer.TemplateStepTransfer;
+import choi.toi.data.ws.model.transfer.TemplateTableTransfer;
 import choi.toi.data.ws.service.TemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +47,13 @@ public class TemplateController {
 //                                       @RequestParam(value ="templateType") TemplateType type) {
 //        return templateService.getTemplates(userId, type);
 //    }
+
+    @GetMapping("/userId/{userId}")
+    public List<TemplateTableTransfer> getTransfers(HttpServletRequest request,
+                                                    @PathVariable Long userId,
+                                                    @RequestParam(value ="templateType") TemplateType type) {
+        return templateService.getTableTransfers(userId, type);
+    }
 //
 //    @PutMapping
 //    public Template modifyTemplate(HttpServletRequest request,

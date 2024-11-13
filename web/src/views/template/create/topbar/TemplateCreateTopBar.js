@@ -47,15 +47,21 @@ class CreateTemplateTopBar extends Component {
 
     makeNewTemplate = async () => {
         const { loginUser } = this.props.authStore;
+        const { newTemplate } = this.props.templateStore;
 
-        this.handleOpenDialog();
+        if (!newTemplate.name || newTemplate.name.trim() == "") {
+            return;
+        }
+
         await this.props.templateStore.makeNewPrivateTemplate(loginUser.id);
 
+        this.handleOpenDialog();
         const { templateState } = this.props.templateStore;
         if (templateState === State.Success) {
             alert("템플릿 생성 완료!");
             this.props.navigate("/template");
         }
+
     }
 
     handleCheckTemplateSteps = () => {
