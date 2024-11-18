@@ -12,9 +12,12 @@ import {TemplateType} from "../../stores/TemplateStore";
 class Template extends Component {
 
     componentDidMount() {
+        this.getTemplates();
+    }
+
+    getTemplates = () => {
         const { loginUser } = this.props.authStore;
         this.props.templateStore.getTemplates(loginUser.id, TemplateType.Private);
-
     }
 
     render() {
@@ -33,7 +36,8 @@ class Template extends Component {
                 <SearchBox/>
 
                 {/*TODO Template -> ListTable (데이터 연동)*/}
-                <TemplateList templates={templateTableTransfers}/>
+                <TemplateList templates={templateTableTransfers}
+                              getTemplates={this.getTemplates}/>
                 {/*데이터 없을때 테이블*/}
                 {/*<ListTableEmpty/>*/}
 

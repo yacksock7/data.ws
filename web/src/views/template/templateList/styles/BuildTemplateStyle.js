@@ -548,13 +548,26 @@ export const styles = (theme) => ({
         }
     },
 
-
+    contentsBox:{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems:'center',
+    },
     popoverBox:{
-        '& .MuiPopover-paper': {
-            overflow: 'unset',
-            top: '458px !important',
-            // left: '930px !important'
-        }
+        // '& .MuiPopover-paper': {
+        //     position : "relative",
+        //     // overflow: 'unset',
+        //     // top: '458px !important',
+        //     // left: '930px !important'
+        // }
+        '& .MuiPaper-root':{
+            width: 342,
+            boxShadow:'0 4px 7px 0 rgba(0, 0, 0, 0.45)',
+            borderRadius: 6,
+            background: '#fff',
+            padding:'0 3px 0 9px',
+            boxSizing: 'border-box',
+        },
     },
     TagBoxOuter: {
         maxWidth: '280px',

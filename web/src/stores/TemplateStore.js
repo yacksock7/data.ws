@@ -644,43 +644,6 @@ export default class TemplateStore {
         }
     }
 
-    *makeNewTemplate(userId, callback) {
-        console.log(LogPrefix, `makeNewTemplate Start...`);
-        this.templateState = State.Pending;
-
-        try {
-            this.newTemplate.userId = userId;
-            const templateSteps =
-                this.templateSteps.map(step => {
-                    const options = step.options ? JSON.stringify(step.options) : null;
-                    return {...step, options};
-                });
-
-            const data = {
-                template : this.newTemplate,
-                templateSteps : templateSteps
-            };
-
-            console.log("templateSteps : ", templateSteps);
-            console.log("this.templateSteps : ", this.templateSteps);
-
-            yield this.templateRepository.makeNewTemplate(data);
-            const response = yield this.templateRepository.makeNewTemplate(data);
-            //console.log("response : ", response);
-            // this.template = response.template;
-            // this.templateSteps = response.templateSteps.map(step => {
-            //     return {...step, options : JSON.parse(step.options)}
-            // });
-
-            this.templateState = State.Success;
-
-            console.log(LogPrefix, "makeNewTemplate Success!!");
-            callback();
-        } catch (e) {
-            this.templateState = State.Failed;
-            console.log(LogPrefix, "makeNewTemplate ERROR! e=", e.data);
-        }
-    }
 
     *makeNewPrivateTemplate(userId) {
         console.log(LogPrefix, `makeNewTemplate Start...`);
@@ -771,5 +734,51 @@ export default class TemplateStore {
             // this.template = Object.assign({}, EmptyTemplate);
         }
     }
-    
+
+
+    *removeTemplate(templateId) {
+        console.log(LogPrefix, `removeTemplate Start...`);
+        this.templateState = State.Pending;
+
+        try {
+            yield this.templateRepository.removeTemplate(templateId);
+            this.templateState = State.Success;
+
+            console.log(LogPrefix, "removeTemplate Success!!");
+        } catch (e) {
+            this.templateState = State.Failed;
+            console.log(LogPrefix, "removeTemplate ERROR! e=", e.data);
+        }
+    }
+
+    *makeNewTemplate(userId, callback) {
+        console.log(LogPrefix, `makeNewTemplate Start...`);
+        this.templateState = State.Pending;
+
+        try {
+            this.newTemplate.userId = userId;
+            const templateSteps =
+                this.templateSteps.map(step => {
+                    const options = step.options ? JSON.stringify(step.options) : null;
+                    return {...step, options};
+                });
+
+            const data = {
+                template : this.newTemplate,
+                templateSteps : templateSteps
+            };
+
+            console.log("templateSteps : ", templateSteps);
+            console.log("this.templateSteps : ", this.templateSteps);
+
+            yield this.templateRepository.makeNewTemplate(data);
+            this.templateState = State.Success;
+
+            console.log(LogPrefix, "makeNewTemplate Success!!");
+            callback();
+        } catch (e) {
+            this.templateState = State.Failed;
+            console.log(LogPrefix, "makeNewTemplate ERROR! e=", e.data);
+        }
+    }
 }

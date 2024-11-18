@@ -7,11 +7,11 @@ import dayjs from "dayjs";
 import { ReactComponent as ArrowUpIcon } from '../../../common/images/ArrowUpIcon.svg';
 import { ReactComponent as ArrowDownIcon } from '../../../common/images/ArrowDownIcon.svg';
 import { ReactComponent as TableArrowUp } from '../../../common/images/TableArrowUp.svg';
+import { ReactComponent as MenuDotsIcon } from "../../../common/images/MenuDotsIcon.svg";
 
 import {
     Box,
     MenuItem,
-    Select,
     Button,
     IconButton,
     Typography,
@@ -22,9 +22,10 @@ import {
     TableCell,
     TableBody,
     TableContainer,
-    TablePagination,
+    TablePagination, Popover, MenuList,
 } from "@mui/material";
 import {TemplateStepType, TemplateStepTypeLabel} from "../../../stores/TemplateStore";
+import {inject, observer} from "mobx-react";
 
 
 class TemplateList extends Component {
@@ -34,6 +35,7 @@ class TemplateList extends Component {
             arrow: false,
             state: '1',
             registrationAnchorEl: null,
+            dotsAnchorEl: null,
             page: 0,
             rowsPerPage: 5,
         }
@@ -58,11 +60,36 @@ class TemplateList extends Component {
         });
     };
 
+    // handleClickPopover = (event) => {
+    //     this.setState({ dotsAnchorEl : event.currentTarget.id });
+    //     console.log("event.currentTarget.id : ", event);
+    // }
+    //
+    // handleClickPopoverValue = (e) => {
+    //     console.log("this.state.dotsAnchorEl : ", this.state.dotsAnchorEl );
+    //     console.log("event.currentTarget.id : ", e.target.value);
+    //     this.setState({ dotsAnchorEl : null });
+    // }
+
+     handleClickPopover = (event) => {
+         this.setState({dotsAnchorEl:event.currentTarget});
+    };
+
     handleClosePopover = () => {
-        this.setState({
-            registrationAnchorEl: null,
-            periodAnchorEl: null,
-        });
+        this.setState({dotsAnchorEl:null});
+    };
+
+    // 메뉴 항목 클릭 핸들러
+    handleMenuItemClick = async (value) => {
+        const {dotsAnchorEl} = this.state;
+
+        if (value === 3) { // 삭제
+            const templateId = Number(dotsAnchorEl.id);
+            await this.props.templateStore.removeTemplate(templateId);
+            this.props.getTemplates();
+        }
+
+        this.handleClosePopover();
     };
 
     getTemplateStepLabel = (stepType) => {
@@ -80,11 +107,10 @@ class TemplateList extends Component {
         }
     }
 
-
-
     render() {
         const { classes, templates } = this.props;
-        const { rowsPerPage, page, arrow, state } = this.state;
+        const { rowsPerPage, page, arrow, dotsAnchorEl } = this.state;
+        const dotsOpen = Boolean(dotsAnchorEl);
 
         return (
             <div>
@@ -149,37 +175,6 @@ class TemplateList extends Component {
                                             <IconButton onClick={this.handleClickRegistration} disableRipple>
                                                 <TableArrowUp/>
                                             </IconButton>
-                                            {/*<Popover id="simple-popper"*/}
-                                            {/*         className={classes.popoverBox}*/}
-                                            {/*         open={registrationOpen}*/}
-                                            {/*         anchorEl={registrationAnchorEl}*/}
-                                            {/*         anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}*/}
-                                            {/*         transformOrigin={{vertical: 'top', horizontal: 'right'}}*/}
-                                            {/*         onClose={this.handleClosePopover}>*/}
-                                            {/*    <Box>*/}
-                                            {/*        <Box className={classes.TagBoxOuter}>*/}
-                                            {/*            <Box className={classes.TagBoxtopIcon}><TagBoxtopIcon/></Box>*/}
-                                            {/*            <Box className={classes.tagBoxCloseIcon}><IconButton disableRipple><TagBoxCloseIcon/></IconButton></Box>*/}
-
-                                            {/*            <Box className={classes.tagBox}>*/}
-                                            {/*                {template.templateStepTypes.map(stepType => {*/}
-                                            {/*                    return  <Box className={this.getTemplateStepLabel(stepType)}><Typography> {TemplateStepTypeLabel[stepType]} </Typography></Box>*/}
-                                            {/*                })}*/}
-                                            {/*            </Box>*/}
-                                            {/*        </Box>*/}
-                                            {/*    </Box>*/}
-                                            {/*</Popover>*/}
-
-                                            {/*<Box sx={{position: 'relative'}}>*/}
-                                            {/*    <IconButton disableRipple>*/}
-                                            {/*        <TableArrowUp/>*/}
-                                            {/*    </IconButton>*/}
-                                            {/*    <Box sx={{position: 'absolute', zIndex: 999, background: '#fff', top: '30px', height: '40px', border: '1px solid #000'}}>*/}
-                                            {/*        <Box className={clsx(classes.squareChipBox, classes.squareChipBox6)}><Typography>업로드</Typography></Box>*/}
-                                            {/*        <Box className={clsx(classes.squareChipBox, classes.squareChipBox3)}><Typography>녹음</Typography></Box>*/}
-                                            {/*    </Box>*/}
-                                            {/*</Box>*/}
-
                                         </Box>
                                     </TableCell>
                                     <TableCell>
@@ -194,19 +189,28 @@ class TemplateList extends Component {
                                     </TableCell>
                                     <TableCell>
                                         <Box>
-                                            <Select className={classes.selectBox}
-                                                    value={state}
-                                                    onChange={this.handleChangeState}
-                                                    IconComponent={(props) => (<Box><ArrowDownIcon  {...props} /></Box>)}
-                                                    MenuProps={{
-                                                        className:classes.selectPopover,
-                                                        anchorOrigin: {vertical: "bottom", horizontal: "right"},
-                                                        transformOrigin:{vertical: 'top', horizontal: 'right',}
-                                                    }}>
-                                                <MenuItem value={1}>편집</MenuItem>
-                                                <MenuItem value={2}>복제</MenuItem>
-                                                <MenuItem value={3}>삭제</MenuItem>
-                                            </Select>
+                                            <IconButton id={template.id}
+                                                        aria-haspopup="true"
+                                                        aria-controls={dotsOpen ? 'template-menu' : undefined}
+                                                        onClick={this.handleClickPopover}
+                                                        disableRipple>
+                                                <MenuDotsIcon/>
+                                            </IconButton>
+
+                                            <Popover id="template-menu"
+                                                     open={dotsOpen}
+                                                     anchorEl={dotsAnchorEl}
+                                                     onClose={this.handleClosePopover}
+                                                     anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                                                     transformOrigin={{ vertical: 'top', horizontal: 'left' }}>
+                                                <MenuList>
+                                                    <MenuItem onClick={() => this.handleMenuItemClick(1)}
+                                                              disabled={true}> 편집 </MenuItem>
+                                                    <MenuItem onClick={() => this.handleMenuItemClick(2)}
+                                                              disabled={true}> 복제 </MenuItem>
+                                                    <MenuItem onClick={() => this.handleMenuItemClick(3)}>삭제</MenuItem>
+                                                </MenuList>
+                                            </Popover>
                                         </Box>
                                     </TableCell>
                                 </TableRow>
@@ -237,4 +241,8 @@ class TemplateList extends Component {
     }
 };
 
-export default withStyles(styles)(TemplateList);
+export default withStyles(styles)(
+    inject( 'templateStore') (
+        observer(TemplateList)
+    )
+);

@@ -61,9 +61,9 @@ public class TemplateController {
 //        return templateService.modifyTemplate(template);
 //    }
 //
-//    @DeleteMapping("/{templateId}")
-//    public void removeTemplate(HttpServletRequest request,
-//                               @PathVariable Long templateId) {
-//        templateService.removeTemplate(templateId);
-//    }
+    @DeleteMapping("/{templateId}")
+    public void removeTemplate(HttpServletRequest request,
+                               @PathVariable Long templateId) {
+        templateService.removeTemplate(templateId);
+    }
 }
