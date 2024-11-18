@@ -83,13 +83,13 @@ class MenuBar extends Component {
                     </Box>
 
                     <Box className={open ? classes.listBox : clsx(classes.listBox, classes.listBoxOpen)}>
-                        {/*<Link to="/create" className={classes.underline}>*/}
-                        {/*    <ListItem className={menuValue === 0 ? classes.listBoxSelect : null}*/}
-                        {/*              onClick={this.goToCreateWork}>*/}
-                        {/*        <ListItemIcon><AddIcon/></ListItemIcon>*/}
-                        {/*        <ListItemText primary={'작업 만들기'} />*/}
-                        {/*    </ListItem>*/}
-                        {/*</Link>*/}
+                        <Link to="/create" className={classes.underline}>
+                            <ListItem className={menuValue === 0 ? classes.listBoxSelect : null}
+                                      onClick={this.goToCreateWork}>
+                                <ListItemIcon><AddIcon/></ListItemIcon>
+                                <ListItemText primary={'작업 만들기'} />
+                            </ListItem>
+                        </Link>
 
                         {/*<Link to="/dashboard" className={classes.underline}>*/}
                         {/*    <ListItem className={menuValue === 5 ? classes.listBoxSelect : null}*/}
