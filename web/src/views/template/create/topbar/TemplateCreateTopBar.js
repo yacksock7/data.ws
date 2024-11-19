@@ -151,12 +151,12 @@ class CreateTemplateTopBar extends Component {
 
                     <Box className={classes.buttonStyle}>
 
-                        {purpose === "template" && actionType === "create" &&
+                        {actionType === "create" &&
                             <Button className={classes.buttonBoxIn}
                                     onClick={this.checkTemplateAndOpen}
                                     disableRipple>템플릿 생성</Button>
                         }
-                        {purpose === "template" && actionType === "modify" &&
+                        {actionType === "modify" &&
                             <Button className={classes.buttonBoxIn}
                                     onClick={this.modifyTemplate}
                                     disableRipple>템플릿 수정</Button>
