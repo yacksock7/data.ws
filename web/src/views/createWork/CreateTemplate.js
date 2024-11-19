@@ -63,7 +63,7 @@ class CreateTemplate extends React.Component {
         }
         else{
             this.props.templateStore.getTemplate(templateId);
-            this.props.templateStore.getTemplateSteps(templateId);
+            // this.props.templateStore.getTemplateSteps(templateId);
         }
         this.props.navigateStore.changeHidden(true);
         // }

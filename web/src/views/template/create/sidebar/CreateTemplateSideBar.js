@@ -58,12 +58,10 @@ class CreateTemplateSideBar extends Component {
     };
 
     handleClickCard = (value) => {
+
         const { template } = this.props.templateStore;
         this.setState({cardSelect: value});
-
         if(template.type !== "Private") return;
-        // if (value === TemplateStepType.Recording || value === TemplateStepType.Labeling) return;
-
         this.props.onButtonClick(value);
     };
 

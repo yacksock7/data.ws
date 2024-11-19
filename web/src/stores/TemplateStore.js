@@ -128,7 +128,7 @@ export default class TemplateStore {
         this.templateSteps = [];
         this.templateStepHistories = [];
         this.templateStepHistoryIndex = 0;
-        this.tempalteDeleteIndex = 0;
+        this.templateDeleteIndex = 0;
         this.templateErrorArr = [];
         this.templateState = State.Initial;
 
@@ -154,7 +154,6 @@ export default class TemplateStore {
     }
 
     changeTemplateSteps = (arr) => {
-
         this.templateSteps = arr;
         //this.checkTemplateOrder();
         this.checkTemplateIO();
@@ -162,6 +161,7 @@ export default class TemplateStore {
     }
 
     addStepByTemplate = (step) => {
+        console.log("step : ", step);
         this.templateSteps.splice(this.templateSteps.length-1, 0, step);
         this.templateSteps = [...this.templateSteps]; // push로 observer가 작동을 안해...
 
@@ -170,7 +170,7 @@ export default class TemplateStore {
     }
 
     initTemplateErrorArr = () => {
-        this.templateErrorArr.splice(0,this.templateErrorArr.length);
+        this.templateErrorArr.splice(0, this.templateErrorArr.length);
     }
 
     addTemplateErrorArr = (index) => {
@@ -185,14 +185,13 @@ export default class TemplateStore {
         this.initTemplateErrorArr();
         const arr = this.templateSteps;
 
-        for(let i=0;i<arr.length-1;i++)
-        {
-            try{
-                if(arr[i].resultType !==arr[i+1].inputType){
+        for (let i=0; i<arr.length-1; i++) {
+            try {
+                if (arr[i].resultType !== arr[i+1].inputType){
                 this.addTemplateErrorArr(i);
                 this.addTemplateErrorArr(i+1);
-            }}
-            catch(e){
+                }
+            } catch(e) {
                 this.addTemplateErrorArr(i);
                 this.addTemplateErrorArr(i+1);
             }
@@ -292,9 +291,9 @@ export default class TemplateStore {
         }
     }
     deleteTemplateStep = (index) => {
-        if(this.templateErrorArr.findIndex(item => item === index) >= 0)
-        {
-            this.delTemplateErrorArr(this.templateErrorArr.findIndex(item => item === index));
+        const errIndex = this.templateErrorArr.findIndex(item => item === index)
+        if (errIndex >= 0) {
+            this.delTemplateErrorArr(errIndex);
         }
         this.templateSteps.splice(index,1);
         this.addTemplateStepHistory();
@@ -491,24 +490,24 @@ export default class TemplateStore {
         }
     }
 
-    changeMachineTranslationTargetLang = (value, index, addHistory) => {
-        const mtStep = this.templateSteps[index];
-
-        if(mtStep.type !== TemplateStepType.Machine )
-        {
-            console.log("[Failed] Type error : "+mtStep.type)
-        }
-        else
-        {
-            mtStep.options = {
-                ...mtStep.options,
-                targetLang : value
-            };
-            this.checkTemplateIO();
-            if(addHistory)
-                this.addTemplateStepHistory();
-        }
-    }
+    // changeMachineTranslationTargetLang = (value, index, addHistory) => {
+    //     const mtStep = this.templateSteps[index];
+    //
+    //     if(mtStep.type !== TemplateStepType.Machine )
+    //     {
+    //         console.log("[Failed] Type error : "+mtStep.type)
+    //     }
+    //     else
+    //     {
+    //         mtStep.options = {
+    //             ...mtStep.options,
+    //             targetLang : value
+    //         };
+    //         this.checkTemplateIO();
+    //         if(addHistory)
+    //             this.addTemplateStepHistory();
+    //     }
+    // }
 
     addTemplateStepHistory = () => {
         const templateSteps = JSON.parse(JSON.stringify(this.templateSteps));
@@ -542,48 +541,25 @@ export default class TemplateStore {
         return templateType;
     }
 
-    addTemplateRejectOption = () => {
-        this.templateSteps =
-            this.templateSteps.map(step => {
-                switch (step) {
-                    case TemplateStepType.Refine :
-                    case TemplateStepType.Editing :
-                    case TemplateStepType.Recording :
-                    case TemplateStepType.Labeling : step.rejectPoint = true;
-                    default:
-                }
-            });
-
-        // for (let i =0; i< this.templateSteps.length; i++) {
-        //     if (this.templateSteps[i].type === TemplateStepType.Refine
-        //         || this.templateSteps[i].type === TemplateStepType.Editing
-        //         || this.templateSteps[i].type === TemplateStepType.Recording
-        //         || this.templateSteps[i].type === TemplateStepType.Labeling) {
-        //         this.templateSteps[i].rejectPoint = true;
-        //     }
-        // }
-    }
-
-
-    *getTemplatesByTabIndex(userId, tabIndex) {
-        console.log(LogPrefix, `getTemplates Start... userId=${userId}, tabIndex=${tabIndex}`);
-        this.templateState = State.Pending;
-
-        try {
-            const templateType = this.convertTabIndexToTemplateType(tabIndex);
-            const params = { templateType : templateType }
-            const templates = yield this.templateRepository.getTemplates(userId, params);
-
-            this.templateState = State.Success;
-            this.templates = templates;
-
-            console.log(LogPrefix, "getTemplates Success!! template=", templates);
-
-        } catch (e) {
-            this.templateState = State.Failed;
-            console.log(LogPrefix, "getTemplates ERROR! e=", e.data);
-        }
-    }
+    // *getTemplatesByTabIndex(userId, tabIndex) {
+    //     console.log(LogPrefix, `getTemplates Start... userId=${userId}, tabIndex=${tabIndex}`);
+    //     this.templateState = State.Pending;
+    //
+    //     try {
+    //         const templateType = this.convertTabIndexToTemplateType(tabIndex);
+    //         const params = { templateType : templateType }
+    //         const templates = yield this.templateRepository.getTemplates(userId, params);
+    //
+    //         this.templateState = State.Success;
+    //         this.templates = templates;
+    //
+    //         console.log(LogPrefix, "getTemplates Success!! template=", templates);
+    //
+    //     } catch (e) {
+    //         this.templateState = State.Failed;
+    //         console.log(LogPrefix, "getTemplates ERROR! e=", e.data);
+    //     }
+    // }
 
     *getTemplates(userId, templateType) {
         console.log(LogPrefix, `getTemplates Start... userId=${userId}, templateType=${templateType}`);
@@ -603,46 +579,30 @@ export default class TemplateStore {
         }
     }
 
-    *getTemplate(templateId) {
-        console.log(LogPrefix, `getTemplate Start... templateId=${templateId}`);
-        this.templateState = State.Pending;
 
-        try {
-            const template = yield this.templateRepository.getTemplate(templateId);
-
-            this.templateState = State.Success;
-            this.template = template;
-
-            console.log(LogPrefix, "getTemplate Success!! template=", template);
-
-        } catch (e) {
-            this.templateState = State.Failed;
-            console.log(LogPrefix, "getTemplate ERROR! e=", e.data);
-        }
-    }
     initTemplateSteps = () => {
         this.templateSteps = [];
     }
-    *getTemplateSteps(templateId) {
-        console.log(LogPrefix, `getTemplateSteps Start... templateId=${templateId}`);
-        this.templateState = State.Pending;
-
-        try {
-            const templateSteps = yield this.templateRepository.getTemplateSteps(templateId);
-            this.templateState = State.Success;
-            this.templateSteps = templateSteps.map(step => {
-                const options = step.options ? JSON.parse(step.options) : null;
-                return {...step, options}
-            });
-
-            this.addTemplateStepHistory();
-            console.log(LogPrefix, "getTemplateSteps Success!! templateSteps=", templateSteps);
-
-        } catch (e) {
-            this.templateState = State.Failed;
-            console.log(LogPrefix, "getTemplateSteps ERROR! e=", e.data);
-        }
-    }
+    // *getTemplateSteps(templateId) {
+    //     console.log(LogPrefix, `getTemplateSteps Start... templateId=${templateId}`);
+    //     this.templateState = State.Pending;
+    //
+    //     try {
+    //         const templateSteps = yield this.templateRepository.getTemplateSteps(templateId);
+    //         this.templateState = State.Success;
+    //         this.templateSteps = templateSteps.map(step => {
+    //             const options = step.options ? JSON.parse(step.options) : null;
+    //             return {...step, options}
+    //         });
+    //
+    //         this.addTemplateStepHistory();
+    //         console.log(LogPrefix, "getTemplateSteps Success!! templateSteps=", templateSteps);
+    //
+    //     } catch (e) {
+    //         this.templateState = State.Failed;
+    //         console.log(LogPrefix, "getTemplateSteps ERROR! e=", e.data);
+    //     }
+    // }
 
 
     *makeNewPrivateTemplate(userId) {
@@ -736,18 +696,27 @@ export default class TemplateStore {
     }
 
 
-    *removeTemplate(templateId) {
-        console.log(LogPrefix, `removeTemplate Start...`);
+
+
+    *getTemplate(templateId) {
+        console.log(LogPrefix, `getTemplate Start... templateId=${templateId}`);
         this.templateState = State.Pending;
 
         try {
-            yield this.templateRepository.removeTemplate(templateId);
-            this.templateState = State.Success;
+            const template = yield this.templateRepository.getTemplate(templateId);
+            this.template = template;
+            this.templateSteps = template.steps.map(step => {
+                const options = step.options ? JSON.parse(step.options) : null;
+                return {...step, options}
+            });
+            this.addTemplateStepHistory();
+            console.log("template.steps: ", template.steps);
 
-            console.log(LogPrefix, "removeTemplate Success!!");
+            this.templateState = State.Success;
+            console.log(LogPrefix, "getTemplate Success!! template=", template);
         } catch (e) {
             this.templateState = State.Failed;
-            console.log(LogPrefix, "removeTemplate ERROR! e=", e.data);
+            console.log(LogPrefix, "getTemplate ERROR! e=", e.data);
         }
     }
 
@@ -768,9 +737,6 @@ export default class TemplateStore {
                 templateSteps : templateSteps
             };
 
-            console.log("templateSteps : ", templateSteps);
-            console.log("this.templateSteps : ", this.templateSteps);
-
             yield this.templateRepository.makeNewTemplate(data);
             this.templateState = State.Success;
 
@@ -779,6 +745,44 @@ export default class TemplateStore {
         } catch (e) {
             this.templateState = State.Failed;
             console.log(LogPrefix, "makeNewTemplate ERROR! e=", e.data);
+        }
+    }
+
+    *modifyTemplateSteps() {
+        console.log(LogPrefix, `modifyTemplateSteps Start...`);
+        this.templateState = State.Pending;
+
+        try {
+            const templateSteps =
+                this.templateSteps.map(step => {
+                    const options = step.options ? JSON.stringify(step.options) : null;
+                    return {...step, options};
+                });
+
+            const templateId = this.template.id;
+            const data = templateSteps;
+            yield this.templateRepository.modifyTemplateSteps(templateId, data);
+            this.templateState = State.Success;
+
+            console.log(LogPrefix, "modifyTemplateSteps Success!!");
+        } catch (e) {
+            this.templateState = State.Failed;
+            console.log(LogPrefix, "modifyTemplateSteps ERROR! e=", e.data);
+        }
+    }
+
+    *removeTemplate(templateId) {
+        console.log(LogPrefix, `removeTemplate Start...`);
+        this.templateState = State.Pending;
+
+        try {
+            yield this.templateRepository.removeTemplate(templateId);
+            this.templateState = State.Success;
+
+            console.log(LogPrefix, "removeTemplate Success!!");
+        } catch (e) {
+            this.templateState = State.Failed;
+            console.log(LogPrefix, "removeTemplate ERROR! e=", e.data);
         }
     }
 }

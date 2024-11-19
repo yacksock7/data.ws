@@ -36,7 +36,7 @@ public class TemplateStepRepository {
         templateStepMapper.deleteTemplateStep(templateId, templateStepNum);
     }
 
-    public void deleteTemplateStep(Long templateId) {
-        templateStepMapper.deleteTemplateStepByTemplateId(templateId);
+    public void delete(Long templateId) {
+        templateStepMapper.deleteTemplateStepsByTemplateId(templateId);
     }
 }

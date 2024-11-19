@@ -50,9 +50,7 @@ export default class TemplateRepository extends Repository {
             this.getRequestPromise('get', this.requestPrefix + `/${templateId}/steps`)
                 .then(data => {
                     resolve(data);
-                })
-                .catch(error => {
-
+                }).catch(error => {
                     reject(error);
                 });
         });
@@ -63,9 +61,17 @@ export default class TemplateRepository extends Repository {
             this.getRequestPromise('post', this.requestPrefix, {}, data)
                 .then(data => {
                     resolve(data);
-                })
-                .catch(error => {
-
+                }).catch(error => {
+                    reject(error);
+                });
+        });
+    }
+    modifyTemplateSteps = (templateId, data) => {
+        return new Promise((resolve, reject) => {
+            this.getRequestPromise('put', this.requestPrefix+`/${templateId}/steps`, {}, data)
+                .then(data => {
+                    resolve(data);
+                }).catch(error => {
                     reject(error);
                 });
         });
@@ -76,9 +82,7 @@ export default class TemplateRepository extends Repository {
             this.getRequestPromise('delete', this.requestPrefix + `/${templateId}`)
                 .then(data => {
                     resolve(data);
-                })
-                .catch(error => {
-
+                }).catch(error => {
                     reject(error);
                 });
         });

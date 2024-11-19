@@ -10,5 +10,5 @@ public interface TemplateStepMapper {
     List<TemplateStep> selectTemplateSteps(Long templateId);
     void updateTemplateStep(TemplateStep templateStep);
     void deleteTemplateStep(Long templateId, Integer templateStepNum);
-    void deleteTemplateStepByTemplateId(Long templateId);
+    void deleteTemplateStepsByTemplateId(Long templateId);
 }

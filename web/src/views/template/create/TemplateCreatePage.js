@@ -36,7 +36,6 @@ class TemplateCreatePage extends React.Component {
             this.props.templateStore.changeTemplateSteps(tempArr);
         } else {
             this.props.templateStore.getTemplate(templateId);
-            this.props.templateStore.getTemplateSteps(templateId);
         }
         this.props.navigateStore.changeHidden(true);
     }
@@ -136,12 +135,15 @@ class TemplateCreatePage extends React.Component {
     }
 
     render() {
+        const { purpose, actionType } = this.props.params;
         const { template } = this.props.templateStore;
 
 
         return (
             <Box>
-                <TemplateCreateTopBar/>
+                <TemplateCreateTopBar template={template}
+                                      purpose={purpose}
+                                      actionType={actionType}/>
                 <DragDropContext onDragEnd={this.onDragEnd}>
                     <Box display='flex' >
                         <CreateTemplateSideBar template={template}

@@ -22,7 +22,7 @@ class CreateTemplateContents extends Component {
     }
 
     handleClick = (event,index) => {
-        this.props.templateStore.tempalteDeleteIndex = index;
+        this.props.templateStore.templateDeleteIndex = index;
         //console.log( this.props.templateStore.tempalteDeleteIndex);
         this.setState({
             anchorEl: event.currentTarget,
@@ -42,7 +42,7 @@ class CreateTemplateContents extends Component {
             alert("기본 템플릿은 수정 할 수 없습니다.");
             return;
         }
-        this.props.templateStore.deleteTemplateStep(this.props.templateStore.tempalteDeleteIndex);
+        this.props.templateStore.deleteTemplateStep(this.props.templateStore.templateDeleteIndex);
         //console.log(e.target);
         this.handleClose();
     }

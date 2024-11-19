@@ -83,7 +83,7 @@ class MenuBar extends Component {
                     </Box>
 
                     <Box className={open ? classes.listBox : clsx(classes.listBox, classes.listBoxOpen)}>
-                        <Link to="/create" className={classes.underline}>
+                        <Link to="/work/create" className={classes.underline}>
                             <ListItem className={menuValue === 0 ? classes.listBoxSelect : null}
                                       onClick={this.goToCreateWork}>
                                 <ListItemIcon><AddIcon/></ListItemIcon>

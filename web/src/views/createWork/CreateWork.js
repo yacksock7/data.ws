@@ -61,15 +61,10 @@ class CreateWork extends Component {
         const { activeStep } = this.state;
 
         return (
-            <Box
-                className={classes.root}
-                style={
-                    open ?
-                        menuValue === 1 && sideBar ? {marginLeft: totalDrawerOpenWidth} : {marginLeft: drawerOpenWidth}
-                        :
-                        menuValue === 1 && sideBar ? {marginLeft: totalDrawerCloseWidth} : {marginLeft: drawerCloseWidth}
-                }
-            >
+            <Box className={classes.root}
+                 style={open ?
+                     menuValue === 1 && sideBar ? {marginLeft: totalDrawerOpenWidth} : {marginLeft: drawerOpenWidth}
+                     : menuValue === 1 && sideBar ? {marginLeft: totalDrawerCloseWidth} : {marginLeft: drawerCloseWidth}}>
                 <Box>
                     <Box className={classes.stepperBox}>
                         <Stepper activeStep={activeStep} alternativeLabel>

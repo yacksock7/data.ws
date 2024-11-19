@@ -11,6 +11,7 @@
         <result property="createdDatetime"      column="created_datetime" />
         <result property="updatedDatetime"      column="updated_datetime" />
     </resultMap>
+
     <resultMap id="TemplateTableTransferResultMap" type="TemplateTableTransfer">
         <id     property="id"                   column="id" />
         <result property="userId"               column="user_id" />
@@ -21,6 +22,16 @@
         <result property="updatedDatetime"      column="updated_datetime" />
 
         <collection property="templateStepTypes" column="templateId=id" select="selectStepTypesByTemplateId"/>
+    </resultMap>
+    <resultMap id="TemplateTransferResultMap" type="TemplateTransfer">
+        <id     property="id"                   column="id" />
+        <result property="userId"               column="user_id" />
+        <result property="type"                 column="type" />
+        <result property="name"                 column="name" />
+        <result property="createdDatetime"      column="created_datetime" />
+        <result property="updatedDatetime"      column="updated_datetime" />
+
+        <collection property="steps" column="templateId=id" select="selectStepsByTemplateId"/>
     </resultMap>
 
     <insert id="insertTemplate" parameterType="Template" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
@@ -36,6 +47,18 @@
     </insert>
 
     <select id="selectTemplateById" parameterType="Long" resultMap="TemplateResultMap">
+        SELECT
+            id,
+            user_id,
+            type,
+            name,
+            created_datetime,
+            updated_datetime
+        FROM templates
+        WHERE id = #{templateId}
+    </select>
+
+    <select id="selectTemplateTransfer" parameterType="Long" resultMap="TemplateTransferResultMap">
         SELECT
             id,
             user_id,
@@ -88,6 +111,22 @@
     <select id="selectStepTypesByTemplateId" parameterType="Map" resultType="TemplateStepType">
         SELECT
             type
+        FROM template_steps
+        WHERE template_id=#{templateId}
+        ORDER BY template_step_num ASC
+    </select>
+    <select id="selectStepsByTemplateId" parameterType="Map" resultType="TemplateStep">
+        SELECT
+            template_id AS templateId,
+            template_step_num AS templateStepNum,
+            type,
+            name,
+            options,
+            input_type AS inputType,
+            result_type AS resultType,
+            is_reject_point AS isRejectPoint,
+            created_datetime AS createdDatetime,
+            updated_datetime AS updatedDatetime
         FROM template_steps
         WHERE template_id=#{templateId}
         ORDER BY template_step_num ASC

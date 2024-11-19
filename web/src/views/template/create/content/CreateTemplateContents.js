@@ -25,7 +25,7 @@ class CreateTemplateContents extends Component {
     }
 
     handleClick = (event,index) => {
-        this.props.templateStore.tempalteDeleteIndex = index;
+        this.props.templateStore.templateDeleteIndex = index;
         //console.log( this.props.templateStore.tempalteDeleteIndex);
         this.setState({
             anchorEl: event.currentTarget,
@@ -38,20 +38,19 @@ class CreateTemplateContents extends Component {
         });
     };
 
-    handleDelTemplate = (e) =>
-    {
-        if(this.props.templateStore.template.type === 'System')
-        {
+    handleDelTemplate = (e) => {
+        const {template, templateDeleteIndex} = this.props.templateStore;
+        if(template.type === 'System') {
             alert("기본 템플릿은 수정 할 수 없습니다.");
             return;
         }
-        this.props.templateStore.deleteTemplateStep(this.props.templateStore.tempalteDeleteIndex);
+        this.props.templateStore.deleteTemplateStep(templateDeleteIndex);
         this.handleClose();
     }
     render() {
         const {classes, zoomLevel,
             zoomIn, zoomOut} = this.props;
-        const {anchorEl} = this.state;
+        const { anchorEl, translationFilter, startLanguageFilter, endLanguageFilter } = this.state;
         const open = Boolean(anchorEl);
         const { templateSteps } = this.props.templateStore;
 
@@ -64,17 +63,16 @@ class CreateTemplateContents extends Component {
                                 <Box className={classes.defaultBox}>
                                     {templateSteps && templateSteps.map((step, index) => {
                                         return (
-                                            <TemplateStepButton
-                                                key={`${step.type}_${index}`}
-                                                step={step}
-                                                stepIndex={index}
-                                                anchorEl={this.state.anchorEl}
-                                                translationFilter={this.state.translationFilter}
-                                                startLanguageFilter={this.state.startLanguageFilter}
-                                                endLanguageFilter={this.state.endLanguageFilter}
-                                                zoomLevel={zoomLevel}
-                                                handleClick={this.handleClick}
-                                                handleClose={this.handleClose}/>
+                                            <TemplateStepButton key={`${step.type}_${index}`}
+                                                                step={step}
+                                                                stepIndex={index}
+                                                                anchorEl={anchorEl}
+                                                                translationFilter={translationFilter}
+                                                                startLanguageFilter={startLanguageFilter}
+                                                                endLanguageFilter={endLanguageFilter}
+                                                                zoomLevel={zoomLevel}
+                                                                handleClick={this.handleClick}
+                                                                handleClose={this.handleClose}/>
                                         );
                                     })}
                                 </Box>

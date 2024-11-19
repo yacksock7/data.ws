@@ -5,6 +5,7 @@ import choi.toi.data.ws.model.TemplateStep;
 import choi.toi.data.ws.model.support.TemplateType;
 import choi.toi.data.ws.model.transfer.TemplateStepTransfer;
 import choi.toi.data.ws.model.transfer.TemplateTableTransfer;
+import choi.toi.data.ws.model.transfer.TemplateTransfer;
 import choi.toi.data.ws.repository.TemplateRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.ListUtils;
@@ -88,8 +89,8 @@ public class TemplateService {
         return templates;
     }
 
-    public Template getTemplate(Long templateId) {
-        return templateRepository.selectTemplate(templateId);
+    public TemplateTransfer getTemplate(Long templateId) {
+        return templateRepository.selectTemplateTransfer(templateId);
     }
 
     public List<Template> getTemplates(Long userId) {
@@ -100,10 +101,10 @@ public class TemplateService {
         return templateRepository.selectTemplates(type);
     }
 
-    public Template modifyTemplate(Template template) {
-        templateRepository.updateTemplate(template);
-        return getTemplate(template.getId());
-    }
+//    public Template modifyTemplate(Template template) {
+//        templateRepository.updateTemplate(template);
+//        return getTemplate(template.getId());
+//    }
 
     public void removeTemplate(Long templateId) {
         templateRepository.deleteTemplate(templateId);

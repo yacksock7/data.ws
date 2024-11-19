@@ -21,7 +21,6 @@ public class TemplateStepService {
 
     public void createTemplateSteps(Long templateId, List<TemplateStep> templateSteps) {
         for (TemplateStep templateStep :  templateSteps) {
-            log.trace("templateStep : {}", templateStep);
             templateStep.setTemplateId(templateId);
             createTemplateStep(templateStep);
         }
@@ -40,16 +39,23 @@ public class TemplateStepService {
         return templateStepRepository.selectTemplateSteps(templateId);
     }
 
-    public TemplateStep modifyTemplateStep(TemplateStep templateStep) {
+    public void modify(List<TemplateStep> templateStep) {
+        templateStep.forEach(step -> modify(step));
+    }
+    public void modify(TemplateStep templateStep) {
         templateStepRepository.updateTemplateStep(templateStep);
-        return getTemplateStep(templateStep.getTemplateId(), templateStep.getTemplateStepNum());
     }
 
     public void removeTemplateStep(Long templateId, Integer templateStepNum) {
         templateStepRepository.deleteTemplateStep(templateId, templateStepNum);
     }
 
-    public void removeTemplateStep(Long templateId) {
-        templateStepRepository.deleteTemplateStep(templateId);
+    public void removeAndInsert(Long templateId, List<TemplateStep> templateSteps) {
+        remove(templateId);
+        createTemplateSteps(templateId, templateSteps);
+    }
+
+    public void remove(Long templateId) {
+        templateStepRepository.delete(templateId);
     }
 }

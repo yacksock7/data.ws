@@ -7,7 +7,7 @@ import {styles} from "../styles/CreateTemplateTopBarStyle";
 import {ReactComponent as BasicServiceLogo} from "../../../../common/images/BasicServiceLogin.svg";
 import {ReactComponent as CreateTemplateTopBackIcon} from "../../../../common/images/CreateTemplateTopBackIcon.svg";
 
-import {Box, Button, IconButton, Tooltip, MenuList, MenuItem, Popover} from "@mui/material";
+import {Box, Button, IconButton, Tooltip, MenuList, MenuItem, Popover, TextField, Typography} from "@mui/material";
 
 import CommonDialog from "../../../dialog/CommonDialog";
 import NewCreateTemplate from "../../../createWork/NewCreateTemplate";
@@ -42,6 +42,14 @@ class CreateTemplateTopBar extends Component {
         const checked = await this.handleCheckTemplateSteps();
         if (checked) {
             this.handleOpenDialog();
+        }
+    }
+
+    modifyTemplate = async () => {
+        const checked = await this.handleCheckTemplateSteps();
+        if (checked) {
+            await this.props.templateStore.modifyTemplateSteps();
+            this.props.navigate("/template");
         }
     }
 
@@ -105,9 +113,9 @@ class CreateTemplateTopBar extends Component {
     }
 
     render() {
-        const {classes} = this.props;
-        const {newTemplate} = this.props.templateStore;
-        const {dialogOpen} = this.state;
+        const { classes, template, purpose, actionType } = this.props;
+        const { newTemplate } = this.props.templateStore;
+        const { dialogOpen } = this.state;
 
         return (
             <Box className={classes.root}>
@@ -130,14 +138,29 @@ class CreateTemplateTopBar extends Component {
                     </Tooltip>
                 </Box>
 
+                {template && template.name &&
+                    <Box display='flex' alignItems='center'>
+                        <Typography className={classes.titleText}> {template.name} </Typography>
+                    </Box>
+                }
+
+
                 {/* history controller + 저장 버튼 */}
                 <Box display='flex' alignItems='center'>
                    <TemplateHistoryController/>
 
                     <Box className={classes.buttonStyle}>
-                        <Button className={classes.buttonBoxIn}
-                                onClick={this.checkTemplateAndOpen}
-                                disableRipple>템플릿 생성</Button>
+
+                        {purpose === "template" && actionType === "create" &&
+                            <Button className={classes.buttonBoxIn}
+                                    onClick={this.checkTemplateAndOpen}
+                                    disableRipple>템플릿 생성</Button>
+                        }
+                        {purpose === "template" && actionType === "modify" &&
+                            <Button className={classes.buttonBoxIn}
+                                    onClick={this.modifyTemplate}
+                                    disableRipple>템플릿 수정</Button>
+                        }
                     </Box>
                 </Box>
 

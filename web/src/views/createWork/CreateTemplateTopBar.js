@@ -102,7 +102,7 @@ class CreateTemplateTopBar extends Component {
     }
 
     createWorkTemplateAndWork = () => {
-        this.props.templateStore.addTemplateRejectOption();
+        // this.props.templateStore.addTemplateRejectOption();
 
         const { newWork } = this.props.workStore;
         const { loginUser } = this.props.authStore;

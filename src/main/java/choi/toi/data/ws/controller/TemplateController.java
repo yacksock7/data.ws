@@ -4,6 +4,7 @@ import choi.toi.data.ws.model.Template;
 import choi.toi.data.ws.model.support.TemplateType;
 import choi.toi.data.ws.model.transfer.TemplateStepTransfer;
 import choi.toi.data.ws.model.transfer.TemplateTableTransfer;
+import choi.toi.data.ws.model.transfer.TemplateTransfer;
 import choi.toi.data.ws.service.TemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -35,11 +36,11 @@ public class TemplateController {
 //        templateService.createTemplate(workTransfer);
 //    }
 //
-//    @GetMapping("/{templateId}")
-//    public Template getTemplate(HttpServletRequest request,
-//                                @PathVariable Long templateId) {
-//        return templateService.getTemplate(templateId);
-//    }
+    @GetMapping("/{templateId}")
+    public TemplateTransfer getTemplate(HttpServletRequest request,
+                                        @PathVariable Long templateId) {
+        return templateService.getTemplate(templateId);
+    }
 //
 //    @GetMapping("/userId/{userId}")
 //    public List<Template> getTemplates(HttpServletRequest request,
@@ -54,13 +55,13 @@ public class TemplateController {
                                                     @RequestParam(value ="templateType") TemplateType type) {
         return templateService.getTableTransfers(userId, type);
     }
-//
+
 //    @PutMapping
 //    public Template modifyTemplate(HttpServletRequest request,
 //                                   @RequestBody Template template) {
 //        return templateService.modifyTemplate(template);
 //    }
-//
+
     @DeleteMapping("/{templateId}")
     public void removeTemplate(HttpServletRequest request,
                                @PathVariable Long templateId) {

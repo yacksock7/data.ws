@@ -94,7 +94,7 @@
         AND template_step_num = #{templateStepNum}
     </delete>
 
-    <delete id="deleteTemplateStepByTemplateId">
+    <delete id="deleteTemplateStepsByTemplateId">
         DELETE FROM template_steps
         WHERE template_id = #{templateId}
     </delete>

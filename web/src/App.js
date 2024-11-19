@@ -66,8 +66,8 @@ class App extends React.Component {
       const { classes } = this.props;
       const { open } = this.props.navigateStore;
       const { loginState } = this.props.authStore;
-      console.log('app.js',loginState);
-        return(
+
+      return(
             <div className={classes.root}>
                 {loginState === AuthState.Authenticated ? (
                     <>
@@ -75,9 +75,15 @@ class App extends React.Component {
                         <MenuBar/>
                         <Routes>
                             <Route path="/template" element={<Template/>}/>
-                            <Route path="/template/create" element={<TemplateCreatePage/>}/>
-                            <Route path="/create" element={<CreateWork/>}/>
+                            <Route path="/template/:actionType" element={<TemplateCreatePage/>}/>
+                            <Route path="/template/:actionType/:templateId" element={<TemplateCreatePage/>}/>
+                            <Route path="/workTemplate/:actionType" element={<TemplateCreatePage/>}/>
+                            <Route path="/workTemplate/:actionType/:templateId" element={<TemplateCreatePage/>}/>
+
                             <Route path="/work" element={<Work/>}/>
+                            <Route path="/work/create" element={<CreateWork/>}/>
+
+
 
                             <Route path="/" element={<Work/>} />
                             <Route path="*" element={<Work />}/>

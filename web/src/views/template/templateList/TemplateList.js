@@ -26,6 +26,8 @@ import {
 } from "@mui/material";
 import {TemplateStepType, TemplateStepTypeLabel} from "../../../stores/TemplateStore";
 import {inject, observer} from "mobx-react";
+import template from "../Template";
+import {withRouter} from "../../../components/WithRouter";
 
 
 class TemplateList extends Component {
@@ -83,10 +85,13 @@ class TemplateList extends Component {
     handleMenuItemClick = async (value) => {
         const {dotsAnchorEl} = this.state;
 
+        const templateId = Number(dotsAnchorEl.id);
         if (value === 3) { // 삭제
-            const templateId = Number(dotsAnchorEl.id);
             await this.props.templateStore.removeTemplate(templateId);
             this.props.getTemplates();
+        } else if (value === 1) {
+            await this.props.templateStore.getTemplate(templateId);
+            this.props.navigate(`/template/modify/${templateId}`);
         }
 
         this.handleClosePopover();
@@ -204,8 +209,7 @@ class TemplateList extends Component {
                                                      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                                                      transformOrigin={{ vertical: 'top', horizontal: 'left' }}>
                                                 <MenuList>
-                                                    <MenuItem onClick={() => this.handleMenuItemClick(1)}
-                                                              disabled={true}> 편집 </MenuItem>
+                                                    <MenuItem onClick={() => this.handleMenuItemClick(1)}> 편집 </MenuItem>
                                                     <MenuItem onClick={() => this.handleMenuItemClick(2)}
                                                               disabled={true}> 복제 </MenuItem>
                                                     <MenuItem onClick={() => this.handleMenuItemClick(3)}>삭제</MenuItem>
@@ -241,8 +245,10 @@ class TemplateList extends Component {
     }
 };
 
-export default withStyles(styles)(
-    inject( 'templateStore') (
-        observer(TemplateList)
+export default withRouter(
+    withStyles(styles)(
+        inject('templateStore')(
+            observer(TemplateList)
+        )
     )
 );
