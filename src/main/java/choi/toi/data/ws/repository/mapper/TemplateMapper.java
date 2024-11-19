@@ -11,11 +11,8 @@ import java.util.List;
 public interface TemplateMapper {
 
     void insertTemplate(Template template);
-    Template selectTemplateById(Long templateId);
-    TemplateTransfer selectTemplateTransfer(Long templateId);
-    List<Template> selectTemplateByUserId(Long userId);
-    List<Template> selectTemplateByTemplateType(TemplateType type);
     List<TemplateTableTransfer> selectTableTransfers(Long userId);
-    void updateTemplate(Template template);
+    TemplateTransfer selectTransfer(Long templateId);
+    List<TemplateTransfer> selectTransfers(Long templateId);
     void deleteTemplate(Long templateId);
 }

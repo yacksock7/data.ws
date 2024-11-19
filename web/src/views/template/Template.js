@@ -17,7 +17,7 @@ class Template extends Component {
 
     getTemplates = () => {
         const { loginUser } = this.props.authStore;
-        this.props.templateStore.getTemplates(loginUser.id, TemplateType.Private);
+        this.props.templateStore.getTemplatesForTable(loginUser.id);
     }
 
     render() {

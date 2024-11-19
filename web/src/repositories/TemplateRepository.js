@@ -8,14 +8,22 @@ export default class TemplateRepository extends Repository {
         this.requestPrefix = props.serverContextPath + "/api/v1/templates";
     }
 
-    getTemplates = (userId, param) => {
+    getTemplatesForTable = (userId) => {
         return new Promise((resolve, reject) => {
-            this.getRequestPromise('get', this.requestPrefix + `/userId/${userId}`, param)
+            this.getRequestPromise('get', this.requestPrefix + `/userId/${userId}/table`)
                 .then(data => {
                     resolve(data);
-                })
-                .catch(error => {
-
+                }).catch(error => {
+                    reject(error);
+                });
+        });
+    }
+    getTemplatesByType = (userId, params) => {
+        return new Promise((resolve, reject) => {
+            this.getRequestPromise('get', this.requestPrefix + `/userId/${userId}`, params)
+                .then(data => {
+                    resolve(data);
+                }).catch(error => {
                     reject(error);
                 });
         });
@@ -25,9 +33,7 @@ export default class TemplateRepository extends Repository {
             this.getRequestPromise('get', this.requestPrefix + `/${templateId}`)
                 .then(data => {
                     resolve(data);
-                })
-                .catch(error => {
-
+                }).catch(error => {
                     reject(error);
                 });
         });
@@ -37,9 +43,7 @@ export default class TemplateRepository extends Repository {
             this.getRequestPromise('post', this.requestPrefix+`/steps/works`, {}, data)
                 .then(data => {
                     resolve(data);
-                })
-                .catch(error => {
-
+                }).catch(error => {
                     reject(error);
                 });
         });

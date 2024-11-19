@@ -32,21 +32,30 @@ public class TemplateService {
     }
 
     @Transactional
-    public TemplateStepTransfer createTemplate(TemplateStepTransfer templateStepTransfer) {
+    public void create(TemplateStepTransfer templateStepTransfer) {
         log.trace("createTemplate Start... templateStepTransfer : {}", templateStepTransfer);
         templateRepository.insertTemplate(templateStepTransfer.getTemplate());
         templateStepService.createTemplateSteps(templateStepTransfer.getTemplate().getId(), templateStepTransfer.getTemplateSteps());
 
-        return getTemplateStepTransfer(templateStepTransfer.getTemplate().getId());
     }
 
-    private TemplateStepTransfer getTemplateStepTransfer(Long templateId) {
-        final Template template = templateRepository.selectTemplate(templateId);
-        final List<TemplateStep> templateSteps = templateStepService.getTemplateSteps(templateId);
-        return new TemplateStepTransfer(template, templateSteps);
+    public List<TemplateTableTransfer> getTableTransfers(Long userId) {
+        return templateRepository.selectTableTransfers(userId);
     }
 
-//    @Transactional
+    public TemplateTransfer getTransfer(Long templateId) {
+        return templateRepository.selectTransfer(templateId);
+    }
+
+    public List<TemplateTransfer> getTransfers(Long userId, TemplateType type) {
+        return templateRepository.selectTransfers(userId);
+    }
+
+    public void remove(Long templateId) {
+        templateRepository.delete(templateId);
+    }
+
+    //    @Transactional
 //    public void createTemplate(WorkTransfer workTransfer) {
 //        log.trace("createTemplate Start... workTransfer : {}",  workTransfer);
 //
@@ -64,49 +73,4 @@ public class TemplateService {
 //
 //        log.trace("createTemplate Success!!");
 //    }
-
-    public List<TemplateTableTransfer> getTableTransfers(Long userId, TemplateType type) {
-        return templateRepository.selectTableTransfers(userId);
-    }
-
-
-    public List<Template> getTemplates(Long userId, TemplateType type) {
-        log.trace("getTemplates Start... userId={}, templateType={}", userId, type);
-
-        List<Template> templates = null;
-        if (type.equals(TemplateType.All)) {
-            final List<Template> systemTemplates = getTemplates(type);
-            final List<Template> privateTemplates = getTemplates(userId);
-            templates = ListUtils.union(systemTemplates, privateTemplates);
-
-        } else if (type.equals(TemplateType.System)) {
-            templates = getTemplates(type);
-
-        } else {
-            templates = getTemplates(userId);
-        }
-
-        return templates;
-    }
-
-    public TemplateTransfer getTemplate(Long templateId) {
-        return templateRepository.selectTemplateTransfer(templateId);
-    }
-
-    public List<Template> getTemplates(Long userId) {
-        return templateRepository.selectTemplates(userId);
-    }
-
-    public List<Template> getTemplates(TemplateType type) {
-        return templateRepository.selectTemplates(type);
-    }
-
-//    public Template modifyTemplate(Template template) {
-//        templateRepository.updateTemplate(template);
-//        return getTemplate(template.getId());
-//    }
-
-    public void removeTemplate(Long templateId) {
-        templateRepository.deleteTemplate(templateId);
-    }
 }

@@ -25,30 +25,17 @@ public class TemplateRepository {
         templateMapper.insertTemplate(template);
     }
 
-    public Template selectTemplate(Long templateId) {
-        return templateMapper.selectTemplateById(templateId);
-    }
-    public TemplateTransfer selectTemplateTransfer(Long templateId) {
-        return templateMapper.selectTemplateTransfer(templateId);
-    }
-
-    public List<Template> selectTemplates(Long userId) {
-        return templateMapper.selectTemplateByUserId(userId);
-    }
-
-    public List<Template> selectTemplates(TemplateType type) {
-        return templateMapper.selectTemplateByTemplateType(type);
-    }
-
     public List<TemplateTableTransfer> selectTableTransfers(Long userId) {
         return templateMapper.selectTableTransfers(userId);
     }
-
-    public void updateTemplate(Template template) {
-        templateMapper.updateTemplate(template);
+    public TemplateTransfer selectTransfer(Long templateId) {
+        return templateMapper.selectTransfer(templateId);
+    }
+    public List<TemplateTransfer> selectTransfers(Long userId) {
+        return templateMapper.selectTransfers(userId);
     }
 
-    public void deleteTemplate(Long templateId) {
+    public void delete(Long templateId) {
         templateMapper.deleteTemplate(templateId);
     }
 }

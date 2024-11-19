@@ -11,12 +11,13 @@ import {inject, observer} from "mobx-react";
 import SystemTemplate from "./SystemTemplate";
 import CommonDialog from "../dialog/CommonDialog";
 import NewCreateTemplate from "./NewCreateTemplate";
+import {TemplateType} from "../../stores/TemplateStore";
 
 class ChooseTemplate extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            tabIndex: 0,
+            templateType: TemplateType.All,
             tooltipOpen: false,
             tooltipOpen2: false,
             tooltipOpen3: false,
@@ -25,34 +26,30 @@ class ChooseTemplate extends Component {
 
     componentDidMount() {
         const { loginUser } = this.props.authStore;
-        const { tabIndex } = this.state;
-
-        // this.props.templateStore.getTemplatesByTabIndex(loginUser.id, tabIndex);
-        // this.props.templateStore.getTemplates(loginUser.id, tabIndex);
+        this.props.templateStore.getTemplatesByType(loginUser.id, TemplateType.Private);
     }
 
-    handleChangeTabIndex = (event, tabIndex) => {
-        this.setState({tabIndex});
+    handleChangeTemplateType = (event, templateType) => {
+        this.setState({templateType});
     };
 
     handleClickTemplate = (templateId) => {
-        // this.props.templateStore;
         this.props.navigate(`/createTemplate/${templateId}`);
     };
 
     render() {
-        const { tabIndex } = this.state;
-        const {classes} = this.props;
+        const { classes } = this.props;
+        const { templateType } = this.state;
         const { templates } = this.props.templateStore;
 
         return (
             <Box className={classes.root}>
-                <Tabs value={tabIndex}
-                      onChange={this.handleChangeTabIndex}
+                <Tabs value={templateType}
+                      onChange={this.handleChangeTemplateType}
                       className={classes.trigger}>
-                    <Tab value={0} label={'전체'} disableRipple/>
-                    <Tab value={1} label={'기본 템플릿'} disableRipple/>
-                    <Tab value={2} label={'내 템플릿'} disableRipple/>
+                    <Tab value={TemplateType.All} label={'전체'} disableRipple/>
+                    <Tab value={TemplateType.System} label={'기본 템플릿'} disableRipple/>
+                    <Tab value={TemplateType.Private} label={'내 템플릿'} disableRipple/>
                 </Tabs>
 
                 <Box className={classes.contentsBox}>
@@ -64,7 +61,7 @@ class ChooseTemplate extends Component {
 
                             <Box className='hover-button-box'>
                                 <Box className={classes.hoverBox}>
-                                    <Button className={classes.hoverButton} onClick={e=>{this.handleClickTemplate('new')}}
+                                    <Button className={classes.hoverButton} onClick={(e) => {this.handleClickTemplate('new')}}
                                             disableRipple>적용하기</Button>
                                     <Button className={clsx(classes.hoverButton, classes.hoverButton2)}
                                             disableRipple>미리보기</Button>
@@ -79,20 +76,20 @@ class ChooseTemplate extends Component {
 
                         </Box>
                     </Box>
-
-                    {(tabIndex && tabIndex === 1 || tabIndex === 0) &&
+                    {((templateType === TemplateType.All)
+                        || (templateType === TemplateType.System)) &&
                         <SystemTemplate/>
                     }
 
-                    {(tabIndex && tabIndex === 2 || tabIndex === 0) &&
-                        templates.filter(template => template.type === "Private").map((template, index) => {
+                    {((templateType === TemplateType.All)
+                        || (templateType === TemplateType.Private)) &&
+                        templates.map( (template, index) => {
                             return (
                                 <Box key={`${template.name}_${index}`} className={classes.templateBox}>
                                     <Box className={clsx(classes.imageBox, classes.imageBoxHover)}>
                                         <Box className={classes.imageBoxIn}>
                                             <img src={ScreenShotTestImage} alt={'스크린샷 이미지'}/>
                                         </Box>
-
 
                                         <Box className='hover-button-box'>
                                             <Box className={classes.hoverBox}>
@@ -103,6 +100,7 @@ class ChooseTemplate extends Component {
                                             </Box>
                                         </Box>
                                     </Box>
+
                                     <Box className={classes.bottomBox}>
                                         <Box className={classes.AddTextBox}>
                                             <Typography className={classes.textStyle}>{template.name}</Typography>

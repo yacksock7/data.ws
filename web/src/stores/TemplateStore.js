@@ -541,45 +541,6 @@ export default class TemplateStore {
         return templateType;
     }
 
-    // *getTemplatesByTabIndex(userId, tabIndex) {
-    //     console.log(LogPrefix, `getTemplates Start... userId=${userId}, tabIndex=${tabIndex}`);
-    //     this.templateState = State.Pending;
-    //
-    //     try {
-    //         const templateType = this.convertTabIndexToTemplateType(tabIndex);
-    //         const params = { templateType : templateType }
-    //         const templates = yield this.templateRepository.getTemplates(userId, params);
-    //
-    //         this.templateState = State.Success;
-    //         this.templates = templates;
-    //
-    //         console.log(LogPrefix, "getTemplates Success!! template=", templates);
-    //
-    //     } catch (e) {
-    //         this.templateState = State.Failed;
-    //         console.log(LogPrefix, "getTemplates ERROR! e=", e.data);
-    //     }
-    // }
-
-    *getTemplates(userId, templateType) {
-        console.log(LogPrefix, `getTemplates Start... userId=${userId}, templateType=${templateType}`);
-        this.templateState = State.Pending;
-
-        try {
-            const params = { templateType : templateType }
-            const templateTableTransfers = yield this.templateRepository.getTemplates(userId, params);
-
-            this.templateTableTransfers = templateTableTransfers;
-            this.templateState = State.Success;
-            console.log(LogPrefix, "getTemplates Success!! templateTableTransfers=", templateTableTransfers);
-
-        } catch (e) {
-            this.templateState = State.Failed;
-            console.log(LogPrefix, "getTemplates ERROR! e=", e.data);
-        }
-    }
-
-
     initTemplateSteps = () => {
         this.templateSteps = [];
     }
@@ -695,8 +656,40 @@ export default class TemplateStore {
         }
     }
 
+    *getTemplatesForTable(userId) {
+        console.log(LogPrefix, `getTemplatesByType Start... userId=${userId}`);
+        this.templateState = State.Pending;
 
+        try {
+            const templateTableTransfers = yield this.templateRepository.getTemplatesForTable(userId);
 
+            this.templateTableTransfers = templateTableTransfers;
+            this.templateState = State.Success;
+            console.log(LogPrefix, "getTemplatesByType Success!! templateTableTransfers=", templateTableTransfers);
+
+        } catch (e) {
+            this.templateState = State.Failed;
+            console.log(LogPrefix, "getTemplatesByType ERROR! e=", e.data);
+        }
+    }
+
+    *getTemplatesByType(userId, templateType) {
+        console.log(LogPrefix, `getTemplatesByType Start... userId=${userId}, templateType=${templateType}`);
+        this.templateState = State.Pending;
+
+        try {
+            const params = { templateType : templateType }
+            const templates = yield this.templateRepository.getTemplatesByType(userId, params);
+            this.templates = templates;
+
+            this.templateState = State.Success;
+            console.log(LogPrefix, "getTemplatesByType Success!! templates=", this.templates);
+
+        } catch (e) {
+            this.templateState = State.Failed;
+            console.log(LogPrefix, "getTemplatesByType ERROR! e=", e.data);
+        }
+    }
 
     *getTemplate(templateId) {
         console.log(LogPrefix, `getTemplate Start... templateId=${templateId}`);

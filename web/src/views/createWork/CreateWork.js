@@ -27,9 +27,7 @@ function QontoStepIcon(props) {
     const { active, completed } = props;
 
     return (
-        <div
-            className={active ? classes.stepIcon : clsx(classes.stepIcon, classes.stepIconActive)}
-        >
+        <div className={active ? classes.stepIcon : clsx(classes.stepIcon, classes.stepIconActive)}>
             {completed ? <StepCheckedIcon/> : active ? <StepIcon/> : <StepIcon/>}
         </div>
     );
@@ -77,22 +75,20 @@ class CreateWork extends Component {
                         </Stepper>
                     </Box>
 
-                    <Typography className={classes.titleText}>
-                        {this.state.activeStep === 0 ?
-                            '작업 정보를 등록해주세요.'
-                            :
-                            '작업 템플릿을 선택해주세요.'
-                        }
 
-                    </Typography>
-                    {this.state.activeStep === 0 &&
-                        <TitleRegistration handleNext={this.handleNext}/>
+
+                    {activeStep === 0 &&
+                        <Box>
+                            <Typography className={classes.titleText}>작업 정보를 등록해주세요.</Typography>
+                            <TitleRegistration handleNext={this.handleNext}/>
+                        </Box>
                     }
-
-                    {this.state.activeStep === 1 &&
-                        <ChooseTemplate/>
+                    {activeStep === 1 &&
+                        <Box>
+                            <Typography className={classes.titleText}>작업 템플릿을 선택해주세요.</Typography>
+                            <ChooseTemplate/>
+                        </Box>
                     }
-
                 </Box>
             </Box>
         );

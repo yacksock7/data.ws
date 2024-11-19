@@ -46,7 +46,22 @@
         )
     </insert>
 
-    <select id="selectTemplateById" parameterType="Long" resultMap="TemplateResultMap">
+    <select id="selectTableTransfers" parameterType="Long" resultMap="TemplateTableTransferResultMap">
+        SELECT
+        t.id,
+        t.user_id,
+        u.nickname AS user_nickname,
+        t.type,
+        t.name,
+        t.created_datetime,
+        t.updated_datetime
+        FROM templates t
+        INNER JOIN users u ON t.user_id = u.id
+        WHERE t.user_id = #{userId}
+        ORDER BY updated_datetime DESC
+    </select>
+
+    <select id="selectTransfer" parameterType="Long" resultMap="TemplateTransferResultMap">
         SELECT
             id,
             user_id,
@@ -58,7 +73,7 @@
         WHERE id = #{templateId}
     </select>
 
-    <select id="selectTemplateTransfer" parameterType="Long" resultMap="TemplateTransferResultMap">
+    <select id="selectTransfers" parameterType="Long" resultMap="TemplateTransferResultMap">
         SELECT
             id,
             user_id,
@@ -67,7 +82,7 @@
             created_datetime,
             updated_datetime
         FROM templates
-        WHERE id = #{templateId}
+        WHERE user_id = #{userId}
     </select>
 
     <select id="selectTemplateByUserId" parameterType="Long" resultMap="TemplateResultMap">
@@ -93,21 +108,6 @@
         WHERE type = #{type}
     </select>
 
-    <select id="selectTableTransfers" parameterType="Long" resultMap="TemplateTableTransferResultMap">
-        SELECT
-            t.id,
-            t.user_id,
-            u.nickname AS user_nickname,
-            t.type,
-            t.name,
-            t.created_datetime,
-            t.updated_datetime
-        FROM templates t
-        INNER JOIN users u ON t.user_id = u.id
-        WHERE t.user_id = #{userId}
-        ORDER BY updated_datetime DESC
-    </select>
-
     <select id="selectStepTypesByTemplateId" parameterType="Map" resultType="TemplateStepType">
         SELECT
             type
@@ -115,6 +115,7 @@
         WHERE template_id=#{templateId}
         ORDER BY template_step_num ASC
     </select>
+
     <select id="selectStepsByTemplateId" parameterType="Map" resultType="TemplateStep">
         SELECT
             template_id AS templateId,

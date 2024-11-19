@@ -24,10 +24,34 @@ public class TemplateController {
     }
 
     @PostMapping
-    public TemplateStepTransfer createTemplate(HttpServletRequest request,
-                               @RequestBody TemplateStepTransfer templateStepTransfer) {
+    public void create(HttpServletRequest request,
+                       @RequestBody TemplateStepTransfer templateStepTransfer) {
+        templateService.create(templateStepTransfer);
+    }
 
-        return templateService.createTemplate(templateStepTransfer);
+    @GetMapping("/userId/{userId}/table")
+    public List<TemplateTableTransfer> getTransfers(HttpServletRequest request,
+                                                    @PathVariable Long userId) {
+        return templateService.getTableTransfers(userId);
+    }
+
+    @GetMapping("/{templateId}")
+    public TemplateTransfer getTransfer(HttpServletRequest request,
+                                        @PathVariable Long templateId) {
+        return templateService.getTransfer(templateId);
+    }
+
+    @GetMapping("/userId/{userId}")
+    public List<TemplateTransfer> getTransfers(HttpServletRequest request,
+                                       @PathVariable Long userId,
+                                       @RequestParam(value ="templateType") TemplateType type) {
+        return templateService.getTransfers(userId, type);
+    }
+
+    @DeleteMapping("/{templateId}")
+    public void removeTemplate(HttpServletRequest request,
+                               @PathVariable Long templateId) {
+        templateService.remove(templateId);
     }
 
 //    @PostMapping("/steps/works")
@@ -36,35 +60,4 @@ public class TemplateController {
 //        templateService.createTemplate(workTransfer);
 //    }
 //
-    @GetMapping("/{templateId}")
-    public TemplateTransfer getTemplate(HttpServletRequest request,
-                                        @PathVariable Long templateId) {
-        return templateService.getTemplate(templateId);
-    }
-//
-//    @GetMapping("/userId/{userId}")
-//    public List<Template> getTemplates(HttpServletRequest request,
-//                                       @PathVariable Long userId,
-//                                       @RequestParam(value ="templateType") TemplateType type) {
-//        return templateService.getTemplates(userId, type);
-//    }
-
-    @GetMapping("/userId/{userId}")
-    public List<TemplateTableTransfer> getTransfers(HttpServletRequest request,
-                                                    @PathVariable Long userId,
-                                                    @RequestParam(value ="templateType") TemplateType type) {
-        return templateService.getTableTransfers(userId, type);
-    }
-
-//    @PutMapping
-//    public Template modifyTemplate(HttpServletRequest request,
-//                                   @RequestBody Template template) {
-//        return templateService.modifyTemplate(template);
-//    }
-
-    @DeleteMapping("/{templateId}")
-    public void removeTemplate(HttpServletRequest request,
-                               @PathVariable Long templateId) {
-        templateService.removeTemplate(templateId);
-    }
 }
