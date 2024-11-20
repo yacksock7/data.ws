@@ -67,6 +67,10 @@ export default class WorkStore {
         this.newWork.name = name;
     }
 
+    changeUserIdByNewWork = (userId) => {
+        this.newWork.userId = userId;
+    }
+
     changeSelectedWork = (workId, userId) => {
         let workTransfer = this.works.find(transfer => transfer.work.id === workId);
 

@@ -599,23 +599,23 @@ export default class TemplateStore {
         }
     }
 
-    *createWorkTemplateAndWork(userId, newWork, navigate) {
-        console.log(LogPrefix, `createWorkTemplateAndWork Start... userId=${userId}, newWork=${newWork}`);
+    *createWorkTemplateAndWork(userId, work) {
+        console.log(LogPrefix, `createWorkTemplateAndWork Start... userId=${userId}, newWork=${work}`);
         this.templateState = State.Pending;
 
         try {
             this.template.userId = userId;
-            newWork.userId = userId;
 
             const templateSteps =
                 this.templateSteps.map(step => {
                     const options = step.options ? JSON.stringify(step.options) : null;
                     return {...step, options};
                 });
+
             const data = {
                 template : this.template,
                 templateSteps : templateSteps,
-                work : newWork
+                work : work
             };
 
             yield this.templateRepository.createWorkTemplateAndWork(data);

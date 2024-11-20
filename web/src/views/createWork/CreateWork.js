@@ -41,6 +41,12 @@ class CreateWork extends Component {
         };
     }
 
+    componentDidMount() {
+        const { loginUser } = this.props.authStore;
+        this.props.workStore.changeNewWorkName("");
+        this.props.workStore.changeUserIdByNewWork(loginUser.id);
+    }
+
     handleNext = () => {
         this.setState(state => ({
             activeStep: state.activeStep + 1,
@@ -96,7 +102,7 @@ class CreateWork extends Component {
 };
 
 export default withStyles(styles) (
-    inject( 'navigateStore') (
+    inject( 'authStore', 'navigateStore', 'workStore') (
         observer(CreateWork)
     )
 );

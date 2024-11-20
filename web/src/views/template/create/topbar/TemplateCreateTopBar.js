@@ -19,7 +19,17 @@ class CreateTemplateTopBar extends Component {
         super(props);
         this.state = {
             dialogOpen: false,
+            work: null,
         };
+    }
+
+    componentDidMount() {
+        const { isTemplate } = this.props;
+        const { newWork } = this.props.workStore;
+
+        if (!isTemplate) {
+            this.setState({ work : newWork });
+        }
     }
 
     handleChangeNewTemplateName = (e) => {
@@ -56,7 +66,9 @@ class CreateTemplateTopBar extends Component {
     checkTemplateAndCreateWorkTemplate = async () => {
         const checked = await this.handleCheckTemplateSteps();
         if (checked) {
-            await this.props.templateStore.modifyTemplateSteps();
+            const { loginUser } = this.props.authStore;
+            const { work } = this.state;
+            await this.props.templateStore.createWorkTemplateAndWork(loginUser.id, work);
             this.props.navigate("/template");
         }
     }
@@ -122,7 +134,7 @@ class CreateTemplateTopBar extends Component {
     render() {
         const { classes, template, actionType, isTemplate } = this.props;
         const { newTemplate } = this.props.templateStore;
-        const { dialogOpen } = this.state;
+        const { dialogOpen, work } = this.state;
 
         return (
             <Box className={classes.root}>
@@ -147,7 +159,7 @@ class CreateTemplateTopBar extends Component {
 
                 {template && template.name &&
                     <Box display='flex' alignItems='center'>
-                        <Typography className={classes.titleText}> {template.name} </Typography>
+                        <Typography className={classes.titleText}> {template.name} {!isTemplate && work && `/ ${work.name}`} </Typography>
                     </Box>
                 }
 

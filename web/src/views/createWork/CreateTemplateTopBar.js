@@ -107,7 +107,7 @@ class CreateTemplateTopBar extends Component {
         const { newWork } = this.props.workStore;
         const { loginUser } = this.props.authStore;
 
-        this.props.templateStore.createWorkTemplateAndWork(loginUser.id, newWork, this.props.navigate);
+        // this.props.templateStore.createWorkTemplateAndWork(loginUser.id, newWork, this.props.navigate);
     }
 
     hanleCheckTemplateSteps = () =>{

@@ -12,12 +12,6 @@ class TitleRegistration extends Component {
         super(props);
     }
 
-    componentDidMount() {
-    }
-
-
-    componentWillUnmount() {
-    }
 
     handleChangeWorkName = (e) => {
         this.props.workStore.changeNewWorkName(e.target.value);
