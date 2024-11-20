@@ -99,13 +99,13 @@ class MenuBar extends Component {
                         {/*    </ListItem>*/}
                         {/*</Link>*/}
 
-                        {/*<Link to="/work" className={classes.underline}>*/}
-                        {/*    <ListItem className={menuValue === 1 ? classes.listBoxSelect : null}*/}
-                        {/*              onClick={() => this.handleOptions(true, 1)}>*/}
-                        {/*        <ListItemIcon><NotesListIcon/></ListItemIcon>*/}
-                        {/*        <ListItemText primary={'작업'} />*/}
-                        {/*    </ListItem>*/}
-                        {/*</Link>*/}
+                        <Link to="/work" className={classes.underline}>
+                            <ListItem className={menuValue === 1 ? classes.listBoxSelect : null}
+                                      onClick={() => this.handleOptions(true, 1)}>
+                                <ListItemIcon><NotesListIcon/></ListItemIcon>
+                                <ListItemText primary={'작업'} />
+                            </ListItem>
+                        </Link>
 
                         <Link to="/template" className={classes.underline}>
                             <ListItem className={menuValue === 2 ? classes.listBoxSelect : null}
