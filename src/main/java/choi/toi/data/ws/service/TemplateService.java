@@ -1,20 +1,17 @@
 package choi.toi.data.ws.service;
 
-import choi.toi.data.ws.model.Template;
-import choi.toi.data.ws.model.TemplateStep;
 import choi.toi.data.ws.model.support.TemplateType;
 import choi.toi.data.ws.model.transfer.TemplateStepTransfer;
 import choi.toi.data.ws.model.transfer.TemplateTableTransfer;
 import choi.toi.data.ws.model.transfer.TemplateTransfer;
+import choi.toi.data.ws.model.transfer.WorkTransfer;
 import choi.toi.data.ws.repository.TemplateRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -22,13 +19,19 @@ public class TemplateService {
 
     private TemplateRepository templateRepository;
     private TemplateStepService templateStepService;
+    private WorkTemplateService workTemplateService;
+    private WorkService workService;
 
     @Autowired
     public TemplateService(TemplateRepository templateRepository,
-                           TemplateStepService templateStepService) {
+                           TemplateStepService templateStepService,
+                           WorkTemplateService workTemplateService,
+                           WorkService workService) {
 
         this.templateRepository = templateRepository;
         this.templateStepService = templateStepService;
+        this.workTemplateService = workTemplateService;
+        this.workService = workService;
     }
 
     @Transactional
@@ -55,22 +58,20 @@ public class TemplateService {
         templateRepository.delete(templateId);
     }
 
-    //    @Transactional
-//    public void createTemplate(WorkTransfer workTransfer) {
-//        log.trace("createTemplate Start... workTransfer : {}",  workTransfer);
-//
-////        templateRepository.updateTemplate(workTransfer.getTemplate());
+    @Transactional
+    public void createTemplate(WorkTransfer workTransfer) {
+        log.trace("createTemplate Start... workTransfer : {}",  workTransfer);
+
 //        if (workTransfer.getTemplate().getType().equals(TemplateType.Private)) {
-//            templateStepService.removeTemplateStep(workTransfer.getTemplate().getId());
+//            templateStepService.remove(workTransfer.getTemplate().getId());
 //            templateStepService.createTemplateSteps(workTransfer.getTemplate().getId(), workTransfer.getTemplateSteps());
 //        }
-//
-//        workTemplateService.createWorkTemplate(workTransfer.getTemplate());
-//        workTemplateStepService.createWorkTemplateSteps(workTransfer.getTemplate().getId(), workTransfer.getTemplateSteps());
-//
-//        workTransfer.getWork().setWorkTemplateId(workTransfer.getTemplate().getId());
-//        workService.createWork(workTransfer.getWork());
-//
-//        log.trace("createTemplate Success!!");
-//    }
+
+        workTemplateService.createWorkTemplate(workTransfer.getTemplate(), workTransfer.getTemplateSteps());
+
+        workTransfer.getWork().setWorkTemplateId(workTransfer.getTemplate().getId());
+        workService.createWork(workTransfer.getWork());
+
+        log.trace("createTemplate Success!!");
+    }
 }

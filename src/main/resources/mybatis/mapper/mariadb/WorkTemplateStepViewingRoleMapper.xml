@@ -1,0 +1,43 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="choi.toi.data.ws.repository.mapper.WorkTemplateStepViewingRoleMapper">
+
+    <resultMap id="WorkTemplateStepViewingRoleResultMap" type="WorkTemplateStepViewingRole">
+        <id     property="workTemplateId"           column="work_template_id" />
+        <id     property="workTemplateStepNum"      column="work_template_step_num" />
+        <id     property="viewingTemplateStepNum"   column="viewing_template_step_num" />
+        <result property="createdDatetime"          column="created_datetime" />
+        <result property="updatedDatetime"          column="updated_datetime" />
+    </resultMap>
+
+    <insert id="insertWorkTemplateStepViewingRole" parameterType="WorkTemplateStepViewingRole">
+        INSERT INTO work_template_step_viewing_roles (
+            work_template_id,
+            work_template_step_num,
+            viewing_template_step_num
+        ) VALUES (
+            #{workTemplateId},
+            #{workTemplateStepNum},
+            #{viewingTemplateStepNum}
+        )
+    </insert>
+
+    <select id="selectWorkTemplateStepViewingRoles" resultMap="WorkTemplateStepViewingRoleResultMap">
+        SELECT
+            work_template_id,
+            work_template_step_num,
+            viewing_template_step_num,
+            created_datetime,
+            updated_datetime
+        FROM work_template_step_viewing_roles
+         WHERE work_template_id = #{workTemplateId}
+         AND work_template_step_num = #{workTemplateStepNum}
+    </select>
+
+    <delete id="deleteWorkTemplateStepViewingRoles" >
+        DELETE FROM work_template_step_viewing_roles
+        WHERE work_template_id = #{workTemplateId}
+        AND work_template_step_num = #{workTemplateStepNum}
+    </delete>
+</mapper>

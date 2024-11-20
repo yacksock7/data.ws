@@ -3,6 +3,7 @@ package choi.toi.data.ws.configuration;
 import choi.toi.data.ws.configuration.support.TomcatProperties;
 import choi.toi.data.ws.util.SystemEnvUtil;
 import org.apache.catalina.connector.Connector;
+import org.modelmapper.ModelMapper;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.aop.interceptor.SimpleAsyncUncaughtExceptionHandler;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
@@ -58,6 +59,11 @@ public class ApplicationConfiguration implements AsyncConfigurer {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
     }
 
     @Bean

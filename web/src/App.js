@@ -77,6 +77,7 @@ class App extends React.Component {
                             <Route path="/template" element={<Template/>}/>
                             <Route path="/template/:actionType" element={<TemplateCreatePage/>}/>
                             <Route path="/template/:actionType/:templateId" element={<TemplateCreatePage/>}/>
+
                             <Route path="/workTemplate/:actionType" element={<TemplateCreatePage/>}/>
                             <Route path="/workTemplate/:actionType/:templateId" element={<TemplateCreatePage/>}/>
 

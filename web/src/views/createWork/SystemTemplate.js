@@ -59,12 +59,9 @@ class SystemTemplate extends Component {
         });
     };
 
-    handleClickTemplate = (templateId) => {
-        this.props.navigate(`/createTemplate/${templateId}`);
-    };
 
     render() {
-        const {classes} = this.props;
+        const { classes, handleClickTemplate} = this.props;
 
         return (
             <>
@@ -74,7 +71,7 @@ class SystemTemplate extends Component {
                         <Box className='hover-button-box'>
                             <Box className={classes.hoverBox}>
                                 <Button className={classes.hoverButton}
-                                        onClick={() => this.handleClickTemplate(1)}
+                                        onClick={() => handleClickTemplate(1)}
                                         disableRipple>적용하기</Button>
                                 <Button className={clsx(classes.hoverButton, classes.hoverButton2)}
                                         disableRipple>미리보기</Button>
@@ -130,7 +127,7 @@ class SystemTemplate extends Component {
                         <Box className='hover-button-box'>
                             <Box className={classes.hoverBox}>
                                 <Button className={classes.hoverButton}
-                                        onClick={this.handleClickTemplate}
+                                        onClick={() => handleClickTemplate()}
                                         disabled={true}
                                         disableRipple>적용하기</Button>
                                 <Button className={clsx(classes.hoverButton, classes.hoverButton2)}
@@ -186,7 +183,7 @@ class SystemTemplate extends Component {
                         <Box className='hover-button-box'>
                             <Box className={classes.hoverBox}>
                                 <Button className={classes.hoverButton}
-                                        onClick={() => this.handleClickTemplate(2)}
+                                        onClick={() => handleClickTemplate(2)}
                                         disableRipple>적용하기</Button>
                                 <Button className={clsx(classes.hoverButton, classes.hoverButton2)}
                                         disabled={true}

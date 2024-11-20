@@ -1,0 +1,195 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="choi.toi.data.ws.repository.mapper.WorkTemplateStepMapper">
+
+    <resultMap id="WorkTemplateStepResultMap" type="WorkTemplateStep">
+        <id     property="workTemplateId"           column="work_template_id" />
+        <id     property="workTemplateStepNum"      column="work_template_step_num" />
+        <result property="type"                     column="type" />
+        <result property="name"                     column="name" />
+        <result property="options"                  column="options" />
+        <result property="inputType"                column="input_type" />
+        <result property="resultType"               column="result_type" />
+        <result property="isRejectPoint"            column="is_reject_point" />
+        <result property="createdDatetime"          column="created_datetime" />
+        <result property="updatedDatetime"          column="updated_datetime" />
+    </resultMap>
+
+    <resultMap id="WorkTemplateStepTransferResultMap" type="WorkTemplateStep">
+        <id     property="workTemplateId"           column="work_template_id" />
+        <id     property="workTemplateStepNum"      column="work_template_step_num" />
+        <result property="type"                     column="type" />
+        <result property="name"                     column="name" />
+        <result property="options"                  column="options" />
+        <result property="inputType"                column="input_type" />
+        <result property="resultType"               column="result_type" />
+        <result property="isRejectPoint"            column="is_reject_point"    typeHandler="BooleanYnTypeHandler"/>
+        <result property="createdDatetime"          column="created_datetime" />
+        <result property="updatedDatetime"          column="updated_datetime" />
+
+        <result     property="userId"           column="user_id" />
+        <collection property="allocateCount"  column="workTemplateId=work_template_id,workTemplateStepNum=work_template_step_num,userId=user_id" select="selectAllocateCountByWork" />
+    </resultMap>
+
+
+    <insert id="insertWorkTemplateStep" parameterType="TemplateStep">
+
+        <selectKey keyProperty="templateStepNum" resultType="Integer" order="BEFORE">
+            SELECT
+                (IFNULL(MAX(work_template_step_num), 0) + 1) AS template_step_num
+            FROM work_template_steps
+            WHERE work_template_id = #{templateId}
+        </selectKey>
+
+        INSERT INTO work_template_steps (
+            work_template_id,
+            work_template_step_num,
+            type,
+            name,
+            options,
+            input_type,
+            result_type,
+            is_reject_point
+        ) VALUES (
+            #{templateId},
+            #{templateStepNum},
+            #{type},
+            #{name},
+            #{options},
+            #{inputType},
+            #{resultType},
+            #{isRejectPoint, typeHandler=BooleanYnTypeHandler}
+        )
+    </insert>
+
+    <select id="selectWorkTemplateSteps" resultMap="WorkTemplateStepResultMap">
+        SELECT
+            work_template_id,
+            work_template_step_num,
+            type,
+            name,
+            options,
+            input_type,
+            result_type,
+            is_reject_point,
+            created_datetime,
+            updated_datetime
+        FROM work_template_steps
+         WHERE work_template_id = #{workTemplateId}
+    </select>
+    <select id="selectWorkTemplateStepsWithUserId" resultMap="WorkTemplateStepTransferResultMap">
+        SELECT
+            work_template_id,
+            work_template_step_num,
+            type,
+            name,
+            options,
+            input_type,
+            result_type,
+            is_reject_point,
+            created_datetime,
+            updated_datetime,
+            #{userId} as user_id
+        FROM work_template_steps
+         WHERE work_template_id = #{workTemplateId}
+    </select>
+
+    <select id="selectAllocateCountByWork" resultType="Integer">
+        SELECT
+            COUNT(*)
+        FROM work_template_steps wts
+        INNER JOIN job_steps js ON wts.work_template_id = js.work_template_id AND wts.work_template_step_num = js.work_template_step_num
+        INNER JOIN job_step_tasks jst ON js.job_id = jst.job_id AND js.job_step_num = jst.job_step_num
+        INNER JOIN job_step_task_workers jstw ON jst.job_id = jstw.job_id AND jst.job_step_num = jstw.job_step_num AND jst.job_step_task_num = jstw.job_step_task_num AND jstw.user_id = #{userId}
+        WHERE wts.work_template_id = #{workTemplateId}
+        AND wts.work_template_step_num = #{workTemplateStepNum}
+    </select>
+
+    <select id="selectWorkTemplateStep" resultMap="WorkTemplateStepResultMap">
+        SELECT
+            work_template_id,
+            work_template_step_num,
+            type,
+            name,
+            options,
+            input_type,
+            result_type,
+            is_reject_point,
+            created_datetime,
+            updated_datetime
+        FROM work_template_steps
+        WHERE work_template_id = #{workTemplateId}
+        AND work_template_step_num = #{workTemplateStepNum}
+    </select>
+
+    <select id="selectWorkTemplateStepByWorkId" resultMap="WorkTemplateStepResultMap">
+        SELECT
+            wts.work_template_id,
+            wts.work_template_step_num,
+            wts.type,
+            wts.name,
+            wts.options,
+            wts.input_type,
+            wts.result_type,
+            wts.is_reject_point,
+            wts.created_datetime,
+            wts.updated_datetime
+        FROM work_template_steps wts
+        INNER JOIN works w ON wts.work_templates_id = w.work_template_id
+        WHERE w.work_id = #{workId}
+        AND wts.work_template_step_num = #{workTemplateStepNum}
+    </select>
+
+    <select id="selectWorkTemplateStepByJobId" resultMap="WorkTemplateStepResultMap">
+        SELECT
+            wts.work_template_id,
+            wts.work_template_step_num,
+            wts.type,
+            wts.name,
+            wts.options,
+            wts.input_type,
+            wts.result_type,
+            wts.is_reject_point,
+            wts.created_datetime,
+            wts.updated_datetime
+        FROM work_template_steps wts
+        INNER JOIN works w ON wts.work_template_id = w.work_template_id
+        INNER JOIN jobs j ON w.id = j.work_id
+        WHERE j.id = #{jobId}
+        AND wts.work_template_step_num = #{workTemplateStepNum}
+    </select>
+
+    <select id="selectWorkTemplateStepsForRejectPoint" resultMap="WorkTemplateStepResultMap">
+        SELECT
+            work_template_id,
+            work_template_step_num,
+            type,
+            name,
+            options,
+            input_type,
+            result_type,
+            is_reject_point,
+            created_datetime,
+            updated_datetime
+        FROM work_template_steps
+        WHERE work_template_id = #{workTemplateId}
+        AND is_reject_point = 'Y'
+    </select>
+
+    <select id="selectPreWorkTemplateSteps" resultMap="WorkTemplateStepResultMap">
+        SELECT
+            work_template_id,
+            work_template_step_num,
+            type,
+            name,
+            options,
+            result_type,
+            is_reject_point,
+            created_datetime,
+            updated_datetime
+        FROM work_template_steps
+        WHERE work_template_id = #{workTemplateId}
+            AND work_template_step_num &lt; #{workTemplateStepNum}
+    </select>
+</mapper>

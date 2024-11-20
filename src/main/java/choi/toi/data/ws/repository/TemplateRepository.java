@@ -1,8 +1,6 @@
 package choi.toi.data.ws.repository;
 
 import choi.toi.data.ws.model.Template;
-import choi.toi.data.ws.model.support.TemplateType;
-import choi.toi.data.ws.model.transfer.TemplateStepTransfer;
 import choi.toi.data.ws.model.transfer.TemplateTableTransfer;
 import choi.toi.data.ws.model.transfer.TemplateTransfer;
 import choi.toi.data.ws.repository.mapper.TemplateMapper;

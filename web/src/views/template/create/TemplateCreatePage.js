@@ -135,15 +135,16 @@ class TemplateCreatePage extends React.Component {
     }
 
     render() {
-        const { purpose, actionType } = this.props.params;
+        const { location } = this.props;
+        const { actionType } = this.props.params;
         const { template } = this.props.templateStore;
-
+        const isTemplate = !location.pathname.includes("workTemplate");
 
         return (
             <Box>
                 <TemplateCreateTopBar template={template}
-                                      purpose={purpose}
-                                      actionType={actionType}/>
+                                      actionType={actionType}
+                                      isTemplate={isTemplate}/>
                 <DragDropContext onDragEnd={this.onDragEnd}>
                     <Box display='flex' >
                         <CreateTemplateSideBar template={template}

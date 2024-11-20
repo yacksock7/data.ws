@@ -31,11 +31,15 @@ class ChooseTemplate extends Component {
 
     handleChangeTemplateType = (event, templateType) => {
         this.setState({templateType});
-    };
+    }
 
     handleClickTemplate = (templateId) => {
-        this.props.navigate(`/createTemplate/${templateId}`);
-    };
+        if (templateId) {
+            this.props.navigate(`/workTemplate/create/${templateId}`);
+        } else {
+            this.props.navigate(`/workTemplate/create`);
+        }
+    }
 
     render() {
         const { classes } = this.props;
@@ -61,7 +65,7 @@ class ChooseTemplate extends Component {
 
                             <Box className='hover-button-box'>
                                 <Box className={classes.hoverBox}>
-                                    <Button className={classes.hoverButton} onClick={(e) => {this.handleClickTemplate('new')}}
+                                    <Button className={classes.hoverButton} onClick={() => {this.handleClickTemplate()}}
                                             disableRipple>적용하기</Button>
                                     <Button className={clsx(classes.hoverButton, classes.hoverButton2)}
                                             disableRipple>미리보기</Button>
@@ -78,7 +82,7 @@ class ChooseTemplate extends Component {
                     </Box>
                     {((templateType === TemplateType.All)
                         || (templateType === TemplateType.System)) &&
-                        <SystemTemplate/>
+                        <SystemTemplate handleClickTemplate={this.handleClickTemplate}/>
                     }
 
                     {((templateType === TemplateType.All)

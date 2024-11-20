@@ -19,6 +19,13 @@
         <typeAlias type="choi.toi.data.ws.model.TemplateStep" alias="TemplateStep" />
         <typeAlias type="choi.toi.data.ws.model.support.TemplateStepType" alias="TemplateStepType" />
 
+        <typeAlias type="choi.toi.data.ws.model.WorkTemplate" alias="WorkTemplate" />
+        <typeAlias type="choi.toi.data.ws.model.WorkTemplateStep" alias="WorkTemplateStep" />
+        <typeAlias type="choi.toi.data.ws.model.WorkTemplateStepViewingRole" alias="WorkTemplateStepViewingRole" />
+
+        <typeAlias type="choi.toi.data.ws.model.Work" alias="Work" />
+        <typeAlias type="choi.toi.data.ws.model.WorkUploadUser" alias="WorkUploadUser" />
+        <typeAlias type="choi.toi.data.ws.model.transfer.WorkUploadUserTransfer" alias="WorkUploadUserTransfer" />
 
         <typeAlias type="choi.toi.data.ws.repository.typehandler.BooleanYnTypeHandler" alias="BooleanYnTypeHandler" />
     </typeAliases>
@@ -31,5 +38,10 @@
         <mapper resource="mybatis/mapper/mariadb/UserMapper.xml" />
         <mapper resource="mybatis/mapper/mariadb/TemplateMapper.xml" />
         <mapper resource="mybatis/mapper/mariadb/TemplateStepMapper.xml" />
+        <mapper resource="mybatis/mapper/mariadb/WorkTemplateMapper.xml" />
+        <mapper resource="mybatis/mapper/mariadb/WorkTemplateStepMapper.xml" />
+        <mapper resource="mybatis/mapper/mariadb/WorkTemplateStepViewingRoleMapper.xml" />
+        <mapper resource="mybatis/mapper/mariadb/WorkMapper.xml" />
+        <mapper resource="mybatis/mapper/mariadb/WorkUploadUserMapper.xml" />
     </mappers>
 </configuration>

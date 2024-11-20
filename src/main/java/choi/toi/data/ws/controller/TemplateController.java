@@ -5,6 +5,7 @@ import choi.toi.data.ws.model.support.TemplateType;
 import choi.toi.data.ws.model.transfer.TemplateStepTransfer;
 import choi.toi.data.ws.model.transfer.TemplateTableTransfer;
 import choi.toi.data.ws.model.transfer.TemplateTransfer;
+import choi.toi.data.ws.model.transfer.WorkTransfer;
 import choi.toi.data.ws.service.TemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -54,10 +55,9 @@ public class TemplateController {
         templateService.remove(templateId);
     }
 
-//    @PostMapping("/steps/works")
-//    public void createTemplate(HttpServletRequest request,
-//                                               @RequestBody WorkTransfer workTransfer) {
-//        templateService.createTemplate(workTransfer);
-//    }
-//
+    @PostMapping("/steps/works")
+    public void createTemplate(HttpServletRequest request,
+                                               @RequestBody WorkTransfer workTransfer) {
+        templateService.createTemplate(workTransfer);
+    }
 }

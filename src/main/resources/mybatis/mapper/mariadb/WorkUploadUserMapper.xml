@@ -1,0 +1,111 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="choi.toi.data.ws.repository.mapper.WorkUploadUserMapper">
+    <resultMap id="WorkUploadUserResultMap" type="WorkUploadUser">
+        <id     property="workId"               column="work_id" />
+        <id     property="userId"               column="user_id" />
+        <result property="viewingOrder"         column="viewing_order" />
+        <result property="createdDatetime"      column="created_datetime" />
+        <result property="updatedDatetime"      column="updated_datetime" />
+    </resultMap>
+
+    <resultMap id="WorkUploadUserTransferResultMap" type="WorkUploadUserTransfer">
+        <id     property="workId"               column="work_id" />
+        <id     property="userId"               column="user_id" />
+        <result property="viewingOrder"         column="viewing_order" />
+        <result property="createdDatetime"      column="created_datetime" />
+        <result property="updatedDatetime"      column="updated_datetime" />
+        <collection property="user" column="{userId=user_id,workId=work_id}" select="selectUserById"/>
+    </resultMap>
+
+    <resultMap id="UserResultMap" type="User">
+        <id     property="id"                   column="id" />
+        <result property="email"                column="email" />
+        <result property="password"             column="password" />
+        <result property="nickname"             column="nickname" />
+        <result property="type"                 column="type" />
+        <result property="createdDatetime"      column="created_datetime" />
+        <result property="updatedDatetime"      column="updated_datetime" />
+    </resultMap>
+
+    <insert id="insertWorkUploadUser" parameterType="WorkUploadUser">
+        INSERT INTO work_upload_users (
+            work_id,
+            user_id,
+            viewing_order
+        ) VALUES (
+            #{workId},
+            #{userId},
+            #{viewingOrder}
+        )
+    </insert>
+
+    <select id="selectWorkUploadUser" parameterType="Long" resultMap="WorkUploadUserResultMap">
+        SELECT
+            work_id,
+            user_id,
+            viewing_order,
+            created_datetime,
+            updated_datetime
+        FROM work_upload_users
+        WHERE work_id = #{workId}
+        AND user_id = #{userId}
+    </select>
+
+    <select id="selectWorkUploadUserTransfersByWorkId" parameterType="Long" resultMap="WorkUploadUserTransferResultMap">
+        SELECT
+            work_id,
+            user_id,
+            viewing_order,
+            created_datetime,
+            updated_datetime
+        FROM work_upload_users
+        WHERE work_id = #{workId}
+    </select>
+
+    <select id="selectUserById" resultMap="UserResultMap">
+        SELECT
+            u.id,
+            u.email,
+            u.password,
+            u.nickname,
+            u.type,
+            u.created_datetime,
+            u.updated_datetime
+        FROM work_upload_users wuu
+            INNER JOIN users u ON wuu.user_id = u.id
+        WHERE u.id = #{userId}
+        AND wuu.work_id = #{workId}
+    </select>
+
+    <select id="selectWorkUploadUsersByUserId" parameterType="String" resultMap="WorkUploadUserResultMap">
+        SELECT
+        work_id,
+        user_id,
+        viewing_order,
+        created_datetime,
+        updated_datetime
+        FROM work_upload_users
+        WHERE user_id = #{userId}
+    </select>
+
+    <update id="updateWorkUploadUser" parameterType="WorkUploadUser">
+        UPDATE work_upload_users
+        SET viewing_order = viewingOrder,
+            updated_datetime = now()
+        WHERE work_id = #{workId}
+        AND user_id = #{userId}
+    </update>
+
+    <delete id="deleteWorkUploadUser" parameterType="Long">
+        DELETE FROM work_upload_users
+        WHERE work_id = #{workId}
+        AND user_id = #{userId}
+    </delete>
+
+    <delete id="deleteWorkUploadUserByWorkId" parameterType="Long">
+        DELETE FROM work_upload_users
+        WHERE work_id = #{workId}
+    </delete>
+</mapper>

@@ -38,14 +38,22 @@ class CreateTemplateTopBar extends Component {
         this.setState({ dialogOpen: !dialogOpen });
     };
 
-    checkTemplateAndOpen = async () => {
+    checkTemplateAndOpenDialog = async () => {
         const checked = await this.handleCheckTemplateSteps();
         if (checked) {
             this.handleOpenDialog();
         }
     }
 
-    modifyTemplate = async () => {
+    checkTemplateAndModifyTemplate = async () => {
+        const checked = await this.handleCheckTemplateSteps();
+        if (checked) {
+            await this.props.templateStore.modifyTemplateSteps();
+            this.props.navigate("/template");
+        }
+    }
+
+    checkTemplateAndCreateWorkTemplate = async () => {
         const checked = await this.handleCheckTemplateSteps();
         if (checked) {
             await this.props.templateStore.modifyTemplateSteps();
@@ -69,7 +77,6 @@ class CreateTemplateTopBar extends Component {
             alert("템플릿 생성 완료!");
             this.props.navigate("/template");
         }
-
     }
 
     handleCheckTemplateSteps = () => {
@@ -113,7 +120,7 @@ class CreateTemplateTopBar extends Component {
     }
 
     render() {
-        const { classes, template, purpose, actionType } = this.props;
+        const { classes, template, actionType, isTemplate } = this.props;
         const { newTemplate } = this.props.templateStore;
         const { dialogOpen } = this.state;
 
@@ -144,22 +151,32 @@ class CreateTemplateTopBar extends Component {
                     </Box>
                 }
 
-
                 {/* history controller + 저장 버튼 */}
                 <Box display='flex' alignItems='center'>
                    <TemplateHistoryController/>
 
                     <Box className={classes.buttonStyle}>
 
-                        {actionType === "create" &&
+                        {isTemplate && actionType === "create" &&
                             <Button className={classes.buttonBoxIn}
-                                    onClick={this.checkTemplateAndOpen}
+                                    onClick={this.checkTemplateAndOpenDialog}
                                     disableRipple>템플릿 생성</Button>
                         }
-                        {actionType === "modify" &&
+                        {isTemplate && actionType === "modify" &&
                             <Button className={classes.buttonBoxIn}
-                                    onClick={this.modifyTemplate}
+                                    onClick={this.checkTemplateAndModifyTemplate}
                                     disableRipple>템플릿 수정</Button>
+                        }
+
+                        {!isTemplate && actionType === "create" &&
+                            <Button className={classes.buttonBoxIn}
+                                    onClick={this.checkTemplateAndCreateWorkTemplate}
+                                    disableRipple>작업 생성</Button>
+                        }
+                        {!isTemplate && actionType === "modify" &&
+                            <Button className={classes.buttonBoxIn}
+                                    onClick={() => {}}
+                                    disableRipple>작업 템플릿 수정</Button>
                         }
                     </Box>
                 </Box>

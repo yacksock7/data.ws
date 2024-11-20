@@ -1,0 +1,78 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="choi.toi.data.ws.repository.mapper.WorkMapper">
+    <resultMap id="WorkResultMap" type="Work">
+        <id     property="id"                   column="id" />
+        <result property="userId"               column="user_id" />
+        <result property="workTemplateId"       column="work_template_id" />
+        <result property="name"                 column="name" />
+        <result property="createdDatetime"      column="created_datetime" />
+        <result property="updatedDatetime"      column="updated_datetime" />
+    </resultMap>
+
+    <insert id="insertWork" parameterType="Work">
+        INSERT INTO works (
+            user_id,
+            work_template_id,
+            name
+        ) VALUES (
+            #{userId},
+            #{workTemplateId},
+            #{name}
+        )
+    </insert>
+
+    <select id="selectWork" parameterType="Long" resultMap="WorkResultMap">
+        SELECT
+            id,
+            user_id,
+            work_template_id,
+            name,
+            created_datetime,
+            updated_datetime
+        FROM works
+        WHERE id = #{workId}
+    </select>
+
+    <select id="selectWorkByWorkTemplateId" parameterType="Long" resultMap="WorkResultMap">
+        SELECT
+            id,
+            user_id,
+            work_template_id,
+            name,
+            created_datetime,
+            updated_datetime
+        FROM works
+        WHERE work_template_id = #{workTemplateId}
+    </select>
+
+    <select id="selectWorksByUserId" parameterType="Map" resultMap="WorkResultMap">
+        SELECT
+            w.id,
+            w.user_id,
+            w.work_template_id,
+            w.name,
+            w.created_datetime,
+            w.updated_datetime
+        FROM works w
+        LEFT JOIN work_upload_users wuu ON w.id = wuu.work_id
+        LEFT JOIN jobs j ON w.id= j.work_id
+        LEFT JOIN job_step_task_workers jstw ON j.id = jstw.job_id
+        WHERE (w.user_id = #{userId} OR wuu.user_id = #{userId} OR jstw.user_id = #{userId})
+        AND w.name like #{keyword}
+        GROUP BY w.id
+    </select>
+
+    <update id="updateWork" parameterType="Work">
+        UPDATE works
+        SET name = #{name},
+            updated_datetime = #{updatedDatetime}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteWork" parameterType="Long">
+        DELETE FROM works
+        WHERE id = #{workId}
+    </delete>
+</mapper>

@@ -606,53 +606,25 @@ export default class TemplateStore {
         try {
             this.template.userId = userId;
             newWork.userId = userId;
+
             const templateSteps =
                 this.templateSteps.map(step => {
                     const options = step.options ? JSON.stringify(step.options) : null;
                     return {...step, options};
                 });
-            let inputType ;
-            let resultType;
-
-            switch (this.templateSteps[0].inputType){
-                case ResultType.Audio:
-                    inputType = "Speech"; break;
-                case ResultType.Text:
-                    inputType = "Text"; break;
-                case ResultType.Tag:
-                    inputType = "Tag"; break;
-                default :
-                    inputType = "Text";
-            }
-
-            switch (this.templateSteps[this.templateSteps.length-1].resultType){
-                case ResultType.Audio:
-                    resultType = "Speech"; break;
-                case ResultType.Text:
-                    resultType = "Text"; break;
-                case ResultType.Tag:
-                    resultType = "Tag"; break;
-                default :
-                    resultType = "Text";
-            }
-
-            this.template.name = `${inputType} to ${resultType}`;
-
             const data = {
                 template : this.template,
                 templateSteps : templateSteps,
                 work : newWork
             };
+
             yield this.templateRepository.createWorkTemplateAndWork(data);
 
             this.templateState = State.Success;
-
             console.log(LogPrefix, "createWorkTemplateAndWork Success!!");
-            navigate("/");
         } catch (e) {
             this.templateState = State.Failed;
             console.log(LogPrefix, "createWorkTemplateAndWork ERROR! e=", e.data);
-            // this.template = Object.assign({}, EmptyTemplate);
         }
     }
 
