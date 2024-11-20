@@ -139,7 +139,7 @@ class TableComponent extends Component {
         const { selectedWorkers, selectedJobStepTransfer } = this.props.jobStepTaskWorkerStore;
         const { selectedWorkTemplateStep } = this.props.workStore;
         const totalPage = Math.floor((totalCount-1) / rowsPerPage) + 1;
-        console.log("##########",this.props.authStore.loginUser,this.props.userStore.userProfile);
+
         return (
             <div ref={this.scrollRef}>
                 <TableContainer component={Paper} className={classes.tableWrap}>

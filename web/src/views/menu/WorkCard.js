@@ -21,7 +21,7 @@ class WorkCard extends Component {
     }
 
     componentDidMount() {
-        const { work } = this.props;
+        const {work} = this.props;
     }
 
     handleClickPopover = (e) => {
@@ -40,10 +40,10 @@ class WorkCard extends Component {
     handleClickCard = async (workId) => {
         this.props.jobStepStore.init();
 
-        const { loginUser } = this.props.authStore;
+        const {loginUser} = this.props.authStore;
         this.props.workStore.changeSelectedWork(workId, loginUser.id);
 
-        const { selectedWork } = this.props.workStore;
+        const {selectedWork} = this.props.workStore;
         const initStep = selectedWork.workTemplateSteps.find(step => !step.disabled);
         this.props.workStore.changeSelectedWorkStep(initStep.workTemplateStepNum);
 
@@ -57,8 +57,8 @@ class WorkCard extends Component {
 
     render() {
         const {classes, workTransfer} = this.props;
-        const { selectedWork } = this.props.workStore;
-        const { anchorEl } = this.state;
+        const {selectedWork} = this.props.workStore;
+        const {anchorEl, step} = this.state;
         const popoverOpen = Boolean(anchorEl);
         const createdDatetime = dayjs(workTransfer.work.updatedDatetime).format("YYYY-MM-DD hh:mm");
 
@@ -69,15 +69,16 @@ class WorkCard extends Component {
                      style={(selectedWork && selectedWork.work.id === workTransfer.work.id) ? {border: '2px solid #7500fa'} : {border: '1px solid #bbbbbb'}}
                      onClick={() => this.handleClickCard(workTransfer.work.id)}>
                     <Box className={classes.topBox}>
-                        {workTransfer.workTemplateSteps && workTransfer.workTemplateSteps.map( step => {
-                            return (
-                                <Box className={classes.stepBox}
-                                     key={`step-${step.workTemplateId}-${step.workTemplateStepNum}`}
-                                    style={this.state.step ? {background: TemplateStepColor[step.type]} : {background: '#eee'}}>
-                                    <Typography style={this.state.step ? {color: '#fff'} : {color: 'rgba(50, 50, 50, 0.6)'}}>{step.name}</Typography>
-                                </Box>
-                            );
-                        })}
+                        {workTransfer.workTemplateSteps
+                            && workTransfer.workTemplateSteps.map(step => {
+                                return (
+                                    <Box className={classes.stepBox}
+                                         key={`step-${step.workTemplateId}-${step.workTemplateStepNum}`}
+                                         style={step ? {background: TemplateStepColor[step.type]} : {background: '#eee'}}>
+                                        <Typography style={step ? {color: '#fff'} : {color: 'rgba(50, 50, 50, 0.6)'}}>{step.name}</Typography>
+                                    </Box>
+                                );
+                            })}
                     </Box>
 
                     <Typography className={classes.titleText}>{workTransfer.work.name}</Typography>
@@ -109,7 +110,8 @@ class WorkCard extends Component {
                             className={classes.popoverBox}
                         >
                             <MenuList>
-                                <MenuItem onClick={() => this.handleClosePopover(workTransfer.work.id)}>템플릿 편집</MenuItem>
+                                <MenuItem onClick={() => this.handleClosePopover(workTransfer.work.id)}>템플릿
+                                    편집</MenuItem>
                             </MenuList>
                         </Popover>
                     </Box>
@@ -124,8 +126,8 @@ class WorkCard extends Component {
     }
 }
 
-export default withStyles(styles) (
-    inject('authStore', 'workStore', 'jobStepStore','deadlineStore', 'workTemplateStore')(
+export default withStyles(styles)(
+    inject('authStore', 'workStore', 'jobStepStore', 'deadlineStore', 'workTemplateStore')(
         observer(WorkCard)
     )
 );

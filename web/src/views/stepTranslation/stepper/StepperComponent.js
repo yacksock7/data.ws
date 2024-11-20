@@ -70,7 +70,7 @@ class StepperComponent extends Component {
 
         await this.props.jobStepStore.getJobStepTransfers(selectedWorkTemplateStep.workTemplateId, selectedWorkTemplateStep.workTemplateStepNum, loginUser.id);
 
-        this.props.deadlineStore.getDeadline(selectedWorkTemplateStep);
+        // this.props.deadlineStore.getDeadline(selectedWorkTemplateStep);
         this.props.workTemplateStore.getWorkTemplateStepViewingRoles(selectedWorkTemplateStep.workTemplateId, selectedWorkTemplateStep.workTemplateStepNum);
     }
 
@@ -125,15 +125,19 @@ class StepperComponent extends Component {
                                     {step.type === TemplateStepType.Upload ?
                                         null
                                         :
-                                        <Button onClick={() => this.handleChangeSelectedWorkStep(step.workTemplateStepNum, "PRE")} className={clsx(classes.nexButton, classes.backButton)} disableRipple>
+                                        <Button className={clsx(classes.nexButton, classes.backButton)}
+                                                onClick={() => this.handleChangeSelectedWorkStep(step.workTemplateStepNum, "PRE")}
+                                                disableRipple>
                                             이전
                                         </Button>
                                     }
 
-                                    {step.type === TemplateStepType.Export?
+                                    {step.type === TemplateStepType.Export ?
                                         null
                                         :
-                                        <Button onClick={() => this.handleChangeSelectedWorkStep(step.workTemplateStepNum, "NEXT")} className={classes.nexButton} disableRipple>
+                                        <Button className={classes.nexButton}
+                                                onClick={() => this.handleChangeSelectedWorkStep(step.workTemplateStepNum, "NEXT")}
+                                                disableRipple>
                                             다음
                                         </Button>
                                     }

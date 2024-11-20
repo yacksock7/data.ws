@@ -22,68 +22,64 @@ class TranslationBar extends Component {
     }
 
     handleChangeFilter = event => {
-        this.setState({ filter: event.target.value });
+        this.setState({filter: event.target.value});
     };
 
     render() {
-        const { classes } = this.props;
-        const { selectedWork } = this.props.workStore;
-        const options = JSON.parse(selectedWork.workTemplateSteps.find(step => step.type === TemplateStepType.Machine).options);
+        const {classes} = this.props;
+        const {selectedWork} = this.props.workStore;
+        const machine = selectedWork.workTemplateSteps.find(step => step.type === TemplateStepType.Machine);
 
         return (
             <Box className={classes.displayFlex}>
-                <Box className={classes.displayFlex}>
-                    <Typography className={classes.buttonTextStyle}>번역기</Typography>
-                    <FormControl className={classes.formControl}>
-                        <Select
-                            value={options.engine}
-                            onChange={this.handleChangeFilter}
-                            IconComponent={(props) => (
-                                <Box>
-                                    <TranslationSelectIcon  {...props} />
-                                </Box>
-                            )}
-                            MenuProps={{
-                                anchorOrigin: {
-                                    vertical: "bottom",
-                                    horizontal: "right"
-                                },
-                                transformOrigin:{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                },
-                                // getContentAnchorEl: null,
-                                className:classes.selectPopover
-                            }}
-                        >
-                            { MachineDetail[options.machineType].engine.map( engine =>
-                                <MenuItem value={engine.type}>
-                                    <img src={engine.image} alt={engine.name}/>
-                                    <span>{MachineDetail[options.machineType].label}</span>
-                                </MenuItem>
-                            )}
-                        </Select>
-                    </FormControl>
-                </Box>
-                <Box className={classes.displayFlex} style={{paddingRight: 30}}>
-                    <Typography className={classes.languageText}>
-                        {LanguageType[options.machineType][options.engine].find(item => item.type === options.sourceLang).name}
-                    </Typography>
-                    <Box className={classes.iconMargin}>
-                        <ArrowLanguage/>
+                {machine && machine.options &&
+                    <Box>
+                        <Box className={classes.displayFlex}>
+                            <Typography className={classes.buttonTextStyle}>번역기</Typography>
+                            <FormControl className={classes.formControl}>
+                                <Select value={machine.options.engine}
+                                        onChange={this.handleChangeFilter}
+                                        IconComponent={(props) => (
+                                            <Box>
+                                                <TranslationSelectIcon  {...props} />
+                                            </Box>
+                                        )}
+                                        MenuProps={{
+                                            anchorOrigin: {vertical: "bottom", horizontal: "right"},
+                                            transformOrigin: {vertical: 'top', horizontal: 'right'},
+                                            className: classes.selectPopover
+                                        }}>
+                                    {MachineDetail[machine.options.machineType].engine.map(engine =>
+                                        <MenuItem value={engine.type}>
+                                            <img src={engine.image} alt={engine.name}/>
+                                            <span>{MachineDetail[machine.options.machineType].label}</span>
+                                        </MenuItem>
+                                    )}
+                                </Select>
+                            </FormControl>
+                        </Box>
+
+                        <Box className={classes.displayFlex} style={{paddingRight: 30}}>
+                            <Typography className={classes.languageText}>
+                                {LanguageType[machine.options.machineType][machine.options.engine].find(item => item.type === machine.options.sourceLang).name}
+                            </Typography>
+                            <Box className={classes.iconMargin}>
+                                <ArrowLanguage/>
+                            </Box>
+                            <Typography className={classes.languageText}>
+                                {LanguageType[machine.options.machineType][machine.options.engine].find(item => item.type === machine.options.targetLang).name}
+                            </Typography>
+                        </Box>
                     </Box>
-                    <Typography className={classes.languageText}>
-                        {LanguageType[options.machineType][options.engine].find(item => item.type === options.targetLang).name}
-                    </Typography>
-                </Box>
+                }
             </Box>
         );
     }
 }
 
 
-export default withStyles(styles) (
-    inject('workStore') (
+export default withStyles(styles)(
+    inject('workStore')(
         observer(TranslationBar)
     )
 );

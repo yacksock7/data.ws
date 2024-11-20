@@ -107,28 +107,20 @@ export default class DeadlineStore{
         try{
             const templateDeadline = yield this.deadlineRepository.getWorkTemplateStepDeadlines(workTemplateSteps.workTemplateId,workTemplateSteps.workTemplateStepNum,{});
             console.log(LogPrefix, "getWorkTemplateStepDeadlines ...", templateDeadline);
-            if(templateDeadline.length < 1)
-            {
+            if (templateDeadline.length < 1) {
                 this.deadline.deadlineDatetime = '';
                 this.deadline.deadlineDatetime = {... this.deadline.deadlineDatetime};
                 return;
             }
-            else if(templateDeadline.length === 1)
-            {
+            else if(templateDeadline.length === 1) {
                 this.changeDeadlineDeadlineDatetime(templateDeadline[0].deadlineDatetime);
                 return;
             }
             const newestDeadline = templateDeadline.reduce((prev,current) => {
                 return (prev.workTemplateStepDeadlineNum > current.workTemplateStepDeadlinNum) ? prev : current;
             });
-            //console.log('[getDeadline] GetDeadline Check');
-            //console.log(this.deadline);
-            //console.log(newestDeadline);
             this.changeDeadlineDeadlineDatetime(newestDeadline.deadlineDatetime);
-            //this.deadline = newestDeadline;
-            //console.log(this.deadline);
-        }
-        catch (e) {
+        } catch (e) {
             this.deadline.deadlineDatetime = '';
             this.deadline.deadlineDatetime = {... this.deadline.deadlineDatetime};
             console.log(e);
