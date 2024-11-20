@@ -64,12 +64,10 @@ class WorkCard extends Component {
 
         return (
             <div className={classes.root} key={`card-${workTransfer.work.id}`}>
-                <Box
-                    key={`card-box-${workTransfer.work.id}`}
-                    className={classes.cardBox}
-                    onClick={() => this.handleClickCard(workTransfer.work.id)}
-                    style={(selectedWork && selectedWork.work.id === workTransfer.work.id) ? {border: '2px solid #7500fa'} : {border: '1px solid #bbbbbb'}}
-                >
+                <Box key={`card-box-${workTransfer.work.id}`}
+                     className={classes.cardBox}
+                     style={(selectedWork && selectedWork.work.id === workTransfer.work.id) ? {border: '2px solid #7500fa'} : {border: '1px solid #bbbbbb'}}
+                     onClick={() => this.handleClickCard(workTransfer.work.id)}>
                     <Box className={classes.topBox}>
                         {workTransfer.workTemplateSteps && workTransfer.workTemplateSteps.map( step => {
                             return (

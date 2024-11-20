@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class SimpleUser implements Serializable {
     public static final long serialVersionUID = 1L;
 
-    private String id;
+    private Long id;
     private String email;
     private String nickname;
     private UserType type;
