@@ -94,9 +94,9 @@ export default class UserStore {
 
                     const param = { keyword : this.lastSearchKeyword} ;
                     const users = yield this.userRepository.getUsers(param);
-                    const groups = yield this.userRepository.getGroups(param);
-
                     this.searchedUsers = users;
+
+                    const groups = yield this.userRepository.getGroups(param);
                     this.searchedGroups = groups;
 
                     this.isSearchLoading = false;

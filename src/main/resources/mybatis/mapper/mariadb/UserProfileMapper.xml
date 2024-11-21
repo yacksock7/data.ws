@@ -1,0 +1,63 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="choi.toi.data.ws.repository.mapper.UserProfileMapper">
+    <resultMap id="UserProfileResultMap" type="UserProfile">
+        <id     property="userId"               column="user_id" />
+        <result property="avatarImageObject"    column="avatar_image_object" />
+        <result property="name"                 column="name" />
+        <result property="gender"               column="gender" />
+        <result property="birth"                column="birth" />
+        <result property="organization"         column="organization" />
+        <result property="createdDatetime"      column="created_datetime" />
+        <result property="updatedDatetime"      column="updated_datetime" />
+    </resultMap>
+
+
+    <insert id="insertUserProfile" parameterType="UserProfile">
+        INSERT INTO user_profiles (
+            user_id,
+            avatar_image_object,
+            name,
+            gender,
+            birth,
+            organization
+        ) VALUES (
+            #{userId},
+            #{avatarImageObject},
+            #{name},
+            #{gender},
+            #{birth},
+            #{organization}
+        )
+    </insert>
+
+    <select id="selectUserProfile" resultMap="UserProfileResultMap">
+        SELECT
+            user_id,
+            avatar_image_object,
+            name,
+            gender,
+            birth,
+            organization,
+            created_datetime,
+            updated_datetime
+        FROM user_profiles
+        WHERE user_id = #{userId}
+    </select>
+
+    <update id="updateUserProfile" parameterType="UserProfile">
+        UPDATE user_profiles
+        SET avatar_image_object = #{avatarImageObject},
+            name= #{name},
+            gender= #{gender},
+            birth= #{birth},
+            organization= #{organization},
+            updated_datetime = now()
+        WHERE id = #{userId}
+    </update>
+
+    <delete id="removeUser" parameterType="Long">
+        DELETE FROM user_profiles WHERE id = #{userId}
+    </delete>
+</mapper>

@@ -45,7 +45,8 @@ class TemplateStepButton extends Component {
     }
 
     componentDidMount() {
-        if (this.props.step.type && this.props.step.type === TemplateStepType.Export) {
+        const { step } = this.props;
+        if (step && step.type && step.type === TemplateStepType.Export) {
             this.props.templateStore.checkTemplateIO();
         }
     }
@@ -147,6 +148,7 @@ class TemplateStepButton extends Component {
         const dragKey = step.type + '_' + stepIndex;
         const boxAlarmStyle = {backgroundColor: templateErrorArr.includes(stepIndex) ? 'rgb(240,120,120)' : ''}
         const systemFlag = (template.type !== "Private");
+
 
         return (
             <>

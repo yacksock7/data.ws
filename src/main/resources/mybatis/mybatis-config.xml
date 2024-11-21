@@ -9,7 +9,11 @@
 
     <typeAliases>
         <typeAlias type="choi.toi.data.ws.model.User" alias="User" />
+        <typeAlias type="choi.toi.data.ws.model.UserProfile" alias="UserProfile" />
         <typeAlias type="choi.toi.data.ws.model.support.UserType" alias="UserType" />
+
+        <typeAlias type="choi.toi.data.ws.model.Group" alias="Group" />
+        <typeAlias type="choi.toi.data.ws.model.transfer.UserGroupTransfer" alias="UserGroupTransfer" />
 
         <typeAlias type="choi.toi.data.ws.model.Template" alias="Template" />
         <typeAlias type="choi.toi.data.ws.model.support.TemplateType" alias="TemplateType" />
@@ -43,5 +47,6 @@
         <mapper resource="mybatis/mapper/mariadb/WorkTemplateStepViewingRoleMapper.xml" />
         <mapper resource="mybatis/mapper/mariadb/WorkMapper.xml" />
         <mapper resource="mybatis/mapper/mariadb/WorkUploadUserMapper.xml" />
+        <mapper resource="mybatis/mapper/mariadb/UserProfileMapper.xml" />
     </mappers>
 </configuration>

@@ -583,12 +583,7 @@ export default class TemplateStore {
                 templateSteps : templateSteps
             };
 
-            const response = yield this.templateRepository.makeNewTemplate(data);
-
-            this.template = response.template;
-            this.templateSteps = response.templateSteps.map(step => {
-                return {...step, options : JSON.parse(step.options)}
-            });
+            yield this.templateRepository.makeNewTemplate(data);
             this.templateState = State.Success;
 
             console.log(LogPrefix, "makeNewTemplate Success!!");

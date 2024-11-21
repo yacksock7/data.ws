@@ -5,5 +5,9 @@ public enum ErrorCode {
     NotAcceptableId,
     CanNotFoundUser,
 
+
+    CanNotValidateToken,
+    ExpiredToken,
+
     Unknown
 }

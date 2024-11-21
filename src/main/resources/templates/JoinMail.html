@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Simple Transactional Email</title>
+	</head>
+	<body style="width: 600px; display: flex; flex-direction: column; align-content: center; margin: 0 auto;">
+		<div style="background: #fff; padding-top: 150px;">
+			<div style="display: flex; justify-content: center;">
+				<img src="https://objectstorage.ap-seoul-1.oraclecloud.com/p/F0sf8hsmOcMrd1Hbu_gUCt2aWjAbNoW4fKKHNCvDSp8QNwbGntKEMU5nr9pFsBSm/n/cnlkg4dnisfp/b/basic-contents-develop/o/util/BasicServiceLogin.svg" alt='Basic Service 로고'/>
+			</div>
+
+			<p style="font-family: Pretendard; font-size: 1.5rem; letter-spacing: -0.5px; color: #333; text-align: center; font-weight: normal; margin-top: 44px;">
+				이메일 주소 인증
+			</p>
+			<p style="font-family: Pretendard; font-size: 1.188rem; letter-spacing: -0.5px; color: #333; font-weight: normal; text-align: center; margin-bottom: 23px;">
+				안녕하세요. 가입 절차를 완료하려면 24시간 이내 아래 링크를 눌러주세요.
+			</p>
+			<div style="display: flex; justify-content: center; margin-bottom: 56px;">
+				<a th:href="*{url}" target="_blank">
+					<button style="background: #7500fa; width: 365px; height: 58px; border-radius: 6px; border: 0; font-family: Pretendard; font-size: 1.25rem; font-weight: 500; letter-spacing: -0.2px; color: #fff; cursor: pointer">
+						이메일 인증
+					</button>
+				</a>
+			</div>
+
+			<p style="font-family: Pretendard; font-size: 1.188rem; color: #333; font-weight: normal; letter-spacing: -0.5px; margin: 0px;">
+				문의사항은 <span style="font-weight: bold">support@postai.co.kr</span>으로 연락주세요.
+			</p>
+		</div>
+	</body>
+</html>

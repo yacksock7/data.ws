@@ -1,9 +1,11 @@
 package choi.toi.data.ws.configuration;
 
 import choi.toi.data.ws.configuration.support.TomcatProperties;
+import choi.toi.data.ws.util.FileUtil;
 import choi.toi.data.ws.util.SystemEnvUtil;
 import org.apache.catalina.connector.Connector;
-import org.modelmapper.ModelMapper;
+import org.modelmapper.*;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.aop.interceptor.SimpleAsyncUncaughtExceptionHandler;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
@@ -14,7 +16,10 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.Executor;
 
 @Configuration
@@ -62,12 +67,45 @@ public class ApplicationConfiguration implements AsyncConfigurer {
     }
 
     @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
-
-    @Bean
     public SystemEnvUtil systemEnvUtil() {
         return new SystemEnvUtil();
     }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        Provider<LocalDateTime> localDateTimeProvider = new AbstractProvider<LocalDateTime>() {
+            @Override
+            public LocalDateTime get() {
+                return LocalDateTime.now();
+            }
+        };
+
+        Converter<String, LocalDateTime> toStringDate = new AbstractConverter<String, LocalDateTime>() {
+            @Override
+            protected LocalDateTime convert(String source) {
+                DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                return LocalDateTime.parse(source, format);
+            }
+        };
+
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.createTypeMap(String.class, LocalDateTime.class);
+        modelMapper.addConverter(toStringDate);
+        modelMapper.getTypeMap(String.class, LocalDateTime.class).setProvider(localDateTimeProvider);
+        modelMapper.getConfiguration()
+                .setMatchingStrategy(MatchingStrategies.STRICT);
+        return modelMapper;
+    }
+
+    @Bean
+    public FileUtil fileUtil(){
+        return new FileUtil();
+    }
+
+
+    @Bean
+    public RestTemplate restTemplate() throws Exception {
+        return new RestTemplate();
+    }
 }
+

@@ -54,10 +54,10 @@ class CreateTemplateSideBar extends Component {
     };
 
     handleClickCard = (i,value) => {
-        this.setState({
-            cardSelect: i,
-        });
-        if(this.props.templateStore.template.type !== "Private")
+        this.setState({ cardSelect: i });
+
+        const { template } = this.props.templateStore;
+        if(template.type !== "Private")
             return;
         if(value === TemplateStepType.Recording || value === TemplateStepType.Labeling)
             return;
@@ -92,8 +92,7 @@ class CreateTemplateSideBar extends Component {
 
     render() {
         const { classes } = this.props;
-        const { template,zoomFlag,zoomLevel } = this.props;
-        //console.log(template.type);
+        const { template, zoomFlag, zoomLevel } = this.props;
         const systemFlag = (template.type !== "Private");
         return (
             <Box className={classes.root}>

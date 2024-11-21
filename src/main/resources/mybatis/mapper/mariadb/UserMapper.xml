@@ -11,48 +11,45 @@
         <result property="updatedDatetime"      column="updated_datetime" />
     </resultMap>
 
-    <select id="selectUser" parameterType="Long" resultMap="UserResultMap">
-        SELECT id,
-               email,
-               password,
-               nickname,
-               type,
-               auth_type,
-               created_datetime,
-               updated_datetime
-        FROM users
-        WHERE id = #{value}
-    </select>
+    <resultMap id="UserGroupTransferResultMap" type="UserGroupTransfer">
+        <id     property="id"                   column="id" />
+        <result property="email"                column="email" />
+        <result property="password"             column="password" />
+        <result property="nickname"             column="nickname" />
+        <result property="type"                 column="type" />
+        <result property="authType"             column="auth_type" />
+        <result property="createdDatetime"      column="created_datetime" />
+        <result property="updatedDatetime"      column="updated_datetime" />
+        <collection property="groups" column="id" select="selectUserGroups"/>
+    </resultMap>
 
-    <select id="selectUserByEmail" parameterType="String" resultMap="UserResultMap">
-        SELECT id,
-               email,
-               password,
-               nickname,
-               type,
-               auth_type,
-               created_datetime,
-               updated_datetime
-        FROM users
-        WHERE email = #{email}
-    </select>
+    <resultMap id="GroupResultMap" type="Group">
+        <id     property="id"                   column="id" />
+        <result property="name"                 column="name" />
+        <result property="userId"               column="user_id" />
+        <result property="createdDatetime"      column="created_datetime" />
+        <result property="updatedDatetime"      column="updated_datetime" />
+    </resultMap>
 
-    <select id="selectUsersWhereType" parameterType="UserType" resultMap="UserResultMap">
-        SELECT id,
-               email,
-               password,
-               nickname,
-               type,
-               auth_type,
-               created_datetime,
-               updated_datetime
-        FROM users
-        WHERE type = #{value}
-        ORDER BY created_datetime DESC
-    </select>
-
-    <insert id="insertUser" parameterType="User">
+    <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO users (
+            email,
+            password,
+            nickname,
+            type,
+            auth_type
+        ) VALUES (
+            #{email},
+            #{password},
+            #{nickname},
+            #{type},
+            #{authType}
+         )
+    </insert>
+
+    <select id="selectUsers" resultMap="UserResultMap">
+        SELECT
+            id,
             email,
             password,
             nickname,
@@ -60,14 +57,119 @@
             auth_type,
             created_datetime,
             updated_datetime
-        ) VALUES (
-            #{email},
-            #{password},
-            #{nickname},
-            #{type},
-            #{authType},
-            NOW(),
-            NOW()
-        )
-    </insert>
+        FROM users
+    </select>
+
+    <select id="selectUserGroupTransfers" resultMap="UserGroupTransferResultMap">
+        SELECT
+            id,
+            email,
+            password,
+            nickname,
+            type,
+            auth_type,
+            created_datetime,
+            updated_datetime
+        FROM users
+        WHERE (email like #{keyword}
+            OR nickname like #{keyword})
+    </select>
+
+    <select id="selectUserGroups" parameterType="Long" resultMap="GroupResultMap">
+        SELECT
+            g.id,
+            g.name,
+            g.user_id,
+            g.created_datetime,
+            g.updated_datetime
+        FROM group_users gu
+                 LEFT JOIN groups g ON gu.group_id = g.id
+        WHERE gu.user_id = #{id}
+    </select>
+
+    <select id="selectUserById" parameterType="Long" resultMap="UserResultMap">
+        SELECT
+            id,
+            email,
+            password,
+            nickname,
+            type,
+            auth_type,
+            created_datetime,
+            updated_datetime
+        FROM users
+        WHERE id = #{userId}
+    </select>
+
+    <select id="selectUserByEmail" parameterType="String" resultMap="UserResultMap">
+        SELECT
+            id,
+            email,
+            password,
+            nickname,
+            type,
+            auth_type,
+            created_datetime,
+            updated_datetime
+        FROM users
+        WHERE email = #{email}
+    </select>
+
+    <select id="selectUserByNickname" parameterType="String" resultMap="UserResultMap">
+        SELECT
+            id,
+            email,
+            password,
+            nickname,
+            type,
+            auth_type,
+            created_datetime,
+            updated_datetime
+        FROM users
+        WHERE nickname = #{nickname}
+    </select>
+
+    <select id="selectUsersWhereType" parameterType="UserType" resultMap="UserResultMap">
+        SELECT
+            id,
+            email,
+            password,
+            nickname,
+            type,
+            auth_type,
+            created_datetime,
+            updated_datetime
+        FROM users
+        WHERE type = #{type}
+        ORDER BY created_datetime DESC
+    </select>
+
+    <update id="updateUser" parameterType="User">
+        UPDATE users
+        SET password = #{password},
+            nickname = #{nickname},
+            type = #{type},
+            updated_datetime = now()
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateUserAuthType" parameterType="Map">
+        UPDATE users
+        SET auth_type = #{authType},
+            updated_datetime = now()
+        WHERE id = #{userId}
+    </update>
+
+    <update id="updateUserPassword" parameterType="Map">
+        UPDATE users
+        SET password = #{password},
+            updated_datetime = now()
+        WHERE id = #{userId}
+    </update>
+
+    <delete id="deleteUser" parameterType="Long">
+        DELETE FROM users WHERE id = #{userId}
+    </delete>
+
+
 </mapper>

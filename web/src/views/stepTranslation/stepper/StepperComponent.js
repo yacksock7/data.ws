@@ -59,7 +59,6 @@ class StepperComponent extends Component {
 
         await this.props.workStore.changeSelectedWorkStep(workTemplateStepNum, state);
 
-
         const { selectedWorkTemplateStep } = this.props.workStore;
         const { loginUser } = this.props.authStore;
 
