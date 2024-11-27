@@ -50,7 +50,9 @@ class WorkCard extends Component {
         const {selectedWorkTemplateStep} = this.props.workStore;
         const {workTemplateId, workTemplateStepNum} = selectedWorkTemplateStep;
 
-        this.props.jobStepStore.getJobStepTransfers(workTemplateId, workTemplateStepNum, loginUser.id);
+        // TODO template step type으로 분기 처리.
+        // this.props.jobStepStore.getJobStepTransfers(workTemplateId, workTemplateStepNum, loginUser.id);
+        this.props.jobStepStore.getJobStepTransfersForUpload(workTemplateId, workTemplateStepNum, loginUser.id);
         this.props.deadlineStore.getDeadline(selectedWorkTemplateStep);
         this.props.workTemplateStore.getWorkTemplateStepViewingRoles(workTemplateId, workTemplateStepNum);
     };

@@ -136,5 +136,30 @@ export default class JobStepStore {
         }
     }
 
+    *getJobStepTransfersForUpload(workTemplateId, workTemplateStepNum, userId) {
+        // this.jobStepState = State.Pending;
+        try {
 
+            const param = {
+                userId : userId,
+                page : this.page,
+                rowsPerPage : this.rowsPerPage
+            }
+            let response = yield this.jobStepRepository.getJobStepTransfersForUpload(workTemplateId, workTemplateStepNum, param);
+
+            this.totalCount = response.totalCount;
+            this.createdCount = response.createdCount;
+            this.completedCount = response.completedCount;
+            this.jobStepTransfers = response.jobStepTransfers.map((jobStepTransfer, index) => {
+                const status = this.getTaskStatus(jobStepTransfer);
+                return {...jobStepTransfer, status}
+            });
+
+            this.jobStepState = State.Success;
+            console.log(LogPrefix, "getJobStepTransfers Success!! response  : ", response );
+        } catch (e) {
+            this.jobStepState = State.Failed;
+            console.log(LogPrefix, "getJobStepTransfers Failed. e : ", e);
+        }
+    }
 }

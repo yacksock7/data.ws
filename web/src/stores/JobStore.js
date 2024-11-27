@@ -20,7 +20,7 @@ export default class JobStore {
     }
 
     *createUploadJob(userId, workId, workTemplateStep, files, inputType) {
-        console.log(`createUploadJob Start... userId=${userId}, workId=${workId}workTemplateStep=${workTemplateStep}, files=${files}, inputType=${inputType}`);
+        console.log(`createUploadJob Start... userId=${userId}, workId=${workId}, workTemplateStep=${workTemplateStep}, files=${files}, inputType=${inputType}`);
         this.jobState = State.Pending;
 
         try {
@@ -42,7 +42,7 @@ export default class JobStore {
             formData.append("workTemplateStepNum", workTemplateStep.workTemplateStepNum);
             files.forEach( e => {formData.append("files", e)});
             
-            yield axios.post('/api/v1/jobs', formData, {
+            yield axios.post('/api/v1/jobs/steps/type/UPLOAD', formData, {
                 headers: {'Content-Type': 'multipart/form-data'},
                 'Authorization': 'JWT ' + sessionStorage.getItem('token')
             });
