@@ -24,10 +24,9 @@ public class ExcelUtil {
     public List<String> convertExcelFile(MultipartFile file) {
         log.trace("convertExcelFile Start... file name = {}", file.getOriginalFilename());
 
-        try {
+        try (final InputStream is = file.getInputStream();
+             final XSSFWorkbook workbook = new XSSFWorkbook(is);) {
 
-            final InputStream is = file.getInputStream();
-            final XSSFWorkbook workbook = new XSSFWorkbook(is);
             return convertWorkBook(workbook);
 
         } catch(IOException ioe) {
@@ -41,6 +40,7 @@ public class ExcelUtil {
 
         final int sheetCount = workbook.getNumberOfSheets();
         for (int i=0 ; i < sheetCount ; i++ ){
+
             final XSSFSheet sheet = workbook.getSheetAt(i);
             final List<String> sourceTextsBySheet = convertSheet(sheet);
             sourceTexts = ListUtils.union(sourceTexts, sourceTextsBySheet);
