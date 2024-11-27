@@ -71,7 +71,7 @@ class UploadControlComponent extends Component {
 
     render() {
         const { classes } = this.props;
-        const { registrationAnchorEl, periodAnchorEl } = this.state;
+        const { registrationAnchorEl, periodAnchorEl, dialogOpen } = this.state;
         const { createdCount, completedCount} = this.props.jobStepStore;
         const { deadline } = this.props.deadlineStore;
         const { selectedWork } = this.props.workStore;
@@ -150,7 +150,7 @@ class UploadControlComponent extends Component {
 
 
                 {/* 일감 등록 dialog */}
-                <UploadDialog open={this.state.dialogOpen} onClose={this.handleCloseDialog}/>
+                <UploadDialog open={dialogOpen} onClose={this.handleCloseDialog}/>
 
                 {/* 작업자 배정 dialog */}
                 <CommonDialog
