@@ -51,7 +51,7 @@ public class TranslationService {
         this.userService = userService;
     }
 
-    private String mtUserEmail = "MT@onthelive.kr";
+    private String mtUserEmail = "MT@data.ws";
 
     @Async
     @Transactional
