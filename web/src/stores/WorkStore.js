@@ -78,7 +78,8 @@ export default class WorkStore {
                 let disabled =
                     ((workTransfer.work.userId !== userId) && (step.type === TemplateStepType.Upload && !workTransfer.uploadUser))
                     || ((workTransfer.work.userId !== userId) && (step.type !== TemplateStepType.Upload && step.allocateCount === 0));
-                return {...step, disabled, options : JSON.parse(step.options)};
+                const options  = (typeof step.options === "String") ? JSON.parse(step.options) : step.options;
+                return {...step, disabled, options};
             });
 
         this.selectedWork = workTransfer;
