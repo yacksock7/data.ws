@@ -1,0 +1,78 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="choi.toi.data.ws.repository.mapper.JobFileMapper">
+    <resultMap id="JobFileResultMap" type="JobFile">
+        <id     property="jobId"                column="job_id" />
+        <result property="jobFileNum"           column="job_file_num" />
+        <result property="uploadFileObject"     column="upload_file_object" />
+        <result property="uploadFileName"       column="upload_file_name" />
+        <result property="userId"               column="user_id" />
+        <result property="createdDatetime"      column="created_datetime" />
+        <result property="updatedDatetime"      column="updated_datetime" />
+    </resultMap>
+
+    <insert id="insertJobFile" parameterType="JobFile">
+        <selectKey keyProperty="jobFileNum" resultType="Integer" order="BEFORE">
+            SELECT
+                (IFNULL(MAX(job_file_num), 0) + 1) AS job_file_num
+            FROM job_files
+             WHERE job_id = #{jobId}
+        </selectKey>
+
+        INSERT INTO job_files (
+            job_id,
+            job_file_num,
+            upload_file_object,
+            upload_file_name,
+            user_id
+        ) VALUES (
+            #{jobId},
+            #{jobFileNum},
+            #{uploadFileObject},
+            #{uploadFileName},
+            #{userId}
+        )
+    </insert>
+
+    <select id="selectJobFile" parameterType="Map" resultMap="JobFileResultMap">
+        SELECT
+            job_id,
+            job_file_num,
+            upload_file_object,
+            upload_file_name,
+            user_id,
+            created_datetime,
+            updated_datetime
+        FROM job_files
+         WHERE id = #{jobId}
+         AND job_file_num = #{jobFileNum}
+    </select>
+
+    <select id="selectJobFilesByJobId" parameterType="Long" resultMap="JobFileResultMap">
+        SELECT
+            job_id,
+            job_file_num,
+            upload_file_object,
+            upload_file_name,
+            user_id,
+            created_datetime,
+            updated_datetime
+        FROM job_files
+         WHERE id = #{jobId}
+    </select>
+
+    <update id="updateJobFile" parameterType="Job">
+        UPDATE job_files
+        SET upload_file_name = #{uploadFileName}
+            updated_datetime = now()
+         WHERE job_id = #{jobId}
+         AND job_file_num = #{jobFileNum}
+    </update>
+
+    <delete id="deleteJob" parameterType="Map">
+        DELETE FROM job_files
+         WHERE job_id = #{jobId}
+         AND job_file_num = #{jobFileNum}
+    </delete>
+</mapper>

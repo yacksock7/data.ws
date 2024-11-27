@@ -1,0 +1,267 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="choi.toi.data.ws.repository.mapper.JobStepMapper">
+    <resultMap id="JobStepResultMap" type="JobStep">
+        <id     property="jobId"                column="job_id" />
+        <result property="jobStepNum"           column="job_step_num" />
+        <result property="workTemplateId"       column="work_template_id" />
+        <result property="workTemplateStepNum"  column="work_template_step_num" />
+        <result property="stepType"             column="step_type" />
+        <result property="createdDatetime"      column="created_datetime" />
+        <result property="updatedDatetime"      column="updated_datetime" />
+    </resultMap>
+
+    <resultMap id="JobStepTransferResultMap" type="JobStepTransfer">
+        <id     property="jobId"                column="job_id" />
+        <result property="jobStepNum"           column="job_step_num" />
+        <result property="workTemplateId"       column="work_template_id" />
+        <result property="workTemplateStepNum"  column="work_template_step_num" />
+        <result property="stepType"             column="step_type" />
+        <result property="createdDatetime"      column="created_datetime" />
+        <result property="updatedDatetime"      column="updated_datetime" />
+        <result property="userId"               column="user_id" />
+        <collection property="job"              column="jobId=job_id" select="selectJob" />
+        <collection property="cloudObject"      column="jobId=job_id" select="selectCloudObject" />
+        <collection property="taskStatusCount"  column="{jobId=job_id, jobStepNum=job_step_num, userId=user_id}" select="selectTaskStatusCount" />
+<!--        <collection property="workers"          column="{jobId=job_id, jobStepNum=job_step_num}" select="selectJobStepWorkers" />-->
+    </resultMap>
+
+    <resultMap id="JobResultMap" type="Job">
+        <id     property="id"                   column="id" />
+        <result property="workId"               column="work_id" />
+        <result property="userId"               column="user_id" />
+        <result property="name"                 column="name" />
+        <result property="createdDatetime"      column="created_datetime" />
+        <result property="updatedDatetime"      column="updated_datetime" />
+    </resultMap>
+
+    <resultMap id="CloudObjectResultMap" type="CloudObject">
+        <id     property="id"                           column="id" />
+        <result property="cloudType"                    column="cloud_type" />
+        <result property="contentsType"                 column="contents_type" />
+        <result property="bucketName"                   column="bucket_name" />
+        <result property="objectName"                   column="object_name" />
+        <result property="downloadFromObjectStorage"    column="download_from_object_storage" />
+        <result property="downloadUrl"                  column="download_url" />
+        <result property="downloadExpireDatetime"       column="download_expire_datetime" />
+        <result property="downloadExpireTimeZone"       column="download_expire_time_zone" />
+        <result property="createdDatetime"              column="created_datetime" />
+        <result property="updatedDatetime"              column="updated_datetime" />
+    </resultMap>
+
+    <resultMap id="TaskStatusCountResultMap" type="TaskStatusCount">
+        <id     property="totalCount"                   column="total_count" />
+        <result property="waitingCount"                 column="waiting_count" />
+        <result property="createdCount"                 column="created_count" />
+        <result property="assignedCount"                column="assigned_count" />
+        <result property="completedCount"               column="completed_count" />
+        <result property="rejectedCount"                column="rejected_count" />
+        <result property="acceptedCount"                column="accepted_count" />
+    </resultMap>
+
+
+
+    <insert id="insertJobStep" parameterType="JobStep">
+        <selectKey keyProperty="jobStepNum" resultType="Integer" order="BEFORE">
+            SELECT
+                (IFNULL(MAX(job_step_num), 0) + 1) AS job_step_num
+            FROM job_steps
+             WHERE job_id = #{jobId}
+        </selectKey>
+
+        INSERT INTO job_steps (
+            job_id,
+            job_step_num,
+            step_type,
+            work_template_id,
+            work_template_step_num
+        ) VALUES (
+            #{jobId},
+            #{jobStepNum},
+            #{stepType},
+            #{workTemplateId},
+            #{workTemplateStepNum}
+        )
+    </insert>
+
+    <select id="selectJobStepsByJobId" parameterType="Long" resultMap="JobStepResultMap">
+        SELECT
+            job_id,
+            job_step_num,
+            work_template_id,
+            work_template_step_num,
+            step_type,
+            created_datetime,
+            updated_datetime
+        FROM job_steps
+        WHERE job_id = #{jobId}
+    </select>
+
+    <select id="selectJobStep" resultMap="JobStepResultMap">
+        SELECT
+            job_id,
+            job_step_num,
+            work_template_id,
+            work_template_step_num,
+            step_type,
+            created_datetime,
+            updated_datetime
+        FROM job_steps
+        WHERE job_id = #{jobId}
+        AND job_step_num = #{jobStepNum}
+    </select>
+
+    <select id="selectJobsByWorkTemplateStepNum" resultMap="JobStepTransferResultMap">
+        SELECT
+            js.job_id,
+            js.job_step_num,
+            js.work_template_id,
+            js.work_template_step_num,
+            js.step_type,
+            js.created_datetime,
+            js.updated_datetime,
+            #{userId} as user_id
+        FROM job_steps js
+        INNER JOIN job_step_tasks jst
+            ON js.job_id = jst.job_id
+            AND js.job_step_num = jst.job_step_num
+            AND jst.status != "Waiting"
+        <if test="userId != 0">
+
+            INNER JOIN job_step_task_workers jstw
+                ON js.job_id = jstw.job_id
+                AND js.job_step_num = jstw.job_step_num
+                AND jstw.user_id = #{userId}
+        </if>
+        WHERE js.work_template_id = #{workTemplateId}
+        AND js.work_template_step_num = #{workTemplateStepNum}
+        GROUP BY js.job_id, js.job_step_num
+        LIMIT #{rowsPerPage}
+        OFFSET #{offset}
+    </select>
+    <select id="selectJobsTotalCountByWorkTemplateStepNum" resultType="int">
+        SELECT
+            count(r.count)
+        FROM (
+            SELECT
+                count(*) as count
+            FROM job_steps js
+                INNER JOIN job_step_tasks jst
+                    ON js.job_id = jst.job_id
+                    AND js.job_step_num = jst.job_step_num
+                    AND jst.status != "Waiting"
+            <if test="userId != 0">
+                INNER JOIN job_step_task_workers jstw
+                    ON js.job_id = jstw.job_id
+                    AND js.job_step_num = jstw.job_step_num
+                    AND jstw.user_id = #{userId}
+            </if>
+            WHERE js.work_template_id = #{workTemplateId}
+                AND js.work_template_step_num = #{workTemplateStepNum}
+            GROUP BY js.job_id, js.job_step_num
+        ) as r
+    </select>
+    <select id="selectJobsStatusCountByWorkTemplateStepNum" resultMap="TaskStatusCountResultMap">
+        SELECT
+            COUNT(*) AS total_count,
+            COUNT(CASE WHEN  jst.status='Waiting' THEN 1 END) AS waiting_count,
+            COUNT(CASE WHEN  jst.status='Created' THEN 1 END) AS created_count,
+            COUNT(CASE WHEN  jst.status='Assigned' THEN 1 END) AS assigned_count,
+            COUNT(CASE WHEN  jst.status='Completed' THEN 1 END) AS completed_count,
+            COUNT(CASE WHEN  jst.status='Rejected' THEN 1 END) AS rejected_count,
+            COUNT(CASE WHEN  jst.status='Accepted' THEN 1 END) AS accepted_count
+        FROM job_step_tasks jst
+         INNER JOIN job_steps js ON jst.job_id = js.job_id AND jst.job_step_num = js.job_step_num
+            <if test="userId != 0">
+                INNER JOIN job_step_task_workers jstw
+                    ON jst.job_id = jstw.job_id
+                    AND jst.job_step_num = jstw.job_step_num
+                    AND jst.job_step_task_num = jstw.job_step_task_num
+                    AND jstw.user_id = #{userId}
+            </if>
+        WHERE js.work_template_id = #{workTemplateId}
+         AND js.work_template_step_num = #{workTemplateStepNum}
+        GROUP BY jst.job_id, jst.job_step_num
+    </select>
+
+    <select id="selectJob" resultMap="JobResultMap">
+        SELECT
+            id,
+            work_id,
+            user_id,
+            name,
+            created_datetime,
+            updated_datetime
+        FROM jobs
+        WHERE id = #{jobId}
+    </select>
+    <select id="selectCloudObject" resultMap="CloudObjectResultMap">
+        SELECT
+            co.id,
+            co.cloud_type,
+            co.contents_type,
+            co.bucket_name,
+            co.object_name,
+            co.download_from_object_storage,
+            co.download_url,
+            co.download_expire_datetime,
+            co.download_expire_time_zone,
+            co.created_datetime,
+            co.updated_datetime
+        FROM job_files jf
+        INNER JOIN cloud_objects co ON jf.upload_file_object = co.id
+        WHERE jf.job_id = #{jobId}
+        limit 1
+    </select>
+
+    <select id="selectTaskStatusCount" resultMap="TaskStatusCountResultMap">
+        SELECT
+            COUNT (*) AS total_count,
+            COUNT (CASE WHEN  jst.status='Waiting' THEN 1 END) AS waiting_count,
+            COUNT (CASE WHEN  jst.status='Created' THEN 1 END) AS created_count,
+            COUNT (CASE WHEN  jst.status='Assigned' THEN 1 END) AS assigned_count,
+            COUNT (CASE WHEN  jst.status='Completed' THEN 1 END) AS completed_count,
+            COUNT (CASE WHEN  jst.status='Rejected' THEN 1 END) AS rejected_count,
+            COUNT (CASE WHEN  jst.status='Accepted' THEN 1 END) AS accepted_count
+        FROM job_step_tasks jst
+            <if test="userId != 0">
+                INNER JOIN job_step_task_workers jstw ON jst.job_id = jstw.job_id AND jst.job_step_num = jstw.job_step_num AND jst.job_step_task_num = jstw.job_step_task_num AND jstw.user_id = #{userId}
+            </if>
+         WHERE jst.job_id=#{jobId}
+         AND jst.job_step_num=#{jobStepNum}
+    </select>
+
+    <select id="selectJobStepByWorkTemplateId" resultMap="JobStepResultMap">
+        SELECT
+            job_id,
+            job_step_num,
+            work_template_id,
+            work_template_step_num,
+            step_type,
+            created_datetime,
+            updated_datetime
+        FROM job_steps
+        WHERE job_id = #{jobId}
+         AND work_template_id = #{workTemplateId}
+         AND work_template_step_num = #{workTemplateStepNum}
+    </select>
+
+<!--    <select id="selectJobStepWorkers" resultMap="">-->
+<!--        -->
+<!--    </select>-->
+
+<!--    <update id="updateJobStep" parameterType="JobStep">-->
+<!--        UPDATE job_steps-->
+<!--        SET -->
+<!--            updated_datetime = now()-->
+<!--         WHERE job_id = #{jobId}-->
+<!--         AND job_step_num = #{jobStepNum}-->
+<!--    </update>-->
+
+    <delete id="deleteJobStep" parameterType="Map">
+        DELETE FROM job_steps
+         WHERE job_id = #{jobId}
+         AND job_step_num = #{jobStepNum}
+    </delete>
+</mapper>

@@ -1,0 +1,54 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="choi.toi.data.ws.repository.mapper.JobStepTaskTextMapper">
+
+    <resultMap id="JobStepTaskTextResultMap" type="JobStepTaskText">
+        <id     property="jobStepTaskResultId"          column="job_step_task_result_id" />
+        <result property="text"                         column="text" />
+        <result property="createdDatetime"              column="created_datetime" />
+        <result property="updatedDatetime"              column="updated_datetime" />
+    </resultMap>
+
+    <insert id="insertJobStepTaskText" parameterType="JobStepTaskText">
+        INSERT INTO job_step_task_texts (
+            job_step_task_result_id,
+            text
+        ) VALUES (
+            #{jobStepTaskResultId},
+            #{text}
+        )
+    </insert>
+
+    <select id="selectJobStepTaskText" resultMap="JobStepTaskTextResultMap">
+        SELECT
+            job_step_task_result_id,
+            text,
+            created_datetime,
+            updated_datetime
+        FROM job_step_task_texts
+        WHERE job_step_task_result_id = #{jobStepTaskResultId}
+    </select>
+
+<!--    <select id="selectJobStepTaskTexts" resultMap="JobStepTaskTextResultMap">-->
+<!--        SELECT-->
+<!--        job_id,-->
+<!--        job_step_num,-->
+<!--        job_step_task_num,-->
+<!--        user_id,-->
+<!--        text,-->
+<!--        created_datetime,-->
+<!--        updated_datetime-->
+<!--        FROM job_step_task_texts-->
+<!--        WHERE job_id = #{jobId}-->
+<!--        AND job_step_num = #{jobStepNum}-->
+<!--        AND job_step_task_num = #{jobStepTaskNum}-->
+<!--    </select>-->
+
+    <update id="updateJobStepTaskText" parameterType="JobStepTaskText">
+        UPDATE job_step_task_texts
+        SET text = #{text},
+        updated_datetime = now()
+        WHERE job_step_task_result_id = #{jobStepTaskResultId}
+    </update>
+</mapper>

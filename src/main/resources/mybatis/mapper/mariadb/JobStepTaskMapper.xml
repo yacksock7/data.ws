@@ -1,0 +1,454 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="choi.toi.data.ws.repository.mapper.JobStepTaskMapper">
+    <resultMap id="JobStepTaskResultMap" type="JobStepTask">
+        <id     property="jobId"                    column="job_id" />
+        <result property="jobStepNum"               column="job_step_num" />
+        <result property="jobStepTaskNum"           column="job_step_task_num" />
+        <result property="index"                    column="index" />
+        <result property="rejectedJobStepTaskNum"   column="rejected_job_step_task_num" />
+        <result property="preJobStepTaskResultId"   column="pre_job_step_task_result_id" />
+        <result property="inputType"                column="input_type" />
+        <result property="resultType"               column="result_type" />
+        <result property="status"                   column="status" />
+        <result property="rejectComment"            column="reject_comment" />
+        <result property="createdDatetime"          column="created_datetime" />
+        <result property="updatedDatetime"          column="updated_datetime" />
+    </resultMap>
+
+    <resultMap id="JobStepTaskTransferResultMap" type="JobStepTaskTransfer">
+        <id     property="jobId"                    column="job_id" />
+        <result property="jobStepNum"               column="job_step_num" />
+        <result property="jobStepTaskNum"           column="job_step_task_num" />
+        <result property="index"                    column="index" />
+        <result property="rejectedJobStepTaskNum"   column="rejected_job_step_task_num" />
+        <result property="preJobStepTaskResultId"   column="pre_job_step_task_result_id" />
+        <result property="inputType"                column="input_type" />
+        <result property="resultType"               column="result_type" />
+        <result property="status"                   column="status" />
+        <result property="rejectComment"            column="reject_comment" />
+        <result property="createdDatetime"          column="created_datetime" />
+        <result property="updatedDatetime"          column="updated_datetime" />
+        <collection property="jobStepTaskResults" column="jobId=job_id,jobStepNum=job_step_num,jobStepTaskNum=job_step_task_num" select="selectJobStepTaskResultTransfers"/>
+        <collection property="preJobStepTaskResult" column="preJobStepTaskResultId=pre_job_step_task_result_id" select="selectPreJobStepTaskResultTransfers"/>
+        <collection property="workers" column="jobId=job_id,jobStepNum=job_step_num,jobStepTaskNum=job_step_task_num" select="selectJobStepTaskWorkerTransfers"/>
+
+    </resultMap>
+
+    <resultMap id="JobStepTaskResultTransferResultMap" type="JobStepTaskResultTransfer">
+        <id     property="id"                   column="id" />
+        <result property="jobId"                column="job_id" />
+        <result property="jobStepNum"           column="job_step_num" />
+        <result property="jobStepTaskNum"       column="job_step_task_num" />
+        <result property="userId"               column="user_id" />
+        <result property="index"                column="index" />
+        <result property="resultType"          column="result_type" />
+        <result property="createdDatetime"      column="created_datetime" />
+        <result property="updatedDatetime"      column="updated_datetime" />
+
+        <collection property="worker" column="jobId=job_id,jobStepNum=job_step_num,jobStepTaskNum=job_step_task_num,userId=user_id" select="selectJobStepTaskWorkerTransfer"/>
+    </resultMap>
+
+    <resultMap id="JobStepTaskWorkerTransferResultMap" type="JobStepTaskWorkerTransfer">
+        <id     property="jobId"                column="job_id" />
+        <result property="jobStepNum"           column="job_step_num" />
+        <result property="jobStepTaskNum"       column="job_step_task_num" />
+        <result property="userId"               column="user_id" />
+        <result property="email"                column="email" />
+        <result property="nickname"             column="nickname" />
+        <result property="createdDatetime"      column="created_datetime" />
+        <result property="updatedDatetime"      column="updated_datetime" />
+    </resultMap>
+
+
+
+    <insert id="insertJobStepTask" parameterType="jobStepTask">
+        <selectKey keyProperty="jobStepTaskNum" resultType="Integer" order="BEFORE">
+            SELECT
+                (IFNULL(MAX(job_step_task_num), 0) + 1) AS job_step_task_num
+            FROM job_step_tasks
+             WHERE job_id = #{jobId}
+             AND job_step_num = #{jobStepNum}
+        </selectKey>
+
+        INSERT INTO job_step_tasks (
+            job_id,
+            job_step_num,
+            job_step_task_num,
+            `index`,
+            rejected_job_step_task_num,
+            pre_job_step_task_result_id,
+            input_type,
+            result_type,
+            reject_comment,
+            status
+        ) VALUES (
+            #{jobId},
+            #{jobStepNum},
+            #{jobStepTaskNum},
+            #{index},
+            #{rejectedJobStepTaskNum},
+            #{preJobStepTaskResultId},
+            #{inputType},
+            #{resultType},
+            #{rejectComment},
+            #{status}
+        )
+    </insert>
+
+    <insert id="insertJobStepTasks" parameterType="jobStepTask">
+        INSERT INTO job_step_tasks (
+            job_id,
+            job_step_num,
+            job_step_task_num,
+            `index`,
+            rejected_job_step_task_num,
+            pre_job_step_task_result_id,
+            input_type,
+            result_type,
+            status
+        ) VALUES (
+            #{jobId},
+            #{jobStepNum},
+            #{jobStepTaskNum},
+            #{index},
+            #{rejectedJobStepTaskNum},
+            #{preJobStepTaskResultId},
+            #{inputType},
+            #{resultType},
+            #{status}
+        )
+    </insert>
+
+    <select id="selectJobStepTask" parameterType="Map" resultMap="JobStepTaskResultMap">
+        SELECT
+            job_id,
+            job_step_num,
+            job_step_task_num,
+            `index`,
+            rejected_job_step_task_num,
+            pre_job_step_task_result_id,
+            input_type,
+            result_type,
+            status,
+            reject_comment,
+            created_datetime,
+            updated_datetime
+        FROM job_step_tasks
+        WHERE job_id = #{jobId}
+        AND job_step_num = #{jobStepNum}
+        AND job_step_task_num = #{jobStepTaskNum}
+    </select>
+    <select id="selectJobStepTasksByPreJobStepTaskResultId" resultMap="JobStepTaskResultMap">
+        SELECT
+            jst.job_id,
+            jst.job_step_num,
+            jst.job_step_task_num,
+            jst.index,
+            jst.rejected_job_step_task_num,
+            jst.pre_job_step_task_result_id,
+            jst.input_type,
+            jst.result_type,
+            jst.status,
+            jst.reject_comment,
+            jst.created_datetime,
+            jst.updated_datetime
+        FROM job_step_tasks jst
+        INNER JOIN job_step_task_results jstr ON jst.job_id = jstr.job_id AND jst.job_step_num = jstr.job_step_num AND jst.job_step_task_num = jstr.job_step_task_num
+        WHERE jst.pre_job_step_task_result_id = #{preJobStepTaskResultId}
+    </select>
+
+    <select id="selectJobStepTaskByJobStepTaskResultId" resultMap="JobStepTaskResultMap">
+        SELECT
+            jst.job_id,
+            jst.job_step_num,
+            jst.job_step_task_num,
+            jst.index,
+            jst.rejected_job_step_task_num,
+            jst.pre_job_step_task_result_id,
+            jst.input_type,
+            jst.result_type,
+            jst.status,
+            jst.reject_comment,
+            jst.created_datetime,
+            jst.updated_datetime
+        FROM job_step_tasks jst
+        INNER JOIN job_step_task_results jstr ON jst.job_id = jstr.job_id AND jst.job_step_num = jstr.job_step_num AND jst.job_step_task_num = jstr.job_step_task_num
+        WHERE jstr.id = #{jobStepTaskResultId}
+    </select>
+    <select id="selectNextJobStepTask" resultMap="JobStepTaskResultMap">
+        SELECT
+            job_id,
+            job_step_num,
+            job_step_task_num,
+            `index`,
+            rejected_job_step_task_num,
+            pre_job_step_task_result_id,
+            input_type,
+            result_type,
+            status,
+            reject_comment,
+            created_datetime,
+            updated_datetime
+        FROM job_step_tasks
+        WHERE pre_job_step_task_result_id = #{jobStepTaskResultId}
+    </select>
+
+    <select id="selectJobStepTasks" parameterType="Map" resultMap="JobStepTaskResultMap">
+        SELECT
+            job_id,
+            job_step_num,
+            job_step_task_num,
+            `index`,
+            rejected_job_step_task_num,
+            pre_job_step_task_result_id,
+            input_type,
+            result_type,
+            status,
+            reject_comment,
+            created_datetime,
+            updated_datetime
+        FROM job_step_tasks
+        WHERE job_id = #{jobId}
+        AND job_step_num = #{jobStepNum}
+    </select>
+
+    <select id="selectJobStepTasksByStatus" parameterType="Map" resultMap="JobStepTaskResultMap">
+        SELECT
+            job_id,
+            job_step_num,
+            job_step_task_num,
+            `index`,
+            rejected_job_step_task_num,
+            pre_job_step_task_result_id,
+            input_type,
+            result_type,
+            status,
+            reject_comment,
+            created_datetime,
+            updated_datetime
+        FROM job_step_tasks
+        WHERE job_id = #{jobId}
+        AND job_step_num = #{jobStepNum}
+        AND status = #{status}
+    </select>
+
+
+    <select id="selectJobStepTaskTransfers" parameterType="Map" resultMap="JobStepTaskTransferResultMap">
+        SELECT
+            jst.job_id,
+            jst.job_step_num,
+            jst.job_step_task_num,
+            jst.index,
+            jst.rejected_job_step_task_num,
+            jst.pre_job_step_task_result_id,
+            jst.input_type,
+            jst.result_type,
+            jst.status,
+            jst.reject_comment,
+            jst.created_datetime,
+            jst.updated_datetime
+        FROM job_step_tasks jst
+        <if test="userId != 0">
+            INNER JOIN job_step_task_workers jstw ON jst.job_id = jstw.job_id AND jst.job_step_num = jstw.job_step_num AND jst.job_step_task_num = jstw.job_step_task_num AND jstw.user_id = #{userId}
+        </if>
+        WHERE jst.job_id = #{jobId}
+        AND jst.job_step_num = #{jobStepNum}
+        AND jst.status != 'Waiting'
+        GROUP BY jst.job_id, jst.job_step_num, jst.job_step_task_num
+        ORDER BY jst.index, jst.created_datetime
+    </select>
+
+    <select id="selectJobStepTaskTransfersByArray" parameterType="Map" resultMap="JobStepTaskTransferResultMap">
+        SELECT
+            jst.job_id,
+            jst.job_step_num,
+            jst.job_step_task_num,
+            jst.index,
+            jst.rejected_job_step_task_num,
+            jst.pre_job_step_task_result_id,
+            jst.input_type,
+            jst.result_type,
+            jst.status,
+            jst.reject_comment,
+            jst.created_datetime,
+            jst.updated_datetime
+        FROM job_step_tasks jst
+        <if test="userId != 0">
+            INNER JOIN job_step_task_workers jstw
+                ON jst.job_id = jstw.job_id
+                AND jst.job_step_num = jstw.job_step_num
+                AND jst.job_step_task_num = jstw.job_step_task_num
+                AND jstw.user_id = #{userId}
+        </if>
+        WHERE jst.job_id = #{jobId}
+        AND jst.job_step_num = #{jobStepNum}
+        AND jst.status != 'Waiting'
+        GROUP BY jst.job_id, jst.job_step_num, jst.job_step_task_num
+        LIMIT #{dataLength}
+        OFFSET #{startNum}
+    </select>
+
+    <select id="selectJobStepTasksCount"  resultType="int">
+        SELECT
+            count(r.count)
+        FROM (
+            SELECT
+                count(*) as count
+            FROM job_step_tasks jst
+            <if test="userId != 0">
+                INNER JOIN job_step_task_workers jstw ON jst.job_id = jstw.job_id
+                    AND jst.job_step_num = jstw.job_step_num
+                    AND jst.job_step_task_num = jstw.job_step_task_num
+                    AND jstw.user_id = #{userId}
+            </if>
+            WHERE jst.job_id = #{jobId}
+                AND jst.job_step_num = #{jobStepNum}
+                AND jst.status != 'Waiting'
+            GROUP BY jst.job_id, jst.job_step_num, jst.job_step_task_num
+        ) as r
+    </select>
+
+    <select id="selectJobStepTaskResultTransfers" parameterType="Map" resultMap="JobStepTaskResultTransferResultMap">
+        SELECT
+            id,
+            job_id,
+            job_step_num,
+            job_step_task_num,
+            user_id,
+            `index`,
+            result_type,
+            created_datetime,
+            updated_datetime
+        FROM job_step_task_results
+        WHERE job_id = #{jobId}
+        AND job_step_num = #{jobStepNum}
+        AND job_step_task_num = #{jobStepTaskNum}
+    </select>
+    <select id="selectPreJobStepTaskResultTransfers" parameterType="Map" resultMap="JobStepTaskResultTransferResultMap">
+        SELECT
+            id,
+            job_id,
+            job_step_num,
+            job_step_task_num,
+            user_id,
+            `index`,
+            result_type,
+            created_datetime,
+            updated_datetime
+        FROM job_step_task_results
+        WHERE id = #{preJobStepTaskResultId}
+    </select>
+
+    <select id="selectJobStepTaskWorkerTransfers" parameterType="Map" resultMap="JobStepTaskWorkerTransferResultMap">
+        SELECT
+            jstw.job_id,
+            jstw.job_step_num,
+            jstw.job_step_task_num,
+            jstw.user_id,
+            u.email,
+            u.nickname,
+            jstw.created_datetime,
+            jstw.updated_datetime
+        FROM job_step_task_workers jstw
+        INNER JOIN users u ON jstw.user_id = u.id
+        WHERE jstw.job_id = #{jobId}
+        AND jstw.job_step_num = #{jobStepNum}
+        AND jstw.job_step_task_num = #{jobStepTaskNum}
+    </select>
+
+    <select id="selectJobStepTaskWorkerTransfer" parameterType="Map" resultMap="JobStepTaskWorkerTransferResultMap">
+        SELECT
+            jstw.job_id,
+            jstw.job_step_num,
+            jstw.job_step_task_num,
+            jstw.user_id,
+            u.email,
+            u.nickname,
+            jstw.created_datetime,
+            jstw.updated_datetime
+        FROM job_step_task_workers jstw
+        INNER JOIN users u ON jstw.user_id = u.id
+        WHERE jstw.job_id = #{jobId}
+        AND jstw.job_step_num = #{jobStepNum}
+        AND jstw.job_step_task_num = #{jobStepTaskNum}
+        AND jstw.user_id = #{userId}
+    </select>
+
+
+<!--    <select id="selectJobStepTaskTexts" parameterType="Map" resultMap="JobStepTaskTextResultMap">-->
+<!--        SELECT-->
+<!--            job_id,-->
+<!--            job_step_num,-->
+<!--            job_step_task_num,-->
+<!--            user_id,-->
+<!--            text,-->
+<!--            created_datetime,-->
+<!--            updated_datetime-->
+<!--        FROM job_step_task_texts-->
+<!--         WHERE job_id = #{jobId}-->
+<!--         AND job_step_num = #{jobStepNum}-->
+<!--         AND job_step_task_num = #{jobStepTaskNum}-->
+<!--         AND user_id = #{userId}-->
+<!--    </select>-->
+
+
+<!--    <select id="selectPreJobStepTaskTexts" parameterType="Map" resultMap="JobStepTaskTextResultMap">-->
+<!--        SELECT-->
+<!--            job_id,-->
+<!--            job_step_num,-->
+<!--            job_step_task_num,-->
+<!--            user_id,-->
+<!--            text,-->
+<!--            created_datetime,-->
+<!--            updated_datetime-->
+<!--        FROM job_step_task_texts-->
+<!--        WHERE job_id = #{jobId}-->
+<!--        AND job_step_num = (#{jobStepNum}-1)-->
+<!--        AND job_step_task_num = #{jobStepTaskNum}-->
+<!--    </select>-->
+
+    <update id="updateJobStepTask" parameterType="JobStepTask">
+        UPDATE job_step_tasks
+        SET status = #{status},
+            updated_datetime = now()
+         WHERE job_id = #{jobId}
+         AND job_step_num = #{jobStepNum}
+         AND job_step_task_num = #{jobStepTaskNum}
+    </update>
+
+    <update id="updateJobStepTaskStatus">
+        UPDATE job_step_tasks
+        SET status = #{status},
+            updated_datetime = now()
+         WHERE job_id = #{jobId}
+          AND job_step_num = #{jobStepNum}
+          AND job_step_task_num = #{jobStepTaskNum}
+    </update>
+
+    <update id="updateJobStepTaskForReject">
+        UPDATE job_step_tasks
+        SET status = #{status},
+            reject_comment = #{rejectComment},
+            updated_datetime = now()
+         WHERE job_id = #{jobId}
+          AND job_step_num = #{jobStepNum}
+          AND job_step_task_num = #{jobStepTaskNum}
+    </update>
+
+    <update id="updateJobStepTasksStatus">
+        UPDATE job_step_tasks
+        SET status = #{status},
+            updated_datetime = now()
+         WHERE job_id = #{jobId}
+          AND job_step_num = #{jobStepNum}
+    </update>
+
+    <delete id="deleteJobStepTask" parameterType="Map">
+        DELETE FROM job_step_tasks
+         WHERE job_id = #{jobId}
+         AND job_step_num = #{jobStepNum}
+         AND job_step_task_num = #{jobStepTaskNum}
+    </delete>
+</mapper>

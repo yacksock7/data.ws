@@ -29,8 +29,6 @@ class TranslationBar extends Component {
         const { classes } = this.props;
         const { selectedWork } = this.props.workStore;
         const machine = selectedWork.workTemplateSteps.find(step => step.type === TemplateStepType.Machine);
-        console.log("!!! machine: ", machine);
-        console.log("!!! machine.engine: ", machine.engine);
 
         return (
             <Box className={classes.displayFlex}>

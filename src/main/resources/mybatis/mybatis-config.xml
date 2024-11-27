@@ -31,6 +31,26 @@
         <typeAlias type="choi.toi.data.ws.model.WorkUploadUser" alias="WorkUploadUser" />
         <typeAlias type="choi.toi.data.ws.model.transfer.WorkUploadUserTransfer" alias="WorkUploadUserTransfer" />
 
+        <typeAlias type="choi.toi.data.ws.model.Job" alias="Job" />
+        <typeAlias type="choi.toi.data.ws.model.JobFile" alias="JobFile" />
+        <typeAlias type="choi.toi.data.ws.model.CloudObject" alias="CloudObject" />
+
+        <typeAlias type="choi.toi.data.ws.model.JobStep" alias="JobStep" />
+        <typeAlias type="choi.toi.data.ws.model.transfer.JobStepTransfer" alias="JobStepTransfer" />
+        <typeAlias type="choi.toi.data.ws.model.support.TaskStatusCount" alias="TaskStatusCount" />
+        <typeAlias type="choi.toi.data.ws.model.JobStepTaskWorker" alias="JobStepTaskWorker" />
+        <typeAlias type="choi.toi.data.ws.model.JobStepTask" alias="JobStepTask" />
+
+        <typeAlias type="choi.toi.data.ws.model.transfer.JobStepTaskTransfer" alias="JobStepTaskTransfer" />
+        <typeAlias type="choi.toi.data.ws.model.transfer.JobStepTaskResultTransfer" alias="JobStepTaskResultTransfer" />
+        <typeAlias type="choi.toi.data.ws.model.transfer.JobStepTaskWorkerTransfer" alias="JobStepTaskWorkerTransfer" />
+
+        <typeAlias type="choi.toi.data.ws.model.PreJobStepTaskResult" alias="PreJobStepTaskResult" />
+        <typeAlias type="choi.toi.data.ws.model.JobStepTaskResult" alias="JobStepTaskResult" />
+        <typeAlias type="choi.toi.data.ws.model.JobStepTaskText" alias="JobStepTaskText" />
+        <typeAlias type="choi.toi.data.ws.model.JobStepTaskAudio" alias="JobStepTaskAudio" />
+        <typeAlias type="choi.toi.data.ws.model.JobStepTaskTag" alias="JobStepTaskTag" />
+
         <typeAlias type="choi.toi.data.ws.repository.typehandler.BooleanYnTypeHandler" alias="BooleanYnTypeHandler" />
     </typeAliases>
 
@@ -48,5 +68,15 @@
         <mapper resource="mybatis/mapper/mariadb/WorkMapper.xml" />
         <mapper resource="mybatis/mapper/mariadb/WorkUploadUserMapper.xml" />
         <mapper resource="mybatis/mapper/mariadb/UserProfileMapper.xml" />
+        <mapper resource="mybatis/mapper/mariadb/JobMapper.xml" />
+        <mapper resource="mybatis/mapper/mariadb/JobFileMapper.xml" />
+        <mapper resource="mybatis/mapper/mariadb/CloudObjectMapper.xml" />
+        <mapper resource="mybatis/mapper/mariadb/JobStepMapper.xml" />
+        <mapper resource="mybatis/mapper/mariadb/JobStepTaskWorkerMapper.xml" />
+
+        <mapper resource="mybatis/mapper/mariadb/JobStepTaskResultMapper.xml" />
+        <mapper resource="mybatis/mapper/mariadb/JobStepTaskTextMapper.xml" />
+        <mapper resource="mybatis/mapper/mariadb/JobStepTaskAudioMapper.xml" />
+        <mapper resource="mybatis/mapper/mariadb/JobStepTaskTagMapper.xml" />
     </mappers>
 </configuration>

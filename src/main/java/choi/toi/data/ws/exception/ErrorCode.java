@@ -9,5 +9,9 @@ public enum ErrorCode {
     CanNotValidateToken,
     ExpiredToken,
 
+    CanNotParsing,
+    NotAllowedExtension,
+    CanNotFoundData,
+
     Unknown
 }

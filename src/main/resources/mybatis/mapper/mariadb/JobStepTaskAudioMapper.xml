@@ -1,0 +1,59 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="choi.toi.data.ws.repository.mapper.JobStepTaskAudioMapper">
+
+    <resultMap id="JobStepTaskAudioResultMap" type="JobStepTaskAudio">
+        <id     property="jobStepTaskResultId"          column="job_step_task_result_id" />
+        <result property="audioObjectId"                column="audio_object_id" />
+        <result property="downloadUrl"                column="download_url" />
+        <result property="createdDatetime"              column="created_datetime" />
+        <result property="updatedDatetime"              column="updated_datetime" />
+    </resultMap>
+
+    <insert id="insertJobStepTaskAudio" parameterType="JobStepTaskAudio">
+        INSERT INTO job_step_task_audios (
+            job_step_task_result_id,
+            audio_object_id
+        ) VALUES (
+            #{jobStepTaskResultId},
+            #{audioObjectId}
+        )
+    </insert>
+
+    <select id="selectJobStepTaskAudio" resultMap="JobStepTaskAudioResultMap">
+        SELECT
+            jsta.job_step_task_result_id,
+            jsta.audio_object_id,
+            co.download_url,
+            jsta.created_datetime,
+            jsta.updated_datetime
+        FROM job_step_task_audios jsta
+        INNER JOIN cloud_objects co ON co.id = jsta.audio_object_id
+        WHERE jsta.job_step_task_result_id = #{jobStepTaskResultId}
+    </select>
+
+<!--    <select id="selectJobStepTaskAudios" resultMap="JobStepTaskAudioResultMap">-->
+<!--        SELECT-->
+<!--            job_id,-->
+<!--            job_step_num,-->
+<!--            job_step_task_num,-->
+<!--            user_id,-->
+<!--            audio_object_id,-->
+<!--            created_datetime,-->
+<!--            updated_datetime-->
+<!--        FROM job_step_task_audios-->
+<!--        WHERE job_id = #{jobId}-->
+<!--        AND job_step_num = #{jobStepNum}-->
+<!--        AND job_step_task_num = #{jobStepTaskNum}-->
+<!--    </select>-->
+
+<!--    <update id="updateJobStepTaskAudio" parameterType="JobStepTaskAudio">-->
+<!--        UPDATE job_step_task_audios-->
+<!--        SET audio_object_id = #{audioObjectId},-->
+<!--            updated_datetime = now()-->
+<!--        WHERE job_id = #{jobId}-->
+<!--        AND job_step_num = #{jobStepNum}-->
+<!--        AND job_step_task_num = #{jobStepTaskNum}-->
+<!--    </update>-->
+</mapper>

@@ -1,0 +1,79 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="choi.toi.data.ws.repository.mapper.JobMapper">
+    <resultMap id="JobResultMap" type="Job">
+        <id     property="id"                   column="id" />
+        <result property="workId"               column="work_id" />
+        <result property="userId"               column="user_id" />
+        <result property="name"                 column="name" />
+        <result property="jobTaskCount"         column="job_task_count" />
+        <result property="createdDatetime"      column="created_datetime" />
+        <result property="updatedDatetime"      column="updated_datetime" />
+    </resultMap>
+
+    <insert id="insertJob" parameterType="Job" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO jobs (
+            work_id,
+            user_id,
+            name,
+            job_task_count
+        ) VALUES (
+            #{workId},
+            #{userId},
+            #{name},
+            #{jobTaskCount}
+        )
+    </insert>
+
+    <select id="selectJob" parameterType="Long" resultMap="JobResultMap">
+        SELECT
+            id,
+            work_id,
+            user_id,
+            name,
+            job_task_count,
+            created_datetime,
+            updated_datetime
+        FROM jobs
+        WHERE id = #{jobId}
+    </select>
+
+    <select id="selectJobsByWorkId" parameterType="Long" resultMap="JobResultMap">
+        SELECT
+            id,
+            work_id,
+            user_id,
+            name,
+            job_task_count,
+            created_datetime,
+            updated_datetime
+        FROM jobs
+        WHERE work_id = #{workId}
+    </select>
+    <select id="selectJobByJobStepTaskResultId" parameterType="Long" resultMap="JobResultMap">
+        SELECT
+            j.id,
+            j.work_id,
+            j.user_id,
+            j.name,
+            j.job_task_count,
+            j.created_datetime,
+            j.updated_datetime
+        FROM jobs j
+        INNER JOIN job_step_task_results jstr ON j.id = jstr.job_id
+        WHERE jstr.id = #{jobStepTaskResultId}
+    </select>
+
+    <update id="updateJob" parameterType="Job">
+        UPDATE jobs
+        SET name = #{name},
+            updated_datetime = now()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteJob" parameterType="Long">
+        DELETE FROM jobs
+        WHERE id = #{jobId}
+    </delete>
+</mapper>

@@ -1,0 +1,124 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="choi.toi.data.ws.repository.mapper.JobStepTaskWorkerMapper">
+    <resultMap id="JobStepTaskWorkerResultMap" type="JobStepTaskWorker">
+        <id     property="jobId"                column="job_id" />
+        <result property="jobStepNum"           column="job_step_num" />
+        <result property="jobStepTaskNum"       column="job_step_task_num" />
+        <result property="userId"               column="user_id" />
+        <result property="createdDatetime"      column="created_datetime" />
+        <result property="updatedDatetime"      column="updated_datetime" />
+        <collection property="user" column="userId=user_id" select="selectUserById" />
+    </resultMap>
+
+    <resultMap id="UserResultMap" type="User">
+        <id     property="id"                   column="id" />
+        <result property="email"                column="email" />
+        <result property="password"             column="password" />
+        <result property="nickname"             column="nickname" />
+        <result property="type"                 column="type" />
+        <result property="createdDatetime"      column="created_datetime" />
+        <result property="updatedDatetime"      column="updated_datetime" />
+    </resultMap>
+
+    <insert id="insertJobStepTaskWorker" parameterType="JobStepTaskWorker">
+
+        INSERT INTO job_step_task_workers (
+            job_id,
+            job_step_num,
+            job_step_task_num,
+            user_id
+        ) VALUES (
+            #{jobId},
+            #{jobStepNum},
+            #{jobStepTaskNum},
+            #{userId}
+        )
+    </insert>
+
+    <select id="selectJobStepTaskWorker" parameterType="Map" resultMap="JobStepTaskWorkerResultMap">
+        SELECT
+            job_id,
+            job_step_num,
+            job_step_task_num,
+            user_id,
+            created_datetime,
+            updated_datetime
+        FROM job_step_task_workers
+        WHERE job_id = #{jobId}
+        AND job_step_num = #{jobStepNum}
+        AND job_step_task_num = #{jobStepTaskNum}
+        AND user_id = #{userId}
+    </select>
+
+    <select id="selectUserById" resultMap="UserResultMap">
+        SELECT
+        id,
+        email,
+        password,
+        nickname,
+        type,
+        created_datetime,
+        updated_datetime
+        FROM users
+        WHERE id = #{userId}
+    </select>
+
+    <select id="selectJobStepTaskWorkersByJobStepTaskId" parameterType="Map" resultMap="JobStepTaskWorkerResultMap">
+        SELECT
+            job_id,
+            job_step_num,
+            job_step_task_num,
+            user_id,
+            created_datetime,
+            updated_datetime
+        FROM job_step_task_workers
+        WHERE job_id = #{jobId}
+        AND job_step_num = #{jobStepNum}
+        AND job_step_task_num = #{jobStepTaskNum}
+    </select>
+
+    <select id="selectJobStepTaskWorkersByJobStepId" parameterType="Map" resultMap="JobStepTaskWorkerResultMap">
+        SELECT
+            job_id,
+            job_step_num,
+            job_step_task_num,
+            user_id,
+            created_datetime,
+            updated_datetime
+        FROM job_step_task_workers
+        WHERE job_id = #{jobId}
+        AND job_step_num = #{jobStepNum}
+        GROUP BY user_id
+    </select>
+
+    <select id="selectJobStepWorkersByJobStepId" parameterType="Map" resultMap="JobStepTaskWorkerResultMap">
+        SELECT
+            jstw.job_id,
+            jstw.job_step_num,
+            jstw.user_id,
+            jstw.created_datetime,
+            jstw.updated_datetime
+        FROM job_step_task_workers jstw
+        INNER JOIN job_steps js ON jstw.job_id = js.job_id AND jstw.job_step_num = js.job_step_num
+        WHERE jstw.job_id = #{jobId}
+        AND jstw.job_step_num = #{jobStepNum}
+        GROUP BY user_id, job_id, job_step_num
+    </select>
+
+<!--    <update id="updateJobStepTaskWorker" parameterType="JobStepTaskWorker">-->
+<!--        UPDATE job_step_task_workers-->
+<!--         WHERE job_id = #{jobId}-->
+<!--         AND job_step_num = #{jobStepNum}-->
+<!--         AND job_step_task_num = #{jobStepTaskNum}-->
+<!--    </update>-->
+
+    <delete id="deleteJobStepTask" parameterType="Map">
+        DELETE FROM job_step_task_workers
+            WHERE job_id = #{jobId}
+            AND job_step_num = #{jobStepNum}
+            AND job_step_task_num = #{jobStepTaskNum}
+            AND user_id = #{userId}
+    </delete>
+</mapper>

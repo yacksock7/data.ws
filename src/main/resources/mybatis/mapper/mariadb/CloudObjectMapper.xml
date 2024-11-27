@@ -1,0 +1,59 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="choi.toi.data.ws.repository.mapper.CloudObjectMapper">
+    <resultMap id="CloudObjectResultMap" type="CloudObject">
+        <id     property="id"                           column="id" />
+        <result property="cloudType"                    column="cloud_type" />
+        <result property="contentsType"                 column="contents_type" />
+        <result property="bucketName"                   column="bucket_name" />
+        <result property="objectName"                   column="object_name" />
+        <result property="downloadFromObjectStorage"    column="download_from_object_storage" />
+        <result property="downloadUrl"                  column="download_url" />
+        <result property="downloadExpireDatetime"       column="download_expire_datetime" />
+        <result property="downloadExpireTimeZone"       column="download_expire_time_zone" />
+        <result property="createdDatetime"              column="created_datetime" />
+        <result property="updatedDatetime"              column="updated_datetime" />
+    </resultMap>
+
+    <insert id="insertCloudObject" parameterType="CloudObject" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO cloud_objects (
+            cloud_type,
+            contents_type,
+            bucket_name,
+            object_name,
+            download_from_object_storage,
+            download_url,
+            download_expire_datetime,
+            download_expire_time_zone
+        ) VALUES (
+            #{cloudType},
+            #{contentsType},
+            #{bucketName},
+            #{objectName},
+            #{downloadFromObjectStorage},
+            #{downloadUrl},
+            #{downloadExpireDatetime},
+            #{downloadExpireTimeZone}
+        )
+    </insert>
+
+    <select id="selectCloudObject" resultMap="CloudObjectResultMap">
+        SELECT
+            id,
+            cloud_type,
+            contents_type,
+            bucket_name,
+            object_name,
+            download_from_object_storage,
+            download_url,
+            download_expire_datetime,
+            download_expire_time_zone,
+            created_datetime,
+            updated_datetime
+        FROM cloud_objects
+        WHERE id = #{id}
+    </select>
+
+
+</mapper>
