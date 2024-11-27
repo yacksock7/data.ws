@@ -78,5 +78,6 @@
         <mapper resource="mybatis/mapper/mariadb/JobStepTaskTextMapper.xml" />
         <mapper resource="mybatis/mapper/mariadb/JobStepTaskAudioMapper.xml" />
         <mapper resource="mybatis/mapper/mariadb/JobStepTaskTagMapper.xml" />
+        <mapper resource="mybatis/mapper/mariadb/JobStepTaskMapper.xml" />
     </mappers>
 </configuration>
