@@ -1,8 +1,0 @@
-<svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <style>
-        .circle-line{fill: #fff; stroke: #9740FB;}
-        .circle{fill: #7500FA;}
-    </style>
-    <circle class="circle-line" cx="15" cy="15" r="14" fill="#fff" stroke="#9740FB" stroke-width="2"/>
-    <circle class="circle" opacity=".5" cx="15.132" cy="15.131" r="6.658" fill="#7500FA"/>
-</svg>

@@ -2,7 +2,6 @@ package choi.toi.data.ws.service;
 
 import choi.toi.data.ws.exception.ServiceException;
 import choi.toi.data.ws.exception.ErrorCode;
-import choi.toi.data.ws.model.support.UserAuthType;
 import choi.toi.data.ws.model.support.UserType;
 import choi.toi.data.ws.repository.UserRepository;
 import choi.toi.data.ws.model.User;
@@ -57,7 +56,6 @@ public class UserService {
                     .password(DEFAULT_ADMIN_PASSWORD)
                     .nickname(DEFAULT_ADMIN_NAME)
                     .type(UserType.Admin)
-                    .authType(UserAuthType.AUTHENTICATED)
                     .build();
 
             createNewUser(newAdmin);

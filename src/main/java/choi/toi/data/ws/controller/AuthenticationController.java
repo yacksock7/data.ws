@@ -30,7 +30,7 @@ public class AuthenticationController {
 
     @PostMapping("/signin")
     public ResponseEntity<UserToken> getLoginToken(HttpServletRequest httpRequest, HttpSession session, @RequestBody User account) {
-        final UserToken token = authenticationService.getToken(account.getEmail(), account.getPassword(), session);
+        final UserToken token = authenticationService.getToken(account.getId(), account.getPassword(), session);
 
         return new ResponseEntity<>(token, HttpStatus.OK);
     }

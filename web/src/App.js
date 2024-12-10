@@ -1,126 +1,115 @@
 import React from "react";
-import {Routes, Route} from "react-router-dom";
-import {withStyles} from "@mui/styles";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {inject, observer} from "mobx-react";
-import MenuBar from "./views/menu/MenuBar";
-import Header from "./views/topbar/Header";
-import Empty from "./views/empty/Empty";
-import CreateWork from "./views/createWork/CreateWork";
-import {withRouter} from "./components/WithRouter";
-import CreateTemplate from "./views/createWork/CreateTemplate";
-import Work from "./views/stepTranslation/Work";
-import Template from "./views/template/Template";
-import TemplateCreatePage from "./views/template/create/TemplateCreatePage";
-import Dashboard from "./views/dashboard/Dashboard";
-import LoginHome from "./views/login/LoginHome";
-import SignUp from "./views/signup/SignUp";
-import ChangePassword from "./views/changepassword/ChangePassword";
-import SignUpComplete from "./views/signup/SignUpComplete";
-import {State, State as AuthState} from "./stores/AuthStore";
-import Main from "./views/signup/Main";
-import DashboardDetail from "./views/dashboard/detail/DashboardDetail";
-import Profile from "./views/profile/Profile";
-import ProfileEdit from "./views/profile/ProfileEdit";
-import DashboardMyWorkStatistics from "./views/dashboard/myWorkStatistics/DashboardMyWorkStatistics";
-import Help from "./views/help/Help";
+
+import {withStyles} from "@material-ui/core/styles";
+import {CssBaseline} from "@material-ui/core";
+
+import axios from "axios";
+
+import TopBar from "./components/TopBar";
+import SideMenu from "./components/SideMenu";
+import ScrollToTop from "./components/ScrollToTop";
+import Home from "./views/Home";
+import SignIn from "./views/SignIn";
+import * as store from "./stores/AuthStore";
 
 
-
-
-const styles = theme => ({
+const style = () => ({
     root: {
-        '& *': {
-            fontFamily: 'Pretendard !important',
-        },
-    },
+        display: 'flex',
+    }
 });
 
-export const drawerOpenWidth = 230;
-export const drawerCloseWidth = 60;
-export const drawerSideOpenWidth = 300;
-export const totalDrawerOpenWidth = drawerOpenWidth + drawerSideOpenWidth;
-export const totalDrawerCloseWidth = drawerCloseWidth + drawerSideOpenWidth;
 
-const email = 'user@onthelive.kr';
-const password = '1234';
-
+@inject('authStore')
+@observer
 class App extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
-            open: true,
-            menuValue: 1,
-            sideBar: false,
-            cardEmpty: false
+            mobileOpen: false,
         };
+
+        this.setMobileOpen = this.setMobileOpen.bind(this);
     }
 
     componentDidMount() {
-        this.props.authStore.checkLogin(this.checkLoginCallback);
+        const axiosRequestInterceptors = (config) => {
+            const token = localStorage.getItem(store.LocalStorageTokenKey);
+
+            if(token) {
+                config.headers['X-Auth-Token'] = token;
+            }
+
+            return config;
+        };
+
+        const axiosRequestErrorHandler = (error) => {
+            return Promise.reject(error);
+        };
+
+        const axiosResponseInterceptor = (response) => {
+            if(response.status === 403) {
+                this.props.authStore.invalidateLogin();
+            }
+
+            return response;
+        };
+
+        const axiosResponseErrorHandler = (error) => {
+            if((error.response) && (error.response.status === 403)) {
+                this.props.authStore.invalidateLogin();
+            }
+
+            return Promise.reject(error);
+        };
+
+        console.log("========== RGate App componentDidMount ==========");
+        axios.interceptors.request.use(axiosRequestInterceptors, axiosRequestErrorHandler);
+        axios.interceptors.response.use(axiosResponseInterceptor, axiosResponseErrorHandler);
+
+        this.props.authStore.checkLogin();
     }
 
-    checkLoginCallback=()=>{
-        if(this.props.authStore.loginState === State.Authenticated) {
-            this.props.userStore.getUserProfile(this.props.authStore.loginUser.id);
-
-        }else{
-            this.props.userStore.initUserProfile();
-        }
+    setMobileOpen(mobileOpen) {
+        this.setState({mobileOpen: mobileOpen});
     }
 
     render() {
-      const { classes } = this.props;
-      const { open } = this.props.navigateStore;
-      const { loginState } = this.props.authStore;
-      console.log('app.js',loginState);
-        return(
+        const { classes } = this.props;
+        const { loginState } = this.props.authStore;
+
+        return (
             <div className={classes.root}>
-                {loginState === AuthState.Authenticated ? (
-                    <>
-                        <Header open={open} />
-                        <MenuBar/>
-                        <Routes>
-                            <Route path="/template" element={<Template/>}/>
-                            <Route path="/template/create" element={<TemplateCreatePage/>}/>
-                            {/*<Route path="/template/modify/:templateId" element={<TemplateCreatePage/>}/>*/}
+                <Router>
+                    <CssBaseline />
 
-                            {/*<Route path="/create" element={<CreateWork/>}/>*/}
-                            {/*<Route path="/createTemplate/:templateId" element={<CreateTemplate/>}/>*/}
-                            {/*<Route path="/workGroup" element={<Empty />}/>*/}
-                            {/*<Route path="/help" element={<Help/>}/>*/}
-                            {/*<Route path="/work" element={<Work/>}/>*/}
-                            {/*<Route path="/profile" element={<Profile/>}/>*/}
-                            {/*<Route path="/profileEdit" element={<ProfileEdit/>}/>*/}
-                            {/*<Route path="/dashboard" element={<Dashboard/>}/>*/}
-                            {/*<Route path="/dashboard/detail" element={<DashboardDetail/>}/>*/}
-                            {/*/!* 작업자 대시보드*!/*/}
-                            {/*<Route path="/dashboard/statistics" element={<DashboardMyWorkStatistics/>}/>*/}
+                    <Route path="/" component={ScrollToTop}>
+                        <TopBar mobileOpen={this.state.mobileOpen}
+                                setMobileOpen={this.setMobileOpen}
+                                isLoggedIn={loginState === store.State.Authenticated}
+                                doLogout={() => this.props.authStore.doLogout()} />
+                        <SideMenu mobileOpen={this.state.mobileOpen}
+                                  setMobileOpen={this.setMobileOpen}
+                                  isLoggedIn={loginState === store.State.Authenticated} />
 
-                            <Route path="/" element={<Work/>} />
-                            <Route path="*" element={<Work />}/>
-                        </Routes>
-                    </>
-                    ) : (
-                    <Routes>
-                        <Route path="/login" element={<LoginHome />}/>
-                        <Route path="/signup" element={<SignUp />}/>
-                        <Route path="/signupComplete" element={<SignUpComplete />}/>
-                        <Route path="/password/:token" element={<ChangePassword />}/>
-                        <Route path="/main" element={<Main />}/>
-                        <Route path="/" element={<Main />}/>
-                        <Route path="*" element={<Main />}/>
-                    </Routes>
-                    )}
+                        {loginState === store.State.Authenticated ? (
+                            <React.Fragment>
+                              <Switch>
+                                <Route exact path="/" component={Home} />
+                                <Route exact path="/home" component={Home} />
+                              </Switch>
+                            </React.Fragment>
+                        ) : (
+                            <Route path="/" component={SignIn} />
+                        )}
+                  </Route>
+                </Router>
             </div>
-        )
+        );
     }
-}
+};
 
-export default withRouter(
-    withStyles(styles)(
-        inject('authStore', 'navigateStore','userStore')(
-            observer(App)
-        )
-    )
-);
-
+export default withStyles(style) (App);

@@ -6,7 +6,6 @@
         <result property="password"             column="password" />
         <result property="nickname"             column="nickname" />
         <result property="type"                 column="type" />
-        <result property="authType"             column="auth_type" />
         <result property="createdDatetime"      column="created_datetime" />
         <result property="updatedDatetime"      column="updated_datetime" />
     </resultMap>
@@ -17,7 +16,6 @@
                password,
                nickname,
                type,
-               auth_type,
                created_datetime,
                updated_datetime
         FROM users
@@ -30,7 +28,6 @@
                password,
                nickname,
                type,
-               auth_type,
                created_datetime,
                updated_datetime
         FROM users
@@ -43,7 +40,6 @@
                password,
                nickname,
                type,
-               auth_type,
                created_datetime,
                updated_datetime
         FROM users
@@ -57,7 +53,6 @@
             password,
             nickname,
             type,
-            auth_type,
             created_datetime,
             updated_datetime
         ) VALUES (
@@ -65,7 +60,6 @@
             #{password},
             #{nickname},
             #{type},
-            #{authType},
             NOW(),
             NOW()
         )

@@ -1,6 +1,0 @@
-<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="10.001" cy="10" r="1.667" transform="rotate(180 10.001 10)" stroke="#323232" stroke-width="1.5"/>
-    <circle cx="16.665" cy="11.666" r="1.667" transform="rotate(180 16.665 11.666)" stroke="#323232" stroke-width="1.5"/>
-    <circle cx="1.667" cy="1.667" r="1.667" transform="matrix(-1 0 0 1 5 6.667)" stroke="#323232" stroke-width="1.5"/>
-    <path d="M10 6.667v-2.5M16.668 8.333V4.166M3.332 11.667v4.167M10 15.833v-2.5M16.668 15.833V15M3.332 4.167V5" stroke="#323232" stroke-width="1.5" stroke-linecap="round"/>
-</svg>
