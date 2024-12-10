@@ -110,7 +110,8 @@ export default class JobStepStore {
     }
 
     *getJobStepTransfers(workTemplateId, workTemplateStepNum, userId) {
-        // this.jobStepState = State.Pending;
+        console.log(LogPrefix, `getJobStepTransfers Start... workTemplateId=${workTemplateId}, workTemplateStepNum=${workTemplateStepNum}, userId=${userId}`);
+        this.jobStepState = State.Pending;
         try {
 
             const param = {

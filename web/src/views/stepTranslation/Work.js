@@ -43,25 +43,17 @@ class Work extends Component {
         const { selectedWork, selectedWorkTemplateStep } = this.props.workStore;
 
         return (
-            <div
-                className={classes.root}
-                style={
-                    open ?
-                        menuValue === 1 && sideBar ? {marginLeft: totalDrawerOpenWidth} : {marginLeft: drawerOpenWidth}
-                        :
-                        menuValue === 1 && sideBar ? {marginLeft: totalDrawerCloseWidth} : {marginLeft: drawerCloseWidth}
-                }
-            >
+            <div className={classes.root}
+                 style={open ? menuValue === 1 && sideBar ? {marginLeft: totalDrawerOpenWidth} : {marginLeft: drawerOpenWidth} : menuValue === 1 && sideBar ? {marginLeft: totalDrawerCloseWidth} : {marginLeft: drawerCloseWidth}}>
                 {!selectedWork ?
                     //등록된 작업이 없을때
                     <Box className={classes.emptyBack} />
                     :
-                    <>
+                    <Box>
                         <StepperComponent />
                         <WorkStep />
-                    </>
+                    </Box>
                 }
-
             </div>
         );
     }

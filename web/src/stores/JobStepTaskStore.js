@@ -201,14 +201,11 @@ export default class JobStepTaskStore {
 
     intervalForGetJobStepTaskTransfers = (jobId, jobStepNum, userId, judgeDiff) =>{
 
-        if(this.getListJobStepTaskTransfers.length===0){
+        if (this.getListJobStepTaskTransfers.length===0) {
             clearInterval(this.searchIntervalState);
             this.searchIntervalState = undefined;
-        } else{
+        } else {
             const uniqueArray = [...new Set(this.getListJobStepTaskTransfers)];
-            // console.log(LogPrefix, "uniqueArray ... ", uniqueArray);
-            // console.log(LogPrefix, "uniqueArray2 ... ", this.getListJobStepTaskTransfers);
-            // console.log(LogPrefix, "lastGetListJobStepTaskTransfers ... ", this.lastGetListJobStepTaskTransfers);
             let flag = false;
             if(Math.abs(uniqueArray[0]-this.lastGetJobStepTaskTransferNum) >= judgeDiff || this.lastGetJobStepTaskTransferNum ===null)
                 flag = true;
@@ -223,8 +220,10 @@ export default class JobStepTaskStore {
     }
 
     compareArrays(arr1,arr2){
-        if(arr1.length !== arr2.length)
+        if (arr1.length !== arr2.length) {
             return false;
+        }
+
         return arr1.every((value, index) => value === arr2[index]);
     }
     changeGetJobStepTaskState = (state) =>{

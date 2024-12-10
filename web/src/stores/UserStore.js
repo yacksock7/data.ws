@@ -96,8 +96,8 @@ export default class UserStore {
                     const users = yield this.userRepository.getUsers(param);
                     this.searchedUsers = users;
 
-                    const groups = yield this.userRepository.getGroups(param);
-                    this.searchedGroups = groups;
+                    // const groups = yield this.userRepository.getGroups(param);
+                    this.searchedGroups = [];
 
                     this.isSearchLoading = false;
 

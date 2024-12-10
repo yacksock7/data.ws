@@ -106,34 +106,35 @@ class TableComponentRow extends Component {
     setOpenTable = async () => {
         const {jobId, jobStepNum} = this.props.jobStepTransfer;
         const {loginUser} = this.props.authStore;
-
+        const {selectedJobStepTransfer} = this.props.jobStepStore;
+        const {jobStepTaskTransfers} = this.props.jobStepTaskStore;
+        const {checkedJobList} = this.props.jobStepTaskResultStore;
 
         await this.props.jobStepStore.changeSelectedJobStepTransfer(jobId, jobStepNum);
-        console.log('jobid, jobstepnum ',jobId,jobStepNum);
-        const openTable =
-            this.props.jobStepStore.selectedJobStepTransfer
-            && this.props.jobStepStore.selectedJobStepTransfer.jobId === jobId
-            && this.props.jobStepStore.selectedJobStepTransfer.jobStepNum === jobStepNum;
         this.props.jobStepTaskStore.initJobStepTaskTransfers();
-        if(openTable) {
 
+        const openTable =
+            selectedJobStepTransfer
+            && selectedJobStepTransfer.jobId === jobId
+            && selectedJobStepTransfer.jobStepNum === jobStepNum;
+        if(!openTable) {
             this.props.jobStepTaskStore.changeJobStepTasksCount(0);
             await this.props.jobStepTaskStore.getJobStepTasksCount(jobId,jobStepNum,loginUser.id);
-
             this.props.jobStepTaskResultStore.changeCheckedJobId(jobId);
 
-            if (this.props.jobStepTaskResultStore.checkedJobList.indexOf(jobId) !== -1) {
+            if (checkedJobList.indexOf(jobId) !== -1) {
                 this.props.jobStepTaskResultStore.initCheckedJobStepTaskList();
-                this.props.jobStepTaskStore.jobStepTaskTransfers.map(jobStepTaskTransfer => {
+                jobStepTaskTransfers.map(jobStepTaskTransfer => {
                     this.props.jobStepTaskResultStore.addCheckedJobStepTaskList(jobStepTaskTransfer.jobStepTaskNum);
                 });
             }
+
             if (this.tableHeaderRef.current) {
                 const headerWidth = this.tableHeaderRef.current.offsetWidth;
                 this.setState({ headerWidth : 0 });
-                console.log('headerWidth : ' + headerWidth);
                 this.setState({ headerWidth : headerWidth });
             }
+
             this.props.jobStepTaskStore.initGetListJobStepTaskTransfers();
             this.props.jobStepTaskStore.changeGetJobStepTaskState(State.Pending);
             this.props.jobStepTaskStore.changeGetRequestFlag(true);
@@ -248,11 +249,11 @@ class TableComponentRow extends Component {
             && selectedJobStepTransfer.jobId === jobStepTransfer.jobId
             && selectedJobStepTransfer.jobStepNum === jobStepTransfer.jobStepNum;
 
-        if(isScrolling){
+        if (isScrolling) {
             this.props.jobStepTaskStore.initGetListJobStepTaskTransfers();
             this.props.jobStepTaskStore.changeGetRequestFlag(true);
             this.props.jobStepTaskStore.changeGetJobStepTaskState(State.Pending);
-        }else{
+        } else {
             this.props.jobStepTaskStore.pushGetListJobStepTaskTransfers(index);
             if(this.props.jobStepTaskStore.getListJobStepTaskTransfers &&
                 (this.props.jobStepStore.rowsPerPage <= this.props.jobStepTaskStore.getListJobStepTaskTransfers.length || this.props.jobStepStore.rowsPerPage > this.props.jobStepTaskStore.jobStepTasksCount)
@@ -371,29 +372,30 @@ class TableComponentRow extends Component {
                 <TableRow className={clsx(classes.tableList, classes.tableHover)} style={openTable ? {background: '#d6e7fd'} : {}} ref={this.tableHeaderRef}>
                     <TableCell align="left" style={{borderBottom: '0.5px solid rgba(224, 224, 224, 0.5)', paddingLeft: '23px'}}>
                         <Box  className={classes.CheckboxStyle}>
-                            {selectedWorkTemplateStep.type === TemplateStepType.Export ? (
-                                <Checkbox
-                                onClick={e => this.handleClickCheckBox(checked)}
-                                checked={checked}
-                                icon={<UnCheckedBox />}
-                                checkedIcon={<CheckedBox />}
-                                disableRipple/>) : null }
+                            {selectedWorkTemplateStep.type === TemplateStepType.Export && (
+                                <Checkbox onClick={e => this.handleClickCheckBox(checked)}
+                                          checked={checked}
+                                          icon={<UnCheckedBox />}
+                                          checkedIcon={<CheckedBox />}
+                                          disableRipple/>
+                            )}
                             <Typography>{jobStepTransfer.jobId}</Typography>
                         </Box>
                     </TableCell>
-                    <TableCell align="left" style={{borderBottom: '0.5px solid rgba(224, 224, 224, 0.5)'}} className={classes.titleWrap}>
-                        <IconButton
-                            aria-label="expand row"
-                            size="small"
-                            onClick={this.setOpenTable}
-                            disableRipple>
-                            {openTable ? <TableRoundDown /> : <TableRoundUp />}
 
+                    <TableCell align="left" style={{borderBottom: '0.5px solid rgba(224, 224, 224, 0.5)'}} className={classes.titleWrap}>
+                        <IconButton aria-label="expand row"
+                                    size="small"
+                                    onClick={this.setOpenTable}
+                                    disableRipple>
+
+                            {openTable ? <TableRoundDown /> : <TableRoundUp />}
                             <Typography sx={{overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box", WebkitLineClamp: "1", WebkitBoxOrient: "vertical", textAlign: "left",}}>
                                 {jobStepTransfer.job.name}
                             </Typography>
                         </IconButton>
                     </TableCell>
+
                     <TableCell align="left" style={{borderBottom: '0.5px solid rgba(224, 224, 224, 0.5)'}} className={classes.tableDueDate}>
                         <Typography>{createdDatetime}</Typography>
                     </TableCell>

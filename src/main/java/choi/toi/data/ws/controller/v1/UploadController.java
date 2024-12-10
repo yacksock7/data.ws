@@ -32,13 +32,32 @@ public class UploadController {
         uploadService.createJobs(userId, workId, workTemplateId, workTemplateStepNum, files, inputType);
     }
 
+    /**
+     * @return JobByStep
+     */
+
     @GetMapping("/workTemplateId/{workTemplateId}/workTemplateStepNum/{workTemplateStepNum}")
-    public JobStepTransfers getJobStepTransfers(HttpServletRequest request,
-                                                @PathVariable Long workTemplateId,
-                                                @PathVariable Integer workTemplateStepNum,
-                                                @RequestParam(value="userId") Long userId,
-                                                @RequestParam(value="page", required=false, defaultValue="1") Integer page,
-                                                @RequestParam(value="rowsPerPage", required=false, defaultValue="5") Integer rowsPerPage) {
+    public JobStepTransfers getJobs(HttpServletRequest request,
+                                    @PathVariable Long workTemplateId,
+                                    @PathVariable Integer workTemplateStepNum,
+                                    @RequestParam(value="userId") Long userId,
+                                    @RequestParam(value="page", required=false, defaultValue="1") Integer page,
+                                    @RequestParam(value="rowsPerPage", required=false, defaultValue="5") Integer rowsPerPage) {
+
+        return uploadService.getJobStepTransfers(workTemplateId, workTemplateStepNum, userId, page, rowsPerPage);
+    }
+
+    /**
+     * @return TaskOf(JobByStep)
+     */
+
+//    @GetMapping("/workTemplateId/{workTemplateId}/workTemplateStepNum/{workTemplateStepNum}")
+    public JobStepTransfers getTasks(HttpServletRequest request,
+                                    @PathVariable Long workTemplateId,
+                                    @PathVariable Integer workTemplateStepNum,
+                                    @RequestParam(value="userId") Long userId,
+                                    @RequestParam(value="page", required=false, defaultValue="1") Integer page,
+                                    @RequestParam(value="rowsPerPage", required=false, defaultValue="5") Integer rowsPerPage) {
 
         return uploadService.getJobStepTransfers(workTemplateId, workTemplateStepNum, userId, page, rowsPerPage);
     }

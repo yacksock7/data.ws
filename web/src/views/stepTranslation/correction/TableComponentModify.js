@@ -553,7 +553,7 @@ class TableComponentModify extends Component {
                     title={<span><b>{TemplateStepTypeLabel[selectedWorkTemplateStep.type]}</b> 단계 작업자 배정</span>}
                     submitText={'배정하기'}
                     onClick={this.saveJobStepTaskWorkers}
-                    children={<WorkersAssignment/>}
+                    children={<WorkersAssignment isShowSelectedBar={true}/>}
                 />
             </div>
         );

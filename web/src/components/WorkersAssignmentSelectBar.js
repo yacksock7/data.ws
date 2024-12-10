@@ -117,9 +117,7 @@ class WorkersAssignmentSelectBar extends Component {
                     <Typography>작업자 <span>{selectedWorkers.length}명</span></Typography>
                 </Box>
 
-                {selectedWorkers.length > 0
-                    && isShowSelectedBar
-                    &&
+                {isShowSelectedBar &&
                     <>
                         <Button
                             className={assignCount > 0 ? classes.selectButton2 : classes.selectButton}

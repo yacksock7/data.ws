@@ -17,7 +17,6 @@ class WorkStep extends Component {
             <div>
                 <ControlComponent/>
                 <TableComponent/>
-
             </div>
         );
     }
